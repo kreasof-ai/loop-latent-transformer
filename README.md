@@ -272,6 +272,11 @@ These are **estimates** synthesized from published results for the
 individual techniques (MELT, LLA, LAGA, CompAct) and standard NanoGPT
 speedrun performance. They are not measured for this exact combination.
 
+A [local RX 6700 XT Vulkan and CPU benchmark report](benchmarks/README.md) now
+measures attention, a synthetic complete decoder forward, live tensor allocations,
+and toy checkpoint gradients. It verifies cache savings with latency tradeoffs,
+but does not validate the H100 throughput or total-memory estimates below.
+
 ## Setup
 
 - Model: NanoGPT-style decoder
@@ -315,7 +320,9 @@ speedrun performance. They are not measured for this exact combination.
 - The 1.98× LAGA figure is **measured on 8× Ascend 910B**, not H100.
 - CompAct's 25–50% activation savings are for **general activations**,
   not loop-axis latents specifically.
-- The loop-axis LAC application is **novel and unmeasured**.
+- The proposed loop-axis LAC training system is **novel and unvalidated**.
+  Local toy replay passes exact gradient checks but exposes recomputation cost;
+  lossy full-state reconstruction produces biased gradients.
 
 # Scaling with Loop Count
 

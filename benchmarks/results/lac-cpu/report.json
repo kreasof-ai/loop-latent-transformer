@@ -1,0 +1,285 @@
+{
+  "schema": "llt.lac-cpu.v1",
+  "status": "passed",
+  "timestamp_utc": "2026-10-06T08:28:39.778595+00:00",
+  "torch": "2.14.0+cpu",
+  "device": "cpu",
+  "dtype": "float64",
+  "threads": 4,
+  "source_sha256": "920b31c66fd905a2cce173564788a307e3ddf4ecc6c6b9a8c2d71431d5d33e2a",
+  "protocol": {
+    "width": 64,
+    "rank": 16,
+    "sequence": 16,
+    "replays": 3,
+    "memory": "peak unique autograd saved storage, excludes parameter storage; not RSS or total workspace",
+    "timing": "forward+backward without storage-meter hooks; clones and GC excluded",
+    "scope": "toy causal attention + RMSNorm + GELU MLP; no GPU training or trained-model quality",
+    "exact_replay": "one input checkpoint + prefix recomputation per backward step; quadratic forward replay count"
+  },
+  "cases": [
+    {
+      "state": "full",
+      "loops": 1,
+      "gradient_max_abs_error": 0.0,
+      "peak_saved_bytes": {
+        "autograd": 141824,
+        "prefix_replay": 133632
+      },
+      "checkpoint_payload_bytes": 8192,
+      "replayed_prefix_forward_steps": 0,
+      "timings": {
+        "autograd": {
+          "median_ms": 1.291199994739145,
+          "samples_ms": [
+            1.254500006325543,
+            1.3279999839141965,
+            1.291199994739145
+          ]
+        },
+        "prefix_replay": {
+          "median_ms": 1.949500001501292,
+          "samples_ms": [
+            1.9000000320374966,
+            2.114799979608506,
+            1.949500001501292
+          ]
+        }
+      },
+      "passed": true
+    },
+    {
+      "state": "full",
+      "loops": 4,
+      "gradient_max_abs_error": 0.0,
+      "peak_saved_bytes": {
+        "autograd": 542720,
+        "prefix_replay": 141824
+      },
+      "checkpoint_payload_bytes": 8192,
+      "replayed_prefix_forward_steps": 6,
+      "timings": {
+        "autograd": {
+          "median_ms": 3.9170999662019312,
+          "samples_ms": [
+            3.8841000059619546,
+            3.9209999958984554,
+            3.9170999662019312
+          ]
+        },
+        "prefix_replay": {
+          "median_ms": 7.306899991817772,
+          "samples_ms": [
+            7.306899991817772,
+            7.59330001892522,
+            7.302899961359799
+          ]
+        }
+      },
+      "passed": true
+    },
+    {
+      "state": "full",
+      "loops": 16,
+      "gradient_max_abs_error": 0.0,
+      "peak_saved_bytes": {
+        "autograd": 2146304,
+        "prefix_replay": 141824
+      },
+      "checkpoint_payload_bytes": 8192,
+      "replayed_prefix_forward_steps": 120,
+      "timings": {
+        "autograd": {
+          "median_ms": 14.452799980062991,
+          "samples_ms": [
+            14.452799980062991,
+            14.290800027083606,
+            16.934299957938492
+          ]
+        },
+        "prefix_replay": {
+          "median_ms": 55.08740001823753,
+          "samples_ms": [
+            62.590999994426966,
+            51.96529999375343,
+            55.08740001823753
+          ]
+        }
+      },
+      "passed": true
+    },
+    {
+      "state": "full",
+      "loops": 32,
+      "gradient_max_abs_error": 0.0,
+      "peak_saved_bytes": {
+        "autograd": 4284416,
+        "prefix_replay": 141824
+      },
+      "checkpoint_payload_bytes": 8192,
+      "replayed_prefix_forward_steps": 496,
+      "timings": {
+        "autograd": {
+          "median_ms": 28.8113999995403,
+          "samples_ms": [
+            29.5509000425227,
+            28.80710002500564,
+            28.8113999995403
+          ]
+        },
+        "prefix_replay": {
+          "median_ms": 165.16709997085854,
+          "samples_ms": [
+            184.11919998470694,
+            165.16709997085854,
+            165.0299000320956
+          ]
+        }
+      },
+      "passed": true
+    },
+    {
+      "state": "latent",
+      "loops": 1,
+      "gradient_max_abs_error": 0.0,
+      "peak_saved_bytes": {
+        "autograd": 145920,
+        "prefix_replay": 143872
+      },
+      "checkpoint_payload_bytes": 2048,
+      "replayed_prefix_forward_steps": 0,
+      "timings": {
+        "autograd": {
+          "median_ms": 1.424900023266673,
+          "samples_ms": [
+            1.4041999820619822,
+            1.424900023266673,
+            1.4549000188708305
+          ]
+        },
+        "prefix_replay": {
+          "median_ms": 2.1653000148944557,
+          "samples_ms": [
+            2.1653000148944557,
+            2.387200016528368,
+            2.1314999903552234
+          ]
+        }
+      },
+      "passed": true
+    },
+    {
+      "state": "latent",
+      "loops": 4,
+      "gradient_max_abs_error": 0.0,
+      "peak_saved_bytes": {
+        "autograd": 577536,
+        "prefix_replay": 145920
+      },
+      "checkpoint_payload_bytes": 2048,
+      "replayed_prefix_forward_steps": 6,
+      "timings": {
+        "autograd": {
+          "median_ms": 4.27879998460412,
+          "samples_ms": [
+            4.317799990531057,
+            4.271799989510328,
+            4.27879998460412
+          ]
+        },
+        "prefix_replay": {
+          "median_ms": 7.826399989426136,
+          "samples_ms": [
+            7.826399989426136,
+            7.908700034022331,
+            7.756299979519099
+          ]
+        }
+      },
+      "passed": true
+    },
+    {
+      "state": "latent",
+      "loops": 16,
+      "gradient_max_abs_error": 0.0,
+      "peak_saved_bytes": {
+        "autograd": 2304000,
+        "prefix_replay": 145920
+      },
+      "checkpoint_payload_bytes": 2048,
+      "replayed_prefix_forward_steps": 120,
+      "timings": {
+        "autograd": {
+          "median_ms": 15.752199979033321,
+          "samples_ms": [
+            18.818400043528527,
+            15.681800025049597,
+            15.752199979033321
+          ]
+        },
+        "prefix_replay": {
+          "median_ms": 54.56600000616163,
+          "samples_ms": [
+            63.38579999282956,
+            54.56600000616163,
+            54.30379998870194
+          ]
+        }
+      },
+      "passed": true
+    },
+    {
+      "state": "latent",
+      "loops": 32,
+      "gradient_max_abs_error": 0.0,
+      "peak_saved_bytes": {
+        "autograd": 4605952,
+        "prefix_replay": 145920
+      },
+      "checkpoint_payload_bytes": 2048,
+      "replayed_prefix_forward_steps": 496,
+      "timings": {
+        "autograd": {
+          "median_ms": 34.2782000079751,
+          "samples_ms": [
+            34.2782000079751,
+            37.746199988760054,
+            31.083800015039742
+          ]
+        },
+        "prefix_replay": {
+          "median_ms": 221.2326999870129,
+          "samples_ms": [
+            203.7498999852687,
+            224.7097000363283,
+            221.2326999870129
+          ]
+        }
+      },
+      "passed": true
+    }
+  ],
+  "lossy_checkpoint": {
+    "rank": 16,
+    "width": 64,
+    "loops": 4,
+    "relative_l2_gradient_errors": [
+      0.07510798829522332,
+      1.438370814303445,
+      1.5476315303631742,
+      0.9821624932587116,
+      1.0366218205541753,
+      0.9882287064589125,
+      0.9636198965730641
+    ],
+    "input_reconstruction_relative_l2_error": 0.8514286744034157,
+    "expected_exact": false,
+    "biased_gradient_detected": true
+  },
+  "directional_gradient_check": {
+    "finite_difference": 0.0012522271886084013,
+    "replay_gradient_dot_direction": 0.0012522271880049864,
+    "absolute_error": 6.034148875011525e-13,
+    "passed": true
+  }
+}

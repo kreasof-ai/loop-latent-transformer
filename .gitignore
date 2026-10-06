@@ -1,0 +1,10 @@
+__pycache__/
+benchmarks/results/*/artifacts/
+benchmarks/results/*/cache/
+benchmarks/results/*/benchmark_source.py
+benchmarks/results/smoke/
+benchmarks/results/partition-smoke/
+benchmarks/results/partition-debug/
+benchmarks/results/rx6700xt/
+benchmarks/results/extended-smoke/
+benchmarks/results/decoder-smoke/

@@ -1,0 +1,444 @@
+{
+  "schema": "llt.decoder-forward.v1",
+  "status": "passed",
+  "timestamp_utc": "2026-10-06T08:35:50.681476+00:00",
+  "source_hashes": {
+    "decoder_forward.py": "e5c20f58bf2f478f07eba036322ba6061e1e598942598476126058b6339fb60a",
+    "extended_kernels.py": "3daab8b6d8b12cd01ebd2bc87f8057609840a2a206169e03c0bda15c2a2860dd"
+  },
+  "tensor_commit": "fa006eda9f01b5b2539ad1ca7eda03bc41f253c4",
+  "protocol": {
+    "samples": 3,
+    "repeats": 1,
+    "gpu_timestamp_period_ns": 10.0,
+    "precision": "FP16 weights/history; FP32 residual, accumulators, output",
+    "scope": "one input embedding to 256 logits; evolving residual/query across all layers and loops",
+    "architecture": "RMSNorm, attention, residual, RMSNorm, 4x GELU MLP, residual; final RMSNorm/vocabulary",
+    "baseline": "naive_cache: same LLT graph, distinct full KV cache for each layer/loop; reuse_cache: one per layer; mha: current KV from evolving hidden, different model math",
+    "memory": "all tensor allocations live at once, one method at a time; weights/cache/workspace included; driver and pipeline overhead excluded",
+    "history": "deterministic synthetic prefixes, not trained-model prefill",
+    "excluded": [
+      "compilation",
+      "allocation",
+      "uploads",
+      "readbacks",
+      "prefill",
+      "embedding lookup",
+      "sampling"
+    ]
+  },
+  "cases": [
+    {
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "rank": 128,
+      "loops": 10,
+      "context": 4096,
+      "methods": [
+        {
+          "method": "naive_cache",
+          "timing": {
+            "median_ms": 53.08849,
+            "samples_ms": [
+              52.87791,
+              53.08849,
+              53.48853
+            ],
+            "min_ms": 52.87791,
+            "max_ms": 53.48853,
+            "host": {
+              "median_ms": 55.42930000228807,
+              "samples_ms": [
+                55.42930000228807,
+                55.05949998041615,
+                55.71889999555424
+              ],
+              "min_ms": 55.05949998041615,
+              "max_ms": 55.71889999555424
+            }
+          },
+          "dispatches": 1567,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.474412729742582e-07
+          },
+          "peak_live_tensor_bytes": 1656926976,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 146866176,
+            "cache": 1509949440
+          },
+          "allocation_count": 200
+        },
+        {
+          "method": "reuse_cache",
+          "timing": {
+            "median_ms": 53.32978,
+            "samples_ms": [
+              53.1656,
+              53.32978,
+              53.44735
+            ],
+            "min_ms": 53.1656,
+            "max_ms": 53.44735,
+            "host": {
+              "median_ms": 55.38109998451546,
+              "samples_ms": [
+                55.13180000707507,
+                55.44660001760349,
+                55.38109998451546
+              ],
+              "min_ms": 55.13180000707507,
+              "max_ms": 55.44660001760349
+            }
+          },
+          "dispatches": 1567,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.474412729742582e-07
+          },
+          "peak_live_tensor_bytes": 297972480,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 146866176,
+            "cache": 150994944
+          },
+          "allocation_count": 92
+        },
+        {
+          "method": "mha",
+          "timing": {
+            "median_ms": 54.524319999999996,
+            "samples_ms": [
+              54.41433,
+              54.524319999999996,
+              54.58578
+            ],
+            "min_ms": 54.41433,
+            "max_ms": 54.58578,
+            "host": {
+              "median_ms": 56.9334999890998,
+              "samples_ms": [
+                57.06970003666356,
+                56.73270003171638,
+                56.9334999890998
+              ],
+              "min_ms": 56.73270003171638,
+              "max_ms": 57.06970003666356
+            }
+          },
+          "dispatches": 1563,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.921926276517773e-07
+          },
+          "peak_live_tensor_bytes": 1680323328,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 170262528,
+            "cache": 1509949440
+          },
+          "allocation_count": 199
+        },
+        {
+          "method": "absorbed",
+          "timing": {
+            "median_ms": 134.96633,
+            "samples_ms": [
+              135.00373,
+              134.87878,
+              134.96633
+            ],
+            "min_ms": 134.87878,
+            "max_ms": 135.00373,
+            "host": {
+              "median_ms": 141.34809997631237,
+              "samples_ms": [
+                141.34809997631237,
+                141.365300049074,
+                141.04259997839108
+              ],
+              "min_ms": 141.04259997839108,
+              "max_ms": 141.365300049074
+            }
+          },
+          "dispatches": 1568,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.151412473201276e-07
+          },
+          "peak_live_tensor_bytes": 148132096,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 214272,
+            "weights": 146866176,
+            "cache": 1048576
+          },
+          "allocation_count": 84
+        },
+        {
+          "method": "fused",
+          "timing": {
+            "median_ms": 812.85248,
+            "samples_ms": [
+              814.1425899999999,
+              812.85248,
+              811.42899
+            ],
+            "min_ms": 811.42899,
+            "max_ms": 814.1425899999999,
+            "host": {
+              "median_ms": 816.8894000118598,
+              "samples_ms": [
+                816.8894000118598,
+                840.2235999819823,
+                815.7245999900624
+              ],
+              "min_ms": 815.7245999900624,
+              "max_ms": 840.2235999819823
+            }
+          },
+          "dispatches": 1328,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.102324401260681e-06
+          },
+          "peak_live_tensor_bytes": 148019968,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 102144,
+            "weights": 146866176,
+            "cache": 1048576
+          },
+          "allocation_count": 80
+        }
+      ]
+    }
+  ],
+  "device": {
+    "ordinal": 0,
+    "provider": "webgpu",
+    "arch": "webgpu-portable-v1",
+    "name": "AMD Radeon RX 6700 XT",
+    "adapter": {
+      "vendor": "AMD proprietary driver",
+      "architecture": "",
+      "device": "AMD Radeon RX 6700 XT",
+      "description": "26.6.2 (AMD proprietary shader compiler)",
+      "stackgroup_min_size": 4,
+      "stackgroup_max_size": 128,
+      "vendor_id": 4098,
+      "device_id": 29663,
+      "adapter_type": "DiscreteGPU",
+      "backend_type": "Vulkan"
+    },
+    "features": [
+      "shader-f16",
+      "subgroup",
+      "timestamp-query",
+      "timestamp-query-inside-passes"
+    ],
+    "limits": {
+      "max-bind-groups": 8,
+      "max-bind-groups-plus-vertex-buffers": 0,
+      "max-bindings-per-bind-group": 1000,
+      "max-buffer-size": 134217728,
+      "max-color-attachment-bytes-per-sample": 0,
+      "max-color-attachments": 0,
+      "max-compute-invocations-per-workgroup": 1024,
+      "max-compute-workgroup-size-x": 1024,
+      "max-compute-workgroup-size-y": 1024,
+      "max-compute-workgroup-size-z": 1024,
+      "max-compute-workgroup-storage-size": 32768,
+      "max-compute-workgroups-per-dimension": 65535,
+      "max-dynamic-storage-buffers-per-pipeline-layout": 8,
+      "max-dynamic-uniform-buffers-per-pipeline-layout": 8,
+      "max-inter-stage-shader-variables": 0,
+      "max-non-sampler-bindings": 1000000,
+      "max-push-constant-size": 256,
+      "max-sampled-textures-per-shader-stage": 16,
+      "max-samplers-per-shader-stage": 16,
+      "max-storage-buffer-binding-size": 134217728,
+      "max-storage-buffers-per-shader-stage": 8,
+      "max-storage-textures-per-shader-stage": 4,
+      "max-texture-array-layers": 8192,
+      "max-texture-dimension-1d": 16384,
+      "max-texture-dimension-2d": 16384,
+      "max-texture-dimension-3d": 8192,
+      "max-uniform-buffer-binding-size": 2147483647,
+      "max-uniform-buffers-per-shader-stage": 12,
+      "max-vertex-attributes": 64,
+      "max-vertex-buffer-array-stride": 16383,
+      "max-vertex-buffers": 16,
+      "min-storage-buffer-offset-alignment": 32,
+      "min-uniform-buffer-offset-alignment": 32
+    },
+    "prepared_encoding": "native",
+    "prepared_submission": "native"
+  },
+  "artifacts": [
+    {
+      "source_sha256": "47b7968c766ed01c951316749319c6678accd71834b06f80bc0e44e0d37a93a0",
+      "artifact": "artifacts\\47b7968c766ed01c9513.tbin",
+      "artifact_sha256": "b2368e6264b970ce7b395c2043b15cccaf0aee3c7b5f9b95ccdfe4b533d4dd1f",
+      "pipeline_ms": 83.00390001386404,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "0d8f23a5a6cc472e6e3266a655f82fb2d4d206d33814c79e5602586b71eb0318",
+      "artifact": "artifacts\\0d8f23a5a6cc472e6e32.tbin",
+      "artifact_sha256": "9508621273c413877cb8e8de1928858b9dc7b053fac58039fbf33b52ed296773",
+      "pipeline_ms": 2.0545999868772924,
+      "workgroup_bytes": 3076
+    },
+    {
+      "source_sha256": "e483b5cf8ea53892449d96f0d1d2994918cd57236db78060182635b380b69ad1",
+      "artifact": "artifacts\\e483b5cf8ea53892449d.tbin",
+      "artifact_sha256": "dbcc77defbd50b53507641be379288d9fc848e2b3235e0f2eff7b8c65a81764f",
+      "pipeline_ms": 2.5780999567359686,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "e3ef580c62a778d3b926375cb0a8a4642c5f3da7caa652bbc9bcd4637bd0e6c0",
+      "artifact": "artifacts\\e3ef580c62a778d3b926.tbin",
+      "artifact_sha256": "dff01090d8cdcab9f6f230f232d448181f9aad69f8bd9d20b9ce5de699cfe93a",
+      "pipeline_ms": 1.8449999624863267,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "99a49d1eb642cd7745b164f10bcfc1e789d053b4655147c46684f5e5b00d36c4",
+      "artifact": "artifacts\\99a49d1eb642cd7745b1.tbin",
+      "artifact_sha256": "c84c80f4fd465d2f0d50031d2d5d8668175bc9964f265d1735e794afe6c81a52",
+      "pipeline_ms": 1.5801000408828259,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "28e00c4e5833eb969c2518ee81661f2e32624ac63fd4e4e36a4c0b5ec6f580cd",
+      "artifact": "artifacts\\28e00c4e5833eb969c25.tbin",
+      "artifact_sha256": "953225434bced4be91c8e11b0294a86a4744b3236501562bad77591f6e5d9127",
+      "pipeline_ms": 2.8103000367991626,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "1dbd4e7c42515bf5b20ace9b85d54f09cae08f98f4fc06adb1af57c50159225a",
+      "artifact": "artifacts\\1dbd4e7c42515bf5b20a.tbin",
+      "artifact_sha256": "0bf019e53d16ddfb14f5e4f5a7a52fdf63d4da64ff465c57ffa8e95fcaa84639",
+      "pipeline_ms": 2.551100042182952,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "cb853a28c93e88d84e4674a199e5af28fdd3a1d6e8891a73cf25838de5cd058c",
+      "artifact": "artifacts\\cb853a28c93e88d84e46.tbin",
+      "artifact_sha256": "2f0e4cb2ba8ae00a713ba57023014aa3157e73e1a4f1a151d166e692732767e6",
+      "pipeline_ms": 23.29360001021996,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "65bbb8af0ac91d139a14a5ae5ba33406b8c8e2eefaeb021e77a7958eb8f316a7",
+      "artifact": "artifacts\\65bbb8af0ac91d139a14.tbin",
+      "artifact_sha256": "735500e6e87b5e41d28781bc418691a4ffc374dc3a83f955c206612afd935c85",
+      "pipeline_ms": 5.126700038090348,
+      "workgroup_bytes": 8784
+    },
+    {
+      "source_sha256": "4113c6e37f475af8d2748f49c6b9957794f54e9ef450c4485b06b762ff14941e",
+      "artifact": "artifacts\\4113c6e37f475af8d274.tbin",
+      "artifact_sha256": "3437aa743f279dc722d30b8e4db36839062a509699300b35ecc957a5c7bcb855",
+      "pipeline_ms": 2.545700001064688,
+      "workgroup_bytes": 4552
+    },
+    {
+      "source_sha256": "34dc1c796052cb261c89b6a6ce0e97d24e0edeb3ef10690928a5859e282779ec",
+      "artifact": "artifacts\\34dc1c796052cb261c89.tbin",
+      "artifact_sha256": "31b1d9bdc2a8887e20dbab1ee215686f31a334ed6d8e665715227fba686c2bb7",
+      "pipeline_ms": 1.7880999948829412,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "9db33579e9c126d045d145472dd384dd0ca65eefe559c9287662525a25227f86",
+      "artifact": "artifacts\\9db33579e9c126d045d1.tbin",
+      "artifact_sha256": "a1fe66c041d81df754f5f307ad04d60d26bf7638194d8dcaa508f03cd63d7d2d",
+      "pipeline_ms": 3.0728999990969896,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "ba2dc08b3edaef40e56e433872832accad361da6b0e9c3c0d8cf2585c4e02c58",
+      "artifact": "artifacts\\ba2dc08b3edaef40e56e.tbin",
+      "artifact_sha256": "dbc7d800065e87c85752950ac61ad663c35c59654f1182d1fe7e72bdbc1b8d42",
+      "pipeline_ms": 2.235999971162528,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "4e69fd86b0f0d0fe5861159ff03f79aebc25577a57657ac48eb588eb77c4b495",
+      "artifact": "artifacts\\4e69fd86b0f0d0fe5861.tbin",
+      "artifact_sha256": "3e5ddf941c04afde94c42a359c77c6c79a6fa9ea13a8fbc2283d22eb9365548f",
+      "pipeline_ms": 2.7837000088766217,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "be79b9278b49b9a5fd1211c0682b674ee079c9333189b7282bae9b842e5b8344",
+      "artifact": "artifacts\\be79b9278b49b9a5fd12.tbin",
+      "artifact_sha256": "af622bb0d510ddcaf28edfbdc90470315444707681e015b3b8272db339ee9105",
+      "pipeline_ms": 3.1619000365026295,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "790132c66502cc70cc93d920b8c0def93cd579706da2fe0c8af50e7b3e557b86",
+      "artifact": "artifacts\\790132c66502cc70cc93.tbin",
+      "artifact_sha256": "4d76ff3aff74845b642eecdf7e292232f7b07b5279675eb825eae95f00bb9651",
+      "pipeline_ms": 3.2936999923549592,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "a907bb9d04740f412c8766e018288eec56932d748facd1f7f22fb0301ff23078",
+      "artifact": "artifacts\\a907bb9d04740f412c87.tbin",
+      "artifact_sha256": "a9b4ddc0d9ac27aae4ce9166baa4aa0d5c489dfeea2ec03ac46ce0096f44e8b3",
+      "pipeline_ms": 5.429400014691055,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "fbe89ae58af239b7f74bcbb21fb67a621a385d33f50ee5720322ec90d67482b8",
+      "artifact": "artifacts\\fbe89ae58af239b7f74b.tbin",
+      "artifact_sha256": "9c015950590a1e81ac015ca541f0612e5fad1e206fde326e5ad8bc2f28786de3",
+      "pipeline_ms": 2.0841999794356525,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "bc475c3b53c0321518e1e7bab5a1227ecf3cdcc503f83f8e9ccf3ab5e51fb868",
+      "artifact": "artifacts\\bc475c3b53c0321518e1.tbin",
+      "artifact_sha256": "fa9e2ecf95bd7f101f1262a440a5a113b66d22080702b61eb01403d6970f7209",
+      "pipeline_ms": 3.543799975886941,
+      "workgroup_bytes": 17488
+    },
+    {
+      "source_sha256": "e04301a7ec70a660f6ee23a4f22163d3ee6019b88de87f99cc19038dae187708",
+      "artifact": "artifacts\\e04301a7ec70a660f6ee.tbin",
+      "artifact_sha256": "3cd1e3aa7fec6ec3f7e6828ccf634859a219b6ecab3104ad8f312b4bdd162533",
+      "pipeline_ms": 2.9887999990023673,
+      "workgroup_bytes": 8904
+    },
+    {
+      "source_sha256": "0265315eca45f236489b7e55ef5437aaf730d90c7581b384e872a04f1ec74d8b",
+      "artifact": "artifacts\\0265315eca45f236489b.tbin",
+      "artifact_sha256": "599d76be49ec06a60f2a32040a533f7787104b8efa3c70e7851ab3cac7de5888",
+      "pipeline_ms": 1.8554000416770577,
+      "workgroup_bytes": 256
+    },
+    {
+      "source_sha256": "6a33ecd3c5d531059809109282f0c75d8b3da19897dfe313f050847836554443",
+      "artifact": "artifacts\\6a33ecd3c5d531059809.tbin",
+      "artifact_sha256": "a92844d9b93cfb73385fe7d43097cdf8b72fd066a23b8ea836fb508cbe1404eb",
+      "pipeline_ms": 6.133099959697574,
+      "workgroup_bytes": 22096
+    }
+  ]
+}

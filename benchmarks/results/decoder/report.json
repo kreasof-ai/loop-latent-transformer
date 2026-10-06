@@ -1,0 +1,1602 @@
+{
+  "schema": "llt.decoder-forward.v1",
+  "status": "passed",
+  "timestamp_utc": "2026-10-06T08:33:12.181148+00:00",
+  "source_hashes": {
+    "decoder_forward.py": "e5c20f58bf2f478f07eba036322ba6061e1e598942598476126058b6339fb60a",
+    "extended_kernels.py": "3daab8b6d8b12cd01ebd2bc87f8057609840a2a206169e03c0bda15c2a2860dd"
+  },
+  "tensor_commit": "fa006eda9f01b5b2539ad1ca7eda03bc41f253c4",
+  "protocol": {
+    "samples": 5,
+    "repeats": 3,
+    "gpu_timestamp_period_ns": 10.0,
+    "precision": "FP16 weights/history; FP32 residual, accumulators, output",
+    "scope": "one input embedding to 256 logits; evolving residual/query across all layers and loops",
+    "architecture": "RMSNorm, attention, residual, RMSNorm, 4x GELU MLP, residual; final RMSNorm/vocabulary",
+    "baseline": "naive_cache: same LLT graph, distinct full KV cache for each layer/loop; reuse_cache: one per layer; mha: current KV from evolving hidden, different model math",
+    "memory": "all tensor allocations live at once, one method at a time; weights/cache/workspace included; driver and pipeline overhead excluded",
+    "history": "deterministic synthetic prefixes, not trained-model prefill",
+    "excluded": [
+      "compilation",
+      "allocation",
+      "uploads",
+      "readbacks",
+      "prefill",
+      "embedding lookup",
+      "sampling"
+    ]
+  },
+  "cases": [
+    {
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "rank": 64,
+      "loops": 1,
+      "context": 512,
+      "methods": [
+        {
+          "method": "naive_cache",
+          "timing": {
+            "median_ms": 2.58796,
+            "samples_ms": [
+              2.6908266666666663,
+              2.64348,
+              2.58796,
+              2.5865066666666663,
+              2.5744266666666666
+            ],
+            "min_ms": 2.5744266666666666,
+            "max_ms": 2.6908266666666663,
+            "host": {
+              "median_ms": 2.8571000051063797,
+              "samples_ms": [
+                2.894199996565779,
+                2.8116333220774927,
+                2.8571000051063797,
+                2.806666656397283,
+                2.873533327753345
+              ],
+              "min_ms": 2.806666656397283,
+              "max_ms": 2.894199996565779
+            }
+          },
+          "dispatches": 163,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.3448946903360515e-07
+          },
+          "peak_live_tensor_bytes": 163393664,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 107648,
+            "weights": 144408576,
+            "cache": 18874368
+          },
+          "allocation_count": 92
+        },
+        {
+          "method": "reuse_cache",
+          "timing": {
+            "median_ms": 2.5766266666666664,
+            "samples_ms": [
+              2.57764,
+              2.57428,
+              2.58072,
+              2.5748266666666666,
+              2.5766266666666664
+            ],
+            "min_ms": 2.57428,
+            "max_ms": 2.58072,
+            "host": {
+              "median_ms": 2.8028666662673154,
+              "samples_ms": [
+                2.8277000140709183,
+                2.796433342155069,
+                2.874433334606389,
+                2.8028666662673154,
+                2.7988666552118957
+              ],
+              "min_ms": 2.796433342155069,
+              "max_ms": 2.874433334606389
+            }
+          },
+          "dispatches": 163,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.3448946903360515e-07
+          },
+          "peak_live_tensor_bytes": 163393664,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 107648,
+            "weights": 144408576,
+            "cache": 18874368
+          },
+          "allocation_count": 92
+        },
+        {
+          "method": "mha",
+          "timing": {
+            "median_ms": 2.661973333333333,
+            "samples_ms": [
+              2.6785333333333337,
+              2.661973333333333,
+              2.6550533333333335,
+              2.6541333333333332,
+              2.662173333333333
+            ],
+            "min_ms": 2.6541333333333332,
+            "max_ms": 2.6785333333333337,
+            "host": {
+              "median_ms": 2.871533331926912,
+              "samples_ms": [
+                2.8620000036122897,
+                2.9604333297659955,
+                2.869800004797677,
+                2.883533345690618,
+                2.871533331926912
+              ],
+              "min_ms": 2.8620000036122897,
+              "max_ms": 2.9604333297659955
+            }
+          },
+          "dispatches": 159,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.511881663225246e-07
+          },
+          "peak_live_tensor_bytes": 189247616,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 107648,
+            "weights": 170262528,
+            "cache": 18874368
+          },
+          "allocation_count": 91
+        },
+        {
+          "method": "absorbed",
+          "timing": {
+            "median_ms": 2.7818666666666663,
+            "samples_ms": [
+              2.77512,
+              2.819506666666667,
+              2.7809333333333335,
+              2.7822,
+              2.7818666666666663
+            ],
+            "min_ms": 2.77512,
+            "max_ms": 2.819506666666667,
+            "host": {
+              "median_ms": 3.0154000075223544,
+              "samples_ms": [
+                2.999600003628681,
+                3.0154000075223544,
+                3.105066658463329,
+                3.0945000083496175,
+                3.0048000044189394
+              ],
+              "min_ms": 2.999600003628681,
+              "max_ms": 3.105066658463329
+            }
+          },
+          "dispatches": 164,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.2920808337146816e-07
+          },
+          "peak_live_tensor_bytes": 144635520,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 158336,
+            "weights": 144408576,
+            "cache": 65536
+          },
+          "allocation_count": 84
+        },
+        {
+          "method": "fused",
+          "timing": {
+            "median_ms": 8.840829999999999,
+            "samples_ms": [
+              8.895463333333334,
+              9.06974,
+              8.835753333333333,
+              8.780986666666665,
+              8.840829999999999
+            ],
+            "min_ms": 8.780986666666665,
+            "max_ms": 9.06974,
+            "host": {
+              "median_ms": 9.082199986247966,
+              "samples_ms": [
+                9.081600001081824,
+                9.092633340818187,
+                8.994799999830624,
+                9.09319999239718,
+                9.082199986247966
+              ],
+              "min_ms": 8.994799999830624,
+              "max_ms": 9.09319999239718
+            }
+          },
+          "dispatches": 140,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.0387054920069083e-06
+          },
+          "peak_live_tensor_bytes": 144578688,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 101504,
+            "weights": 144408576,
+            "cache": 65536
+          },
+          "allocation_count": 80
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "rank": 64,
+      "loops": 4,
+      "context": 512,
+      "methods": [
+        {
+          "method": "naive_cache",
+          "timing": {
+            "median_ms": 10.84701,
+            "samples_ms": [
+              10.839243333333334,
+              10.86882,
+              10.84701,
+              10.616623333333333,
+              10.91445
+            ],
+            "min_ms": 10.616623333333333,
+            "max_ms": 10.91445,
+            "host": {
+              "median_ms": 10.551066681121787,
+              "samples_ms": [
+                10.52769999175022,
+                10.553266659068564,
+                10.527233340932677,
+                10.551066681121787,
+                10.565799990824113
+              ],
+              "min_ms": 10.527233340932677,
+              "max_ms": 10.565799990824113
+            }
+          },
+          "dispatches": 631,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.3299022133826952e-07
+          },
+          "peak_live_tensor_bytes": 220016768,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 107648,
+            "weights": 144408576,
+            "cache": 75497472
+          },
+          "allocation_count": 128
+        },
+        {
+          "method": "reuse_cache",
+          "timing": {
+            "median_ms": 11.049523333333333,
+            "samples_ms": [
+              11.049523333333333,
+              10.853173333333332,
+              11.064659999999998,
+              10.665886666666667,
+              11.190856666666667
+            ],
+            "min_ms": 10.665886666666667,
+            "max_ms": 11.190856666666667,
+            "host": {
+              "median_ms": 10.552733341076722,
+              "samples_ms": [
+                10.569133330136538,
+                10.552733341076722,
+                10.545899994516125,
+                10.581233344661692,
+                10.51779999397695
+              ],
+              "min_ms": 10.51779999397695,
+              "max_ms": 10.581233344661692
+            }
+          },
+          "dispatches": 631,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.3299022133826952e-07
+          },
+          "peak_live_tensor_bytes": 163393664,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 107648,
+            "weights": 144408576,
+            "cache": 18874368
+          },
+          "allocation_count": 92
+        },
+        {
+          "method": "mha",
+          "timing": {
+            "median_ms": 11.42469,
+            "samples_ms": [
+              11.389636666666666,
+              11.082223333333333,
+              11.42469,
+              11.43168,
+              11.487563333333332
+            ],
+            "min_ms": 11.082223333333333,
+            "max_ms": 11.487563333333332,
+            "host": {
+              "median_ms": 11.030866667473068,
+              "samples_ms": [
+                11.026233337664356,
+                11.045666663752248,
+                11.030866667473068,
+                11.033833337326845,
+                11.01730001391843
+              ],
+              "min_ms": 11.01730001391843,
+              "max_ms": 11.045666663752248
+            }
+          },
+          "dispatches": 627,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.8141219958477404e-07
+          },
+          "peak_live_tensor_bytes": 245870720,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 107648,
+            "weights": 170262528,
+            "cache": 75497472
+          },
+          "allocation_count": 127
+        },
+        {
+          "method": "absorbed",
+          "timing": {
+            "median_ms": 12.935553333333333,
+            "samples_ms": [
+              13.023676666666667,
+              12.935553333333333,
+              12.985666666666667,
+              12.658926666666666,
+              12.92574
+            ],
+            "min_ms": 12.658926666666666,
+            "max_ms": 13.023676666666667,
+            "host": {
+              "median_ms": 11.264133325312287,
+              "samples_ms": [
+                11.383633323324224,
+                11.308133330506584,
+                11.255599985209605,
+                11.264133325312287,
+                11.234599999928227
+              ],
+              "min_ms": 11.234599999928227,
+              "max_ms": 11.383633323324224
+            }
+          },
+          "dispatches": 632,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.1747430889451635e-07
+          },
+          "peak_live_tensor_bytes": 144635520,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 158336,
+            "weights": 144408576,
+            "cache": 65536
+          },
+          "allocation_count": 84
+        },
+        {
+          "method": "fused",
+          "timing": {
+            "median_ms": 35.98070333333333,
+            "samples_ms": [
+              36.097343333333335,
+              36.062736666666666,
+              35.98070333333333,
+              35.87045333333333,
+              35.549573333333335
+            ],
+            "min_ms": 35.549573333333335,
+            "max_ms": 36.097343333333335,
+            "host": {
+              "median_ms": 35.75659999235844,
+              "samples_ms": [
+                35.66590000021582,
+                35.83339999507492,
+                35.75659999235844,
+                35.641033318825066,
+                35.85766667189697
+              ],
+              "min_ms": 35.641033318825066,
+              "max_ms": 35.85766667189697
+            }
+          },
+          "dispatches": 536,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.722232327085795e-06
+          },
+          "peak_live_tensor_bytes": 144578688,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 101504,
+            "weights": 144408576,
+            "cache": 65536
+          },
+          "allocation_count": 80
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "rank": 64,
+      "loops": 10,
+      "context": 512,
+      "methods": [
+        {
+          "method": "naive_cache",
+          "timing": {
+            "median_ms": 28.656623333333332,
+            "samples_ms": [
+              28.416676666666664,
+              28.656623333333332,
+              35.938696666666665,
+              28.417536666666663,
+              28.74166
+            ],
+            "min_ms": 28.416676666666664,
+            "max_ms": 35.938696666666665,
+            "host": {
+              "median_ms": 26.13230001103754,
+              "samples_ms": [
+                26.13230001103754,
+                26.45313332322985,
+                26.111666675812256,
+                26.156433334108442,
+                26.046000013593584
+              ],
+              "min_ms": 26.046000013593584,
+              "max_ms": 26.45313332322985
+            }
+          },
+          "dispatches": 1567,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.109626999231452e-07
+          },
+          "peak_live_tensor_bytes": 333262976,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 107648,
+            "weights": 144408576,
+            "cache": 188743680
+          },
+          "allocation_count": 200
+        },
+        {
+          "method": "reuse_cache",
+          "timing": {
+            "median_ms": 28.60213,
+            "samples_ms": [
+              28.52973333333333,
+              28.60213,
+              28.257113333333333,
+              28.903539999999996,
+              29.144603333333333
+            ],
+            "min_ms": 28.257113333333333,
+            "max_ms": 29.144603333333333,
+            "host": {
+              "median_ms": 26.333466657282163,
+              "samples_ms": [
+                25.973700006337214,
+                26.056099993487198,
+                26.333466657282163,
+                26.467500002278637,
+                26.883566674465936
+              ],
+              "min_ms": 25.973700006337214,
+              "max_ms": 26.883566674465936
+            }
+          },
+          "dispatches": 1567,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.109626999231452e-07
+          },
+          "peak_live_tensor_bytes": 163393664,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 107648,
+            "weights": 144408576,
+            "cache": 18874368
+          },
+          "allocation_count": 92
+        },
+        {
+          "method": "mha",
+          "timing": {
+            "median_ms": 36.13879,
+            "samples_ms": [
+              29.814976666666666,
+              36.98099666666666,
+              36.13879,
+              36.785023333333335,
+              29.725489999999997
+            ],
+            "min_ms": 29.725489999999997,
+            "max_ms": 36.98099666666666,
+            "host": {
+              "median_ms": 27.661433327011764,
+              "samples_ms": [
+                27.49059999284024,
+                27.936033341878403,
+                27.57766666278864,
+                27.661433327011764,
+                27.728133349834632
+              ],
+              "min_ms": 27.49059999284024,
+              "max_ms": 27.936033341878403
+            }
+          },
+          "dispatches": 1563,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 5.784095612471063e-07
+          },
+          "peak_live_tensor_bytes": 359116928,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 107648,
+            "weights": 170262528,
+            "cache": 188743680
+          },
+          "allocation_count": 199
+        },
+        {
+          "method": "absorbed",
+          "timing": {
+            "median_ms": 32.877266666666664,
+            "samples_ms": [
+              32.877266666666664,
+              33.04190333333333,
+              32.70562666666667,
+              32.902013333333336,
+              32.76318666666666
+            ],
+            "min_ms": 32.70562666666667,
+            "max_ms": 33.04190333333333,
+            "host": {
+              "median_ms": 27.69806666765362,
+              "samples_ms": [
+                27.723733335733414,
+                27.64250000473112,
+                27.169300010427833,
+                27.69806666765362,
+                28.63503332870702
+              ],
+              "min_ms": 27.169300010427833,
+              "max_ms": 28.63503332870702
+            }
+          },
+          "dispatches": 1568,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.7263196484005334e-07
+          },
+          "peak_live_tensor_bytes": 144635520,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 158336,
+            "weights": 144408576,
+            "cache": 65536
+          },
+          "allocation_count": 84
+        },
+        {
+          "method": "fused",
+          "timing": {
+            "median_ms": 90.75802333333333,
+            "samples_ms": [
+              90.75802333333333,
+              92.84574666666667,
+              89.48991666666666,
+              90.94533,
+              89.33980333333334
+            ],
+            "min_ms": 89.33980333333334,
+            "max_ms": 92.84574666666667,
+            "host": {
+              "median_ms": 86.72613332358499,
+              "samples_ms": [
+                88.94336665980518,
+                88.94969998315598,
+                86.72613332358499,
+                83.52023332069318,
+                83.4119333497559
+              ],
+              "min_ms": 83.4119333497559,
+              "max_ms": 88.94969998315598
+            }
+          },
+          "dispatches": 1328,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 8.4436170912916e-06
+          },
+          "peak_live_tensor_bytes": 144578688,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 101504,
+            "weights": 144408576,
+            "cache": 65536
+          },
+          "allocation_count": 80
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "rank": 128,
+      "loops": 1,
+      "context": 512,
+      "methods": [
+        {
+          "method": "naive_cache",
+          "timing": {
+            "median_ms": 2.5969333333333333,
+            "samples_ms": [
+              2.596346666666667,
+              2.597253333333333,
+              2.59716,
+              2.5949066666666667,
+              2.5969333333333333
+            ],
+            "min_ms": 2.5949066666666667,
+            "max_ms": 2.597253333333333,
+            "host": {
+              "median_ms": 2.8161333369401595,
+              "samples_ms": [
+                2.810099996471157,
+                2.8058000025339425,
+                2.8161333369401595,
+                2.816833322867751,
+                2.823333333556851
+              ],
+              "min_ms": 2.8058000025339425,
+              "max_ms": 2.823333333556851
+            }
+          },
+          "dispatches": 163,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.917217770097679e-07
+          },
+          "peak_live_tensor_bytes": 165851904,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 146866176,
+            "cache": 18874368
+          },
+          "allocation_count": 92
+        },
+        {
+          "method": "reuse_cache",
+          "timing": {
+            "median_ms": 2.5557466666666664,
+            "samples_ms": [
+              2.5979466666666666,
+              2.5947466666666665,
+              2.40996,
+              2.4129066666666668,
+              2.5557466666666664
+            ],
+            "min_ms": 2.40996,
+            "max_ms": 2.5979466666666666,
+            "host": {
+              "median_ms": 2.81606666976586,
+              "samples_ms": [
+                2.830266661476344,
+                2.829233339677254,
+                2.8078999991218248,
+                2.8102999979940555,
+                2.81606666976586
+              ],
+              "min_ms": 2.8078999991218248,
+              "max_ms": 2.830266661476344
+            }
+          },
+          "dispatches": 163,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.917217770097679e-07
+          },
+          "peak_live_tensor_bytes": 165851904,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 146866176,
+            "cache": 18874368
+          },
+          "allocation_count": 92
+        },
+        {
+          "method": "mha",
+          "timing": {
+            "median_ms": 2.656546666666667,
+            "samples_ms": [
+              2.656546666666667,
+              2.6582,
+              2.6590933333333333,
+              2.5049333333333332,
+              2.4799599999999997
+            ],
+            "min_ms": 2.4799599999999997,
+            "max_ms": 2.6590933333333333,
+            "host": {
+              "median_ms": 2.8602000093087554,
+              "samples_ms": [
+                2.6962000022952757,
+                2.723399995981405,
+                2.8602000093087554,
+                2.88816667549933,
+                2.9645999893546104
+              ],
+              "min_ms": 2.6962000022952757,
+              "max_ms": 2.9645999893546104
+            }
+          },
+          "dispatches": 159,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.724051335028065e-07
+          },
+          "peak_live_tensor_bytes": 189248256,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 170262528,
+            "cache": 18874368
+          },
+          "allocation_count": 91
+        },
+        {
+          "method": "absorbed",
+          "timing": {
+            "median_ms": 4.109666666666667,
+            "samples_ms": [
+              4.109666666666667,
+              4.114213333333333,
+              4.112746666666666,
+              4.079746666666666,
+              4.106626666666666
+            ],
+            "min_ms": 4.079746666666666,
+            "max_ms": 4.114213333333333,
+            "host": {
+              "median_ms": 4.325266675247501,
+              "samples_ms": [
+                4.325700011880447,
+                4.32236665316547,
+                4.319666652008891,
+                4.325266675247501,
+                4.342266668876012
+              ],
+              "min_ms": 4.319666652008891,
+              "max_ms": 4.342266668876012
+            }
+          },
+          "dispatches": 164,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.7806498286976336e-07
+          },
+          "peak_live_tensor_bytes": 147214592,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 214272,
+            "weights": 146866176,
+            "cache": 131072
+          },
+          "allocation_count": 84
+        },
+        {
+          "method": "fused",
+          "timing": {
+            "median_ms": 13.584053333333332,
+            "samples_ms": [
+              13.589013333333334,
+              13.574786666666666,
+              13.584053333333332,
+              13.577186666666664,
+              13.584919999999999
+            ],
+            "min_ms": 13.574786666666666,
+            "max_ms": 13.589013333333334,
+            "host": {
+              "median_ms": 13.805033348035067,
+              "samples_ms": [
+                13.869299999593446,
+                13.805033348035067,
+                13.772266664697478,
+                13.726900001832595,
+                13.830166678720465
+              ],
+              "min_ms": 13.726900001832595,
+              "max_ms": 13.869299999593446
+            }
+          },
+          "dispatches": 140,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 8.38042526263294e-07
+          },
+          "peak_live_tensor_bytes": 147102464,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 102144,
+            "weights": 146866176,
+            "cache": 131072
+          },
+          "allocation_count": 80
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "rank": 128,
+      "loops": 4,
+      "context": 512,
+      "methods": [
+        {
+          "method": "naive_cache",
+          "timing": {
+            "median_ms": 11.152126666666666,
+            "samples_ms": [
+              11.152126666666666,
+              11.384689999999999,
+              11.344083333333332,
+              11.04372,
+              11.120213333333332
+            ],
+            "min_ms": 11.04372,
+            "max_ms": 11.384689999999999,
+            "host": {
+              "median_ms": 11.083500013531497,
+              "samples_ms": [
+                10.804066667333245,
+                10.967533336952329,
+                11.171466670930386,
+                11.851333333955457,
+                11.083500013531497
+              ],
+              "min_ms": 10.804066667333245,
+              "max_ms": 11.851333333955457
+            }
+          },
+          "dispatches": 631,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.9622898139726175e-07
+          },
+          "peak_live_tensor_bytes": 222475008,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 146866176,
+            "cache": 75497472
+          },
+          "allocation_count": 128
+        },
+        {
+          "method": "reuse_cache",
+          "timing": {
+            "median_ms": 11.231336666666666,
+            "samples_ms": [
+              11.231336666666666,
+              11.28011,
+              10.993433333333334,
+              10.944609999999999,
+              11.526103333333333
+            ],
+            "min_ms": 10.944609999999999,
+            "max_ms": 11.526103333333333,
+            "host": {
+              "median_ms": 10.946133329222599,
+              "samples_ms": [
+                10.868000002422681,
+                10.913066663003216,
+                10.982333333231509,
+                10.946133329222599,
+                11.01166665709267
+              ],
+              "min_ms": 10.868000002422681,
+              "max_ms": 11.01166665709267
+            }
+          },
+          "dispatches": 631,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.9622898139726175e-07
+          },
+          "peak_live_tensor_bytes": 165851904,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 146866176,
+            "cache": 18874368
+          },
+          "allocation_count": 92
+        },
+        {
+          "method": "mha",
+          "timing": {
+            "median_ms": 11.426106666666668,
+            "samples_ms": [
+              11.237499999999999,
+              11.138779999999999,
+              11.517746666666666,
+              11.426106666666668,
+              12.162916666666666
+            ],
+            "min_ms": 11.138779999999999,
+            "max_ms": 12.162916666666666,
+            "host": {
+              "median_ms": 11.455399993186196,
+              "samples_ms": [
+                11.455399993186196,
+                11.541733324217299,
+                11.503866660253456,
+                11.417499995635202,
+                11.361133326621106
+              ],
+              "min_ms": 11.361133326621106,
+              "max_ms": 11.541733324217299
+            }
+          },
+          "dispatches": 627,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.448727909916016e-07
+          },
+          "peak_live_tensor_bytes": 245871360,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 170262528,
+            "cache": 75497472
+          },
+          "allocation_count": 127
+        },
+        {
+          "method": "absorbed",
+          "timing": {
+            "median_ms": 16.622316666666666,
+            "samples_ms": [
+              16.492313333333332,
+              16.622316666666666,
+              18.214506666666665,
+              16.083156666666664,
+              17.276416666666666
+            ],
+            "min_ms": 16.083156666666664,
+            "max_ms": 18.214506666666665,
+            "host": {
+              "median_ms": 15.669833344873041,
+              "samples_ms": [
+                15.551500003008792,
+                15.669833344873041,
+                15.502466664959988,
+                15.785866669223955,
+                16.008699991895508
+              ],
+              "min_ms": 15.502466664959988,
+              "max_ms": 16.008699991895508
+            }
+          },
+          "dispatches": 632,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.8637116994124625e-07
+          },
+          "peak_live_tensor_bytes": 147214592,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 214272,
+            "weights": 146866176,
+            "cache": 131072
+          },
+          "allocation_count": 84
+        },
+        {
+          "method": "fused",
+          "timing": {
+            "median_ms": 55.86437,
+            "samples_ms": [
+              55.86437,
+              56.96223,
+              55.11640333333333,
+              53.763906666666664,
+              56.83874666666666
+            ],
+            "min_ms": 53.763906666666664,
+            "max_ms": 56.96223,
+            "host": {
+              "median_ms": 54.407766670919955,
+              "samples_ms": [
+                54.08809999547278,
+                55.59086665743962,
+                54.407766670919955,
+                54.02236666607981,
+                55.119900013475366
+              ],
+              "min_ms": 54.02236666607981,
+              "max_ms": 55.59086665743962
+            }
+          },
+          "dispatches": 536,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.2425916029754642e-06
+          },
+          "peak_live_tensor_bytes": 147102464,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 102144,
+            "weights": 146866176,
+            "cache": 131072
+          },
+          "allocation_count": 80
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "rank": 128,
+      "loops": 10,
+      "context": 512,
+      "methods": [
+        {
+          "method": "naive_cache",
+          "timing": {
+            "median_ms": 28.781319999999997,
+            "samples_ms": [
+              28.781319999999997,
+              29.030836666666662,
+              28.81299,
+              28.429976666666665,
+              28.48011
+            ],
+            "min_ms": 28.429976666666665,
+            "max_ms": 29.030836666666662,
+            "host": {
+              "median_ms": 26.539099984802306,
+              "samples_ms": [
+                26.504933349012088,
+                26.539099984802306,
+                26.821099997808535,
+                26.35489999859904,
+                26.602700003422797
+              ],
+              "min_ms": 26.35489999859904,
+              "max_ms": 26.821099997808535
+            }
+          },
+          "dispatches": 1567,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.0084294580512427e-07
+          },
+          "peak_live_tensor_bytes": 335721216,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 146866176,
+            "cache": 188743680
+          },
+          "allocation_count": 200
+        },
+        {
+          "method": "reuse_cache",
+          "timing": {
+            "median_ms": 28.51861,
+            "samples_ms": [
+              28.472080000000002,
+              28.439363333333333,
+              28.699089999999998,
+              28.51861,
+              28.782736666666665
+            ],
+            "min_ms": 28.439363333333333,
+            "max_ms": 28.782736666666665,
+            "host": {
+              "median_ms": 26.34866665660714,
+              "samples_ms": [
+                26.359366660472006,
+                26.61250000043462,
+                26.308333326596767,
+                26.34866665660714,
+                26.23353331970672
+              ],
+              "min_ms": 26.23353331970672,
+              "max_ms": 26.61250000043462
+            }
+          },
+          "dispatches": 1567,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.0084294580512427e-07
+          },
+          "peak_live_tensor_bytes": 165851904,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 146866176,
+            "cache": 18874368
+          },
+          "allocation_count": 92
+        },
+        {
+          "method": "mha",
+          "timing": {
+            "median_ms": 29.45047,
+            "samples_ms": [
+              29.610063333333333,
+              29.350373333333334,
+              29.342589999999998,
+              29.638516666666664,
+              29.45047
+            ],
+            "min_ms": 29.342589999999998,
+            "max_ms": 29.638516666666664,
+            "host": {
+              "median_ms": 27.398266654927284,
+              "samples_ms": [
+                27.446433319710195,
+                27.292733332918335,
+                27.474999990469467,
+                27.329166672037292,
+                27.398266654927284
+              ],
+              "min_ms": 27.292733332918335,
+              "max_ms": 27.474999990469467
+            }
+          },
+          "dispatches": 1563,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 6.315566359604841e-07
+          },
+          "peak_live_tensor_bytes": 359117568,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 108288,
+            "weights": 170262528,
+            "cache": 188743680
+          },
+          "allocation_count": 199
+        },
+        {
+          "method": "absorbed",
+          "timing": {
+            "median_ms": 46.49225333333333,
+            "samples_ms": [
+              46.49225333333333,
+              46.31191666666666,
+              47.37564333333333,
+              44.97394666666667,
+              47.55313
+            ],
+            "min_ms": 44.97394666666667,
+            "max_ms": 47.55313,
+            "host": {
+              "median_ms": 41.61150000678996,
+              "samples_ms": [
+                41.84573333865652,
+                41.61150000678996,
+                41.39879999759918,
+                41.552866653849684,
+                41.65833332808688
+              ],
+              "min_ms": 41.39879999759918,
+              "max_ms": 41.84573333865652
+            }
+          },
+          "dispatches": 1568,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.9427845141261066e-07
+          },
+          "peak_live_tensor_bytes": 147214592,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 214272,
+            "weights": 146866176,
+            "cache": 131072
+          },
+          "allocation_count": 84
+        },
+        {
+          "method": "fused",
+          "timing": {
+            "median_ms": 139.28716333333332,
+            "samples_ms": [
+              140.43053333333333,
+              140.06274333333332,
+              139.19609333333332,
+              138.97787,
+              139.28716333333332
+            ],
+            "min_ms": 138.97787,
+            "max_ms": 140.43053333333333,
+            "host": {
+              "median_ms": 137.6291666723167,
+              "samples_ms": [
+                137.66896666493267,
+                138.9307333350492,
+                137.24690000526607,
+                137.6291666723167,
+                137.46493334959573
+              ],
+              "min_ms": 137.24690000526607,
+              "max_ms": 138.9307333350492
+            }
+          },
+          "dispatches": 1328,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 7.357846373873267e-06
+          },
+          "peak_live_tensor_bytes": 147102464,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 102144,
+            "weights": 146866176,
+            "cache": 131072
+          },
+          "allocation_count": 80
+        }
+      ]
+    }
+  ],
+  "device": {
+    "ordinal": 0,
+    "provider": "webgpu",
+    "arch": "webgpu-portable-v1",
+    "name": "AMD Radeon RX 6700 XT",
+    "adapter": {
+      "vendor": "AMD proprietary driver",
+      "architecture": "",
+      "device": "AMD Radeon RX 6700 XT",
+      "description": "26.6.2 (AMD proprietary shader compiler)",
+      "stackgroup_min_size": 4,
+      "stackgroup_max_size": 128,
+      "vendor_id": 4098,
+      "device_id": 29663,
+      "adapter_type": "DiscreteGPU",
+      "backend_type": "Vulkan"
+    },
+    "features": [
+      "shader-f16",
+      "subgroup",
+      "timestamp-query",
+      "timestamp-query-inside-passes"
+    ],
+    "limits": {
+      "max-bind-groups": 8,
+      "max-bind-groups-plus-vertex-buffers": 0,
+      "max-bindings-per-bind-group": 1000,
+      "max-buffer-size": 134217728,
+      "max-color-attachment-bytes-per-sample": 0,
+      "max-color-attachments": 0,
+      "max-compute-invocations-per-workgroup": 1024,
+      "max-compute-workgroup-size-x": 1024,
+      "max-compute-workgroup-size-y": 1024,
+      "max-compute-workgroup-size-z": 1024,
+      "max-compute-workgroup-storage-size": 32768,
+      "max-compute-workgroups-per-dimension": 65535,
+      "max-dynamic-storage-buffers-per-pipeline-layout": 8,
+      "max-dynamic-uniform-buffers-per-pipeline-layout": 8,
+      "max-inter-stage-shader-variables": 0,
+      "max-non-sampler-bindings": 1000000,
+      "max-push-constant-size": 256,
+      "max-sampled-textures-per-shader-stage": 16,
+      "max-samplers-per-shader-stage": 16,
+      "max-storage-buffer-binding-size": 134217728,
+      "max-storage-buffers-per-shader-stage": 8,
+      "max-storage-textures-per-shader-stage": 4,
+      "max-texture-array-layers": 8192,
+      "max-texture-dimension-1d": 16384,
+      "max-texture-dimension-2d": 16384,
+      "max-texture-dimension-3d": 8192,
+      "max-uniform-buffer-binding-size": 2147483647,
+      "max-uniform-buffers-per-shader-stage": 12,
+      "max-vertex-attributes": 64,
+      "max-vertex-buffer-array-stride": 16383,
+      "max-vertex-buffers": 16,
+      "min-storage-buffer-offset-alignment": 32,
+      "min-uniform-buffer-offset-alignment": 32
+    },
+    "prepared_encoding": "native",
+    "prepared_submission": "native"
+  },
+  "artifacts": [
+    {
+      "source_sha256": "47b7968c766ed01c951316749319c6678accd71834b06f80bc0e44e0d37a93a0",
+      "artifact": "artifacts\\47b7968c766ed01c9513.tbin",
+      "artifact_sha256": "c3f07b60e5f2b9e9d40f8a8bd33b7a9b7df5eef7abb11c942bfba018b685417c",
+      "pipeline_ms": 82.04000000841916,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "0d8f23a5a6cc472e6e3266a655f82fb2d4d206d33814c79e5602586b71eb0318",
+      "artifact": "artifacts\\0d8f23a5a6cc472e6e32.tbin",
+      "artifact_sha256": "e50e9524279770303a2f6facf30613b185fe7dd7aad79d4fbb80e67bbef45da2",
+      "pipeline_ms": 1.9004999776370823,
+      "workgroup_bytes": 3076
+    },
+    {
+      "source_sha256": "f4be508cdd76a0e64f88f9e577890c6ef34c92e5e965fcb7481d70dfea8eef26",
+      "artifact": "artifacts\\f4be508cdd76a0e64f88.tbin",
+      "artifact_sha256": "70a0546537527fe86fb4622afe2645f3a9509f5a119a7d1ecadd6405054549e2",
+      "pipeline_ms": 2.426499966531992,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "218eba15a26f41f561231607181fd2ac925f36048d268c92bf2a384b56150622",
+      "artifact": "artifacts\\218eba15a26f41f56123.tbin",
+      "artifact_sha256": "91faf65685707ee653a91bcd28fbc0857a65cb1d2d4f7454726351a089155497",
+      "pipeline_ms": 1.2883999734185636,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "0853f3e7abbdce4644da3dd90f129d2d2b54a660dcf6162bf091888f88f43ce1",
+      "artifact": "artifacts\\0853f3e7abbdce4644da.tbin",
+      "artifact_sha256": "cad91c1780bc7d4ffd8aa12a26ca7c2f84697d272f8817cf8d7833b18f08bbd8",
+      "pipeline_ms": 1.284400001168251,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "28e00c4e5833eb969c2518ee81661f2e32624ac63fd4e4e36a4c0b5ec6f580cd",
+      "artifact": "artifacts\\28e00c4e5833eb969c25.tbin",
+      "artifact_sha256": "c665d96f9e1f99a9cc3752117b65bf1a9bd061e87b3849ba9cb5d79229c82378",
+      "pipeline_ms": 2.239299996290356,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "7c9eb943cf552648ffce805abeede114985fb4ba9921af3e3e5149e5a9d0f182",
+      "artifact": "artifacts\\7c9eb943cf552648ffce.tbin",
+      "artifact_sha256": "a7129d8f70d983c7c90b08671a83419539a9b0de4c016b07bb773c972a6ee2d6",
+      "pipeline_ms": 2.229300036560744,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "e548d68df91d552093d5a403c5c6e3f938209deb430e2667f8dca089d2a6d028",
+      "artifact": "artifacts\\e548d68df91d552093d5.tbin",
+      "artifact_sha256": "26494a5743e071493fa9c404bb946354913547406f37b3c58826334f8e3dab33",
+      "pipeline_ms": 1.458300044760108,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "02c912c30e04def4b89c0c26978b2366655f3a93b92c0fed441ea18f7ca6ad4f",
+      "artifact": "artifacts\\02c912c30e04def4b89c.tbin",
+      "artifact_sha256": "fe8db818cc9344fd77f3c9e3c5589bdfef5f0997f29b27a3c155955e6e3b3de7",
+      "pipeline_ms": 3.1997999758459628,
+      "workgroup_bytes": 8784
+    },
+    {
+      "source_sha256": "4113c6e37f475af8d2748f49c6b9957794f54e9ef450c4485b06b762ff14941e",
+      "artifact": "artifacts\\4113c6e37f475af8d274.tbin",
+      "artifact_sha256": "e5dbb653fa98a17559d06a6daa84d4fcc21db1e470898c196fc80bf1250faa81",
+      "pipeline_ms": 2.190799976233393,
+      "workgroup_bytes": 4552
+    },
+    {
+      "source_sha256": "34dc1c796052cb261c89b6a6ce0e97d24e0edeb3ef10690928a5859e282779ec",
+      "artifact": "artifacts\\34dc1c796052cb261c89.tbin",
+      "artifact_sha256": "f50ce48fa28f0d944e5ab78fd2d7244a7364e905cf05599fe5bb4b15e311b25c",
+      "pipeline_ms": 1.3437000452540815,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "9db33579e9c126d045d145472dd384dd0ca65eefe559c9287662525a25227f86",
+      "artifact": "artifacts\\9db33579e9c126d045d1.tbin",
+      "artifact_sha256": "0a9a5a24f905dfbdd815bb361af667f1655859e060b002823479d7ee794a9851",
+      "pipeline_ms": 2.2331999498419464,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "ba2dc08b3edaef40e56e433872832accad361da6b0e9c3c0d8cf2585c4e02c58",
+      "artifact": "artifacts\\ba2dc08b3edaef40e56e.tbin",
+      "artifact_sha256": "9d7c045341c33c5d5ed4530fd8eaa85d128e60b8eeff204cb204acf24335108c",
+      "pipeline_ms": 1.774700009264052,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "4e69fd86b0f0d0fe5861159ff03f79aebc25577a57657ac48eb588eb77c4b495",
+      "artifact": "artifacts\\4e69fd86b0f0d0fe5861.tbin",
+      "artifact_sha256": "a2e5e1e1d205446cc00e9554d750467b4a7ee5cfec421681db2a65225d2f1702",
+      "pipeline_ms": 2.279800013639033,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "be79b9278b49b9a5fd1211c0682b674ee079c9333189b7282bae9b842e5b8344",
+      "artifact": "artifacts\\be79b9278b49b9a5fd12.tbin",
+      "artifact_sha256": "72cb9a2d448b21dde5e988b692c3220eb751515c614bf82a1e52dc11138fb26d",
+      "pipeline_ms": 2.7877999818883836,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "790132c66502cc70cc93d920b8c0def93cd579706da2fe0c8af50e7b3e557b86",
+      "artifact": "artifacts\\790132c66502cc70cc93.tbin",
+      "artifact_sha256": "aebc4da09e0d9232bd7734de19de4c85a1d035e6179a85cd8526a735a11f9e4d",
+      "pipeline_ms": 2.920700004324317,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "5b57f0dc64710c15347fe390d046edfe1138bf8448745549c9258a38277e61f0",
+      "artifact": "artifacts\\5b57f0dc64710c15347f.tbin",
+      "artifact_sha256": "ab28d82971adfe940c2315ee381832d857a94147c651a367e490e4bd17043b01",
+      "pipeline_ms": 1.6988000134006143,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "9775f32b680e99081fc963e5b0b0c3afb2d0a8127e3beaef420d9a5a6af86d98",
+      "artifact": "artifacts\\9775f32b680e99081fc9.tbin",
+      "artifact_sha256": "35c01fac741e873b9a2f86f42cec16f4eb300e84cc5c72eb2ba8327848266633",
+      "pipeline_ms": 1.6638000379316509,
+      "workgroup_bytes": 256
+    },
+    {
+      "source_sha256": "8572e1e402bb9f1e9de3f687e57be69381dc1322743551dacf3b548438dd3167",
+      "artifact": "artifacts\\8572e1e402bb9f1e9de3.tbin",
+      "artifact_sha256": "3e4665bf545d0b8199d4fc2471abc17b22d8c21ffaa4fdbf02ea27c6bc945f79",
+      "pipeline_ms": 3.4514000290073454,
+      "workgroup_bytes": 8784
+    },
+    {
+      "source_sha256": "da026542d4d65a17e7940323c64cfb18e555b488a4e749fbcc71445128adf923",
+      "artifact": "artifacts\\da026542d4d65a17e794.tbin",
+      "artifact_sha256": "755505cbb907c522d8a17b713f9cbe0f57ffab9f66ec45094770f2606022062d",
+      "pipeline_ms": 1.5251999720931053,
+      "workgroup_bytes": 256
+    },
+    {
+      "source_sha256": "871f110e7e5e14ed85244c0e37229ab4a148261dafc4656f8f0c9ee209459266",
+      "artifact": "artifacts\\871f110e7e5e14ed8524.tbin",
+      "artifact_sha256": "41f8fa64700b3df4c42f7257bc4dedcda1858e9b10e5db6009d9791f1f5bcaf9",
+      "pipeline_ms": 6.036599981598556,
+      "workgroup_bytes": 22096
+    },
+    {
+      "source_sha256": "e483b5cf8ea53892449d96f0d1d2994918cd57236db78060182635b380b69ad1",
+      "artifact": "artifacts\\e483b5cf8ea53892449d.tbin",
+      "artifact_sha256": "777b6fcb5789f4949c8365e2173f398682c0693c4f4f407d46edfe9a26ca491a",
+      "pipeline_ms": 2.917999983765185,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "e3ef580c62a778d3b926375cb0a8a4642c5f3da7caa652bbc9bcd4637bd0e6c0",
+      "artifact": "artifacts\\e3ef580c62a778d3b926.tbin",
+      "artifact_sha256": "d11e96c0841a943471c06f0d0008fb2bde1e0f786e46b87b30c689a40552c931",
+      "pipeline_ms": 1.527200045529753,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "99a49d1eb642cd7745b164f10bcfc1e789d053b4655147c46684f5e5b00d36c4",
+      "artifact": "artifacts\\99a49d1eb642cd7745b1.tbin",
+      "artifact_sha256": "cf9d9fd89d04f95a2ae27637e60c3a685b64d71fd79bcb6984b101d2cfba2497",
+      "pipeline_ms": 1.470999966841191,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "1dbd4e7c42515bf5b20ace9b85d54f09cae08f98f4fc06adb1af57c50159225a",
+      "artifact": "artifacts\\1dbd4e7c42515bf5b20a.tbin",
+      "artifact_sha256": "5d8809e4e9b19ca286adf121289f40d5f4af7cb5f947da780377d28e5fe8d062",
+      "pipeline_ms": 2.487399964593351,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "6678c9df9374667b1d30bbb283eb57542a1a280bcbac68233dc36037e249fc4e",
+      "artifact": "artifacts\\6678c9df9374667b1d30.tbin",
+      "artifact_sha256": "677348a72b1fe51f41d24554288cec1b0efd11b1d19d3fec45a5d19c95fdfbe4",
+      "pipeline_ms": 1.7511000041849911,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "fbe89ae58af239b7f74bcbb21fb67a621a385d33f50ee5720322ec90d67482b8",
+      "artifact": "artifacts\\fbe89ae58af239b7f74b.tbin",
+      "artifact_sha256": "e88b33af7c547bfe5317c2bec5a18ae441ab1bf5a4a2a7627cb49804f10c6643",
+      "pipeline_ms": 1.7565000453032553,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "037b2ac4dff716a0048d4a7f6420a6f459443c01f687ad4835826711f99f1e1f",
+      "artifact": "artifacts\\037b2ac4dff716a0048d.tbin",
+      "artifact_sha256": "0252e0204e5b2eda494b09d2da373e539f8eedc19c7ba9ac756d8025438ba44e",
+      "pipeline_ms": 3.4802999580278993,
+      "workgroup_bytes": 17488
+    },
+    {
+      "source_sha256": "e04301a7ec70a660f6ee23a4f22163d3ee6019b88de87f99cc19038dae187708",
+      "artifact": "artifacts\\e04301a7ec70a660f6ee.tbin",
+      "artifact_sha256": "4cc59cede7f5c2c75329f50ca4c5c5eadf3bae36eb584c307efe2db178eab839",
+      "pipeline_ms": 2.309100003913045,
+      "workgroup_bytes": 8904
+    },
+    {
+      "source_sha256": "0265315eca45f236489b7e55ef5437aaf730d90c7581b384e872a04f1ec74d8b",
+      "artifact": "artifacts\\0265315eca45f236489b.tbin",
+      "artifact_sha256": "dff249891dbc54dacb0000bf95c374c395bc4ab9ae4b77a538439555befda43a",
+      "pipeline_ms": 1.556200033519417,
+      "workgroup_bytes": 256
+    },
+    {
+      "source_sha256": "3079a1168b73435d4677c284cd0a6e4b5a363103008cf3a9217bf39232c6a5db",
+      "artifact": "artifacts\\3079a1168b73435d4677.tbin",
+      "artifact_sha256": "52a2b63f6a761e522716b50808ae060f044ff459ff6f35527b5caac7a452bd85",
+      "pipeline_ms": 6.066600035410374,
+      "workgroup_bytes": 22096
+    }
+  ]
+}
