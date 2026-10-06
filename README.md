@@ -408,6 +408,33 @@ policy. There is no measured universal threshold derived from width alone.
 Useful reasoning quality and time-to-solution at deeper recurrence remain
 targets for trained-model evaluation.
 
+# Reasoning Evaluation Targets
+
+The planned quality evaluation focuses on **ARC-AGI, Sudoku and iterative
+reasoning tasks used by comparable looped models**. These are evaluation
+targets; no trained-model scores have been measured yet.
+
+| Evaluation | Primary outcome | Protocol to record |
+|---|---|---|
+| ARC-AGI | Exact output-grid match on held-out tasks | Dataset version, split, input representation and allowed prediction attempts |
+| Sudoku | Whole-puzzle success: a valid completed grid preserving the givens | Puzzle source, split, difficulty and solution-validity checks; cell accuracy is a diagnostic |
+| Other iterative reasoning suites | Task correctness versus loop count and difficulty | Named suites and splits aligned with the reference loop-model evaluation |
+
+Compare non-loop naive, naive looped and LLT models across loop counts and
+latent ranks. Match training data and track parameter count and training
+compute. For LLA, apply the inference codec to a trained looped teacher and
+report codec fitting separately from teacher training.
+
+Report held-out accuracy alongside peak memory, end-to-end latency and
+training cost. Include comparisons at the same loop count, the same latency
+budget and matched accuracy where achievable. Memory comparisons use the
+same checkpoint policy and state each method's latent/cache budget.
+
+The main question is whether additional loops improve reasoning enough to
+justify their compute, and whether LLT retains that improvement with its
+smaller shared latent. A qualifying synthetic memory/latency point alone
+does not establish reasoning quality.
+
 # Terminology
 
 ## Established
@@ -557,9 +584,10 @@ The 1.98× LAGA figure is single-node (8× Ascend 910B). Cross-node
 collectives have different latency/bandwidth trade-offs. Does the
 latent all-gather remain the dominant win at 64+ GPUs?
 
-## 10. What is the right benchmark for looped reasoning?
+## 10. Does deeper recurrence improve reasoning within a useful resource budget?
 
-GSM8K, MATH, and code generation stress different loop depths.
-The cache-memory advantage can grow with T, while compute grows too.
-Benchmarks should compare trained quality and time-to-solution, with matched
-checkpoint policies and explicit latent budgets, as well as peak memory.
+The [evaluation targets](#reasoning-evaluation-targets) are ARC-AGI, Sudoku
+and comparable iterative reasoning suites. Does accuracy improve with more
+loops on held-out tasks, and at what latent rank does LLT retain the naive
+looped model's accuracy? Compare accuracy versus latency and memory, with
+matched checkpoint policies, explicit cache budgets and training costs.
