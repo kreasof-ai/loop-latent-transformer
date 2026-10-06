@@ -26,7 +26,7 @@ At 4,096 historical tokens and ten loops, an independent nine-sample repeat meas
 | Method | Peak live tensor MiB | GPU ms |
 |---|---:|---:|
 | Naive MHA, separate caches, rank-32 control | 1,602.846 | 58.044 |
-| Per-head LLA geometry, rank 32 | 257.696 | 46.267 |
+| Per-head LLA geometry, rank 32 | 257.696 | 46.266 |
 | Folded LLT, rank 32 | 135.746 | 46.209 |
 | Naive MHA, separate caches, rank-64 control | 1,602.846 | 57.820 |
 | Per-head LLA geometry, rank 64 | 352.245 | 62.358 |

@@ -1,8 +1,10 @@
 # Loop-Latent Transformer (LLT)
 
-A merged architecture combining **Multi-head Latent Attention (MLA)**,
-**Looped Transformers**, and **YOCO / U-YOCO**, with a novel training
-strategy called **Latent Activation Checkpointing (LAC)**.
+A proposed architecture combining **Multi-head Latent Attention (MLA)**,
+**Looped Transformers**, and **YOCO / U-YOCO**, with a proposed training
+strategy called **Latent Activation Checkpointing (LAC)**. The current
+implementation evidence covers synthetic inference and CPU training prototypes;
+the full combination and trained-model quality remain unvalidated.
 
 ## Core Idea
 
@@ -17,8 +19,96 @@ LLT observes that:
 3. YOCO / U-YOCO already share a single global KV cache across layers.
 
 By **compressing along the loop axis** and **sharing the compressed latent
-across loops and layers**, LLT makes inference cache, training activation
-memory, and inter-device communication all **constant in T**.
+across loops and layers**, LLT targets an inference KV cache that is
+**constant in T**. This has been demonstrated in the local prototype.
+Constant total training memory and constant total communication have **not**
+been demonstrated: exact loop checkpoints retain full residual boundary states,
+and compute still grows with T.
+
+## Provisional Evidence — 2026-10-06
+
+The current [regime report](benchmarks/REGIMES.md) searches for at least **50%
+less peak live tensor storage**, at most **20% extra median latency** versus
+naive looping, and at most **25% more storage than non-loop LLT**. These are
+synthetic resource comparisons, not equal-quality trained-model comparisons.
+
+### GPU inference
+
+RX 6700 XT, Vulkan via the local Tensor runtime; width 768, 12 layers,
+12 heads of width 64, batch 1, 4,096 historical tokens, ten loops and
+256 output logits. Nine-sample repeats of the folded implementation measured:
+
+| Method | Peak live tensor MiB | Median GPU ms |
+|---|---:|---:|
+| Naive MHA, rank-32 control | 1,602.846 | 58.044 |
+| Per-head LLA geometry prototype, rank 32 | 257.696 | 46.266 |
+| LLT, rank 32 | 135.746 | 46.209 |
+| Naive MHA, rank-64 control | 1,602.846 | 57.820 |
+| Per-head LLA geometry prototype, rank 64 | 352.245 | 62.358 |
+| LLT, rank 64 | 163.071 | 60.227 |
+
+Rank 32 saves **91.5%** versus naive and is **20.4% faster**. Rank 64 saves
+**89.8%** with a **4.2% latency tax**. Both use exactly their non-loop LLT
+tensor storage; non-loop naive uses 306.530 MiB. Versus the corresponding LLA
+prototype, LLT saves **47.3% / 53.7%** memory at rank 32 / 64.
+
+This improvement requires folding tied, fixed K/V up-projections into query
+and output weights. Folded weights are FP32; cache/base weights are FP16.
+The earlier unfused decoder had a substantial latency tax. At the same 4K
+context and ten loops, ranks **96 and 128 still fail** the latency target:
+they take **2.158× and 2.456×** naive time. The exact rank crossover is unmeasured.
+At context 512, the measured 50% memory boundary is between six and seven
+loops for rank 32, and between nine and ten loops for rank 64.
+
+The LLA comparison implements per-head cache-codec geometry with random
+weights, including new-token encoding. It is not an author-system reproduction.
+LLT and LLA use different latent budgets: rank-32 caches here occupy 0.25 MiB
+and 72 MiB respectively, versus naive's 1,440 MiB. The stronger LLT compression
+has no verified quality guarantee.
+
+### CPU training
+
+Ryzen 5 5600, four PyTorch threads, FP32 and Adam; width 512, two layers,
+rank 32, batch 1, sequence 1,024 and vocabulary 50,257. Three rotating timing
+rounds include forward, full-vocabulary cross-entropy, backward and Adam:
+
+| Method | Loops | Peak live tensor MiB | Median step ms |
+|---|---:|---:|---:|
+| Non-loop LLT | 1 | 1,200.897 | 1,524.367 |
+| Naive, no checkpoints | 16 | 2,181.002 | 6,834.270 |
+| LLT, loop checkpoints | 16 | 1,180.818 | 6,635.593 |
+| Naive, no checkpoints | 20 | 2,437.315 | 8,449.932 |
+| Naive, same loop checkpoints | 20 | 1,195.752 | 10,205.507 |
+| LLT, loop checkpoints | 20 | 1,188.818 | 7,701.249 |
+
+At 20 loops, checkpointed LLT saves **51.2%** versus uncheckpointed naive,
+is **8.9% faster**, and has a footprint close to non-loop LLT. At 16 loops,
+it saves only **45.9%**, so the measured crossover lies between 16 and 20.
+
+Against naive with the **same checkpoints**, the additional memory saving
+is only **0.58%**, while median step time is **24.5% lower**. Most of the
+gross training-memory saving comes from ordinary checkpointing. Without
+checkpoints, LLT at 20 loops saves only **10.1%** and uses **1.82×** its
+non-loop footprint. A smaller 128-class, sequence-128 test qualified at
+13 loops, demonstrating that the threshold depends on the memory floor.
+
+The verified training path uses differentiable projection folding and exact
+loop checkpoints that retain full residual boundary states. Its gradients
+match uncheckpointed autograd; a separate float64 unfolded reference also
+passes. It does **not** validate reconstructing every residual activation
+from a single KV latent. LLA is a post-training inference codec; no comparable
+native LLA pretraining activation-memory graph was measured.
+
+### Measurement limits
+
+Memory is peak **live tensor storage**, including weights/workspaces and,
+for training, gradients and dense Adam state. Driver/runtime overhead and
+native operator scratch are excluded; these numbers are not process RSS/VRAM.
+The seven completed regime reports cover 48 configurations including repeats
+and 231 method/policy measurements, with correctness and artifact-hash checks.
+RoPE, prefill, learned quality, GPU backward, H100/NVLink and distributed
+communication remain unverified. Timings are medians, not tail-latency guarantees.
+See [reports and reproduction commands](benchmarks/REGIMES.md#scope-reports-and-reproduction).
 
 # Architecture
 
@@ -33,20 +123,28 @@ from a standard NanoGPT-style model:
 
 ## Forward Pass (per token t)
 
-    C_t   = Down_KV(x_t)                # low-rank latent, dim d_kv
-    q_t   = W_Q x_t                     # per-head query, decoupled RoPE
+The measured implementation uses tied up-projections and folded attention:
+
+    Q_fold[l] = W_K[l]^T W_Q[l]         # prepared once; differentiable in training
+    O_fold[l] = OutProj[l] W_V[l]
+    C_t = Down_KV(Norm(x_t))            # low-rank latent, dim d_kv
+    C_cache = append(C_cache, C_t)
     for i in 1..T:                       # loop index
         for l in 1..L:                   # layer index (shared block reused)
-            K_{t,l}^{(i)} = W_K^{l,i} C_t
-            V_{t,l}^{(i)} = W_V^{l,i} C_t
-            a = softmax(q_t K^T / sqrt(d)) V
-            x_t = x_t + OutProj(a)
+            q_lat = Q_fold[l] Norm(x_t)
+            a_lat = softmax(q_lat C_cache^T / sqrt(d_head)) C_cache
+            x_t = x_t + O_fold[l](a_lat)
+            x_t = x_t + MLP^l(Norm(x_t))
 
 Crucially:
 
 - `C_t` is computed **once per token**.
-- `K, V` are expanded **per layer, per loop, on the fly**.
+- Attention reads the shared latent directly, avoiding full K/V expansion.
 - No per-loop or per-layer KV is ever persisted.
+
+This is schematic per-head algebra; CPU sequence training applies a causal
+mask. Decoupled RoPE remains untested. The full residual state still evolves
+and must be handled during backward.
 
 ## Why This Is Not Just MLA + YOCO
 
@@ -63,12 +161,13 @@ Crucially:
 - Down-projection: `Down_KV`
 - Optional gating (MELT-style): `g_i` per loop
 
-The up-projections can be tied across loops (`W_K^{l,i} = W_K^l`) to
-recover the U-YOCO regime, or untied to allow loop-specific expansion.
+The measured path ties up-projections across loops (`W_K^{l,i} = W_K^l`).
+Loop-specific maps and optional gating remain design variants whose quality
+and resource tradeoffs have not been measured here.
 
 # Mathematical Foundations
 
-## 1. MLA Matrix Absorption (Inference)
+## 1. MLA Matrix Absorption and Projection Folding
 
 Standard MLA attention:
 
@@ -79,23 +178,29 @@ Absorption reorders the multiplications:
     Attn = softmax( (W_UK^T Q) C^T / sqrt(d) ) C W_UV^T
 
 This eliminates materialization of K = W_UK C and V = W_UV C.
-The compressed latent C is the only persistent state.
+The compressed latent C is the persistent KV cache; residuals, weights and
+workspaces remain separate allocations.
 
-## 2. Why Absorption Is a Memory Trap in Training
+## 2. Measured Rank and Training Tradeoffs
 
 The absorbed form materializes:
 
 - `q_absorbed = W_UK^T q_nope` with shape (n_h, d_kv)
 - a post-attention latent accumulator with shape (n_h, d_kv)
 
-These intermediates are larger than the per-head K/V they replace
-whenever `d_kv > d_head`.
+These intermediates grow with `d_kv` and can be larger than their per-head
+counterparts when `d_kv > d_head`. The total memory/latency tradeoff depends
+on the attention implementation, saved tensors and checkpoint policy.
 
 At DeepSeek-V3 scale (n_h = 128, d_model = 7168, seq = 16384),
 the absorbed form's peak activation memory exceeds the explicit
 form by **20–34%**, up to **9.2 GB** on a single device.
 
-**Conclusion:** use absorption for inference, but never for training.
+**Current conclusion:** absorption is conditional, not an inference-only rule.
+The local CPU prototype differentiates folded projections exactly and finds
+useful small-rank training regimes. This does not validate large-rank absorbed
+training or GPU backward. On this Vulkan implementation, even inference at
+rank 96/128 fails the latency target despite cache savings.
 
 ## 3. LAGA (Latent All-Gather Attention)
 
@@ -132,63 +237,67 @@ Two regimes:
 - **Exact:** the forward pass uses Z_t directly. Backward is exact for
   the modified model. This is "low-rank activations," not checkpointing.
 - **Approximate:** the forward pass uses full-rank x_t, but backward
-  reconstructs x_t' ≈ x_t from Z_t. Gradients are biased unless a
-  residual or outlier path is added.
+  reconstructs x_t' ≈ x_t from Z_t. Gradients can be biased. A residual
+  or outlier path can improve reconstruction, but exactness requires
+  recovering the necessary full states exactly or recomputing them.
 
-For looped transformers, LAC is applied **along the loop axis**:
-store one latent per token, reconstruct per-loop activations on the fly.
+The proposed loop-axis LAC would store one latent per token and reconstruct
+per-loop activations on the fly. A KV latent alone does not recover the
+full residual/query/MLP states of the measured model. Exact backward needs
+additional checkpoints, replay or a different forward architecture.
 
 # Training Strategy
 
-## Chunk-Wise Training (MELT-style)
+## Measured Exact Loop Checkpointing
 
-Problem: a gated latent state updated across loops introduces a
-sequential dependency that prevents fully parallel training.
+The verified CPU path uses a shared KV latent and ordinary exact checkpoints:
 
-Solution: split the sequence into chunks. Within each chunk, run the
-loops in parallel. Across chunks, carry the gated latent forward.
+    C = Down_KV(Norm(initial_state))     # shared sequence latent
+    folds = differentiable_fold(weights)
+    state = initial_state
+    for i in 1..T:
+        state = checkpoint(loop_block, state, use_reentrant=False)
+        # loop_block closes over C, folds and the shared block weights
+    loss = cross_entropy(classifier(Norm(state)), targets)
+    loss.backward()                     # autograd recomputes checkpointed blocks
+    optimizer.step()
 
-This gives:
+Checkpoints retain full residual states at loop boundaries. In the measured
+50K-vocabulary configuration, LLT storage rises from **1,180.818 MiB at
+16 loops to 1,188.818 MiB at 20 loops**: 2 MiB per added loop over that interval.
+This yields near-non-loop memory at 20 loops, but does not eliminate T-dependent
+training storage. Its **0.58%** extra saving over equally checkpointed naive
+is the current architecture-specific memory result.
 
-- Constant activation memory in T (loop count)
-- Bounded sequential dependency (chunk length, not sequence length)
-- Compatibility with activation checkpointing
+Earlier toy prefix replay reduced unique saved-tensor storage by **96.7–96.8%**
+at 32 loops, but cost **5.73–6.45×** forward/backward time and 496 extra prefix
+steps. The measured exact loop policy avoids that quadratic replay schedule.
+The lossy rank-16 checkpoint control produced **7.5% input-gradient relative
+L2 error**, with **96.4–154.8%** parameter-gradient errors in that fixture.
+See [CPU checkpoint findings](benchmarks/README.md#cpu-checkpoint-findings).
 
-## Latent Activation Checkpointing (LAC) for the Loop Axis
+## Remaining Training Target
 
-Forward:
+Loop-axis LAC aims to replace full residual checkpoints with compact state
+while retaining exact or acceptably accurate training. Reconstructing K/V
+alone is insufficient for the measured full-residual model. A redesigned
+forward graph, reversible state or additional retained information would
+need to establish the memory/quality tradeoff. MELT-style chunking remains
+an untested route toward this target; it does not by itself parallelize
+dependent residual loops.
 
-    for each token t:
-        C_t = Down_KV(x_t)        # store ONLY this
-        for i in 1..T:
-            for l in 1..L:
-                K, V = expand(C_t, l, i)
-                x_t = attention(x_t, K, V)
+## Current Implementation Guidance
 
-Backward:
-
-    for each token t:
-        load C_t                  # from checkpoint
-        grad_C = 0
-        for i in 1..T:
-            for l in 1..L:
-                K, V = expand(C_t, l, i)   # recompute, transient
-                grad_C += backward_through_expand(K, V)
-        grad_Down = backward_through_down(grad_C)
-
-Memory: O(seq × r) instead of O(seq × L × T × d).
-Compute: + one up-projection per (layer, loop) during backward.
-
-## Recommended Settings
-
-- **Activation checkpointing granularity:** per chunk, not per layer.
-- **Reconstruction:** explicit (LAGA-style), never absorbed.
-- **Residual path:** small full-rank residual for near-exact gradients
-  if loss curve diverges.
-- **Outlier handling:** quantization-aware or sparse-outlier path
-  (Adacc-style) if the latent distribution is heavy-tailed.
-- **Fusion:** fuse expand + attention into one kernel so K/V never
-  persist in HBM.
+- **Checkpointing:** exact per-loop checkpoints are the verified CPU path;
+  compare against naive using the same policy.
+- **Projection folding:** tied up-projections remove repeated query/output
+  projection work; differentiable folding is tested on CPU.
+- **Rank:** 32 and 64 qualify for the tested 768D GPU decoder; rank 128,
+  an earlier proposal setting, currently has excessive latency.
+- **Residuals:** retain or recompute full states for exact gradients.
+  A small residual or outlier path does not by itself guarantee exactness.
+- **Training fusion and chunking:** further candidates to measure; neither establishes
+  the complete proposed training-memory or communication claims.
 
 # Inference
 
@@ -202,174 +311,102 @@ Compute: + one up-projection per (layer, loop) during backward.
 | U-YOCO              | O(seq × d_kv)            |
 | **LLT**             | **O(seq × d_kv)**        |
 
-LLT's cache is constant in both L and T. The only persistent state
-is the per-token latent C_t (plus the decoupled RoPE key).
+LLT's cache is constant in both L and T. The persistent KV cache
+is the per-token latent C_t (plus a decoupled RoPE key if implemented).
+Weights, residuals and workspaces also occupy memory; only the cache's
+independence of L and T follows from this design.
 
 ## Decoding
 
 At each step:
 
-1. Compute C_t = Down_KV(x_t).
+1. Compute C_t = Down_KV(Norm(x_t)).
 2. Append C_t to the latent cache.
 3. For each layer l and loop i:
-   - Expand K, V from C_t locally.
-   - Run attention against the cached latents.
-   - Free the expansion.
+   - Project the evolving residual into a per-head query using folded weights.
+   - Attend directly against cached latents, including the current token.
+   - Project the latent accumulator back to the residual width and run the MLP.
+4. Apply final normalization and the output classifier.
 
-Absorption can be used here (it is an inference-only optimization):
-fold W_UK and W_UV into the query and output projections.
+The measured decoder folds W_UK and W_UV into query/output projections once
+before the loops. The CPU training prototype differentiates those folds.
+This avoids the full historical K/V expansion used by the earlier unfused path.
 
 ## Batch Scaling
 
-LLA reports that 21.3× loop-axis compression increases batch capacity
-from 32 to 768 sequences on a single H200 at matched quality.
-LLT inherits this and adds cross-layer sharing on top.
+The [extended attention measurements](benchmarks/README.md#nine-follow-up-suites)
+test batch sizes 2, 4 and 8. At batch 8, context 1,024 and rank 64, absorbed
+attention takes **3.782 ms**, versus **3.990 ms** for cached attention: 5.2%
+less time. This fixed-query microbenchmark has not received an independent
+rerun and does not establish complete-decoder batch capacity. The current
+folded decoder regime uses batch 1. Matched-quality serving capacity remains
+a target to test, rather than an inherited LLA compression benefit.
 
 # Parallelism and Communication
 
-## Sequence Parallelism (SP) / Context Parallelism (CP)
+No LLT distributed run has been measured. Lower KV traffic remains part of
+the main value proposition, with three implementation targets:
 
-Standard explicit MLA SP communicates:
+- **SP/CP:** transfer shared latents and reconstruct or attend locally,
+  rather than transfer full expanded K/V.
+- **TP:** shard the latent instead of duplicating its cache across ranks.
+- **Loop reuse:** reuse transferred latent data across recurrence when the
+  schedule permits it.
 
-    n_h × (d_nope + d_v) = 128 × 256 = 32,768 elements / token
+Attention outputs, residuals, MLPs and gradients can still communicate per
+loop. Published LAGA/TPLA results motivate these targets but do not measure
+their composition with LLT or justify a total LLT communication speedup.
 
-LLT communicates:
+# Value Proposition and Remaining Targets
 
-    d_kv + d_rope = 512 + 64 = 576 elements / token
+LLT's main target is to make deeper recurrence practical by sharing a small
+KV latent across layers and loops, while preserving useful model quality and
+keeping latency acceptable. Current performance claims use the
+[measured operating points above](#provisional-evidence--2026-10-06).
 
-Per-token reduction: ~57×.
-Measured total collective reduction (LAGA): 1.98× on 8× Ascend 910B.
+| Value proposition | Current evidence | Remaining target |
+|---|---|---|
+| Inference memory close to non-loop | Rank 32: 135.746 MiB at both one and ten loops; 91.5% below naive at ten loops | Preserve trained quality with the shared latent |
+| Acceptable latency at a useful rank | Rank 32 is 20.4% faster; rank 64 has 4.2% tax in the tested GPU decoder | Verify RoPE, prefill and production workloads |
+| Training memory close to non-loop | At 20 loops: 1,188.818 MiB with exact checkpoints, versus 1,200.897 MiB for non-loop LLT | Achieve a substantial additional saving over equally checkpointed naive; currently only 0.58% |
+| Exact backward from compact state | Exact residual-boundary checkpointing passes gradient checks | Establish whether a redesigned forward or reconstruction method can eliminate full residual checkpoints |
+| Lower distributed KV traffic | No local distributed measurement | Share/shard latents without repeated KV transfers; measure total collectives and synchronization |
 
-For CP, the same substitution applies. NVIDIA's Megatron-LM has a
-PR that overlaps the compressed-KV CP all-gather with independent
-compute, confirming this is an active engineering direction.
+Constant total training memory from a single latent and reduced distributed
+communication remain core research targets. There is no measured H100/NVLink
+throughput or whole-device memory figure. Results from LLA, LAGA or CompAct
+provide related-work evidence; their gains cannot be multiplied into an LLT
+performance prediction. The [benchmark history](benchmarks/README.md) retains
+earlier implementation results and the [regime report](benchmarks/REGIMES.md)
+contains current protocols and raw measurements.
 
-## Tensor Parallelism (TP)
+# Measured Scaling with Loop Count
 
-Standard MLA TP duplicates the KV cache across ranks.
-TPLA partitions the latent and each head's input dimension, runs
-attention independently per shard, and all-reduces attention outputs.
+The [coarse inference sweep](benchmarks/results/regime-inference/report.json)
+holds width 768, 12 layers, rank 32, batch 1 and context 4,096 fixed, using
+five GPU timing samples per point:
 
-LLT inherits TPLA's structure:
+| Loops | Naive peak MiB | LLT peak MiB | Naive GPU ms | LLT GPU ms |
+|---|---:|---:|---:|---:|
+| 1 | 306.530 | 135.746 | 5.379 | 4.409 |
+| 4 | 738.635 | 135.746 | 21.664 | 17.278 |
+| 10 | 1,602.846 | 135.746 | 56.707 | 45.965 |
+| 16 | 2,467.057 | 135.746 | 90.885 | 72.959 |
 
-- Latent is partitioned, not duplicated.
-- All-reduce volume scales with query dim, not KV dim.
+LLT's tensor allocation stays fixed across these loop counts while latency
+grows in both models. These are coarse-sweep timings; the independent
+nine-sample repeat above is the preferred ten-loop comparison.
 
-## Loop Axis as a Free Dimension
+For 50K-vocabulary CPU training, increasing loops from 16 to 20 raises naive
+uncheckpointed peak storage from **2,181.002 to 2,437.315 MiB** and checkpointed
+LLT from **1,180.818 to 1,188.818 MiB**. Checkpointing suppresses the growth
+substantially but does not make training memory constant. The equally
+checkpointed naive model already reaches **1,195.752 MiB** at 20 loops.
 
-Because C_t is shared across loops, communication happens **once per
-token per chunk**, not once per loop. Adding loops adds no wire traffic.
-
-| Axis | Naive looped | LLT |
-|------|--------------|-----|
-| SP/CP| O(T × n_h × d) | O(d_kv) |
-| TP   | O(T × d_kv) duplicated | O(d_kv / tp) partitioned |
-| Loop | O(T × d_kv) | 0 |
-
-# Estimated Performance (8×H100, NanoGPT-style)
-
-These are **estimates** synthesized from published results for the
-individual techniques (MELT, LLA, LAGA, CompAct) and standard NanoGPT
-speedrun performance. They are not measured for this exact combination.
-
-A [local RX 6700 XT Vulkan and CPU benchmark report](benchmarks/README.md) now
-measures attention, a synthetic complete decoder forward, live tensor allocations,
-and toy checkpoint gradients. It verifies cache savings with latency tradeoffs,
-but does not validate the H100 throughput or total-memory estimates below.
-
-A subsequent [regime search](benchmarks/REGIMES.md) finds qualifying synthetic
-inference points at rank 32–64 using folded projections, and CPU training points
-using exact loop checkpoints. Training savings are mostly from checkpointing:
-with a 50K vocabulary, LLT saves only 0.6% more memory than naive using the
-same checkpoints. Model quality and GPU training remain unverified.
-
-## Setup
-
-- Model: NanoGPT-style decoder
-- Shared block: L = 12 layers, d_model = 768, n_h = 12
-- Loops: T = 10
-- Latent: d_kv = 128 (≈ 6× compression vs d_model)
-- Hardware: 8×H100 SXM, NVLink
-
-## Naive Looped Transformer
-
-| Metric | Value |
-|--------|-------|
-| Throughput | ~15,000 – 20,000 tokens/sec |
-| Peak memory | ~65 – 75 GB / GPU |
-| KV cache | O(seq × L × T × d) |
-| Activations | O(seq × L × T × d_model) |
-
-## Optimized Loop-Latent Transformer
-
-| Metric | Value |
-|--------|-------|
-| Throughput | ~40,000 – 55,000 tokens/sec |
-| Peak memory | ~25 – 35 GB / GPU |
-| KV cache | O(seq × d_kv) |
-| Activations | O(seq × r) |
-
-## Relative Improvement
-
-| Axis | Ratio |
-|------|-------|
-| Throughput | 2 – 3× |
-| Peak memory | 2 – 3× |
-| SP/CP wire volume | ~57× per token, ~2× total |
-| TP KV duplication | eliminated |
-| Loop-axis cost | T× → 1× |
-
-## Caveats
-
-- The 21.3× LLA figure is **inference-only**. Training gains require
-  baking the low-rank bottleneck into the forward graph.
-- The 1.98× LAGA figure is **measured on 8× Ascend 910B**, not H100.
-- CompAct's 25–50% activation savings are for **general activations**,
-  not loop-axis latents specifically.
-- The proposed loop-axis LAC training system is **novel and unvalidated**.
-  Local toy replay passes exact gradient checks but exposes recomputation cost;
-  lossy full-state reconstruction produces biased gradients.
-
-# Scaling with Loop Count
-
-Let T = number of loops.
-
-## Naive Looped Transformer
-
-    Memory(T)     ∝ T
-    Compute(T)    ∝ T
-    Comm(T)       ∝ T
-
-## Loop-Latent Transformer
-
-    Memory(T)     ≈ C_0          (constant)
-    Compute(T)    ≈ T × c_expand (expansion is cheap)
-    Comm(T)       ≈ C_comm       (constant)
-
-## Relative Gain
-
-    Gain(T) ≈ T / (1 + (ε/C_0) T)
-
-As T → ∞, Gain(T) → C_0/ε, the compression ratio of the latent.
-
-At small T: super-linear improvement.
-At large T: saturates at the latent's compression ceiling.
-
-## Empirical Reference Points
-
-- YOCO-U shows consistent gains scaling loops 1 → 5 with a constant
-  global KV cache.
-- FlashLoop reports that gains from cross-loop sharing **grow with
-  deeper recurrence**.
-- LLA shows 21.3× compression is achievable at matched quality on
-  the loop axis.
-
-## Practical Implication
-
-The loop axis is the **one axis where adding compute costs the naive
-model linearly but the optimized model essentially nothing**. This
-makes LLT attractive for reasoning-heavy tasks where T is large
-(e.g., T = 16 or 32 loops for multi-step reasoning).
+The measured crossover depends on context, vocabulary, optimizer and checkpoint
+policy. There is no measured universal threshold derived from width alone.
+Useful reasoning quality and time-to-solution at deeper recurrence remain
+targets for trained-model evaluation.
 
 # Terminology
 
@@ -413,7 +450,8 @@ makes LLT attractive for reasoning-heavy tasks where T is large
 ## Compression of KV Cache
 
 - **MLA (DeepSeek-V2)** — low-rank KV latent, decoupled RoPE.
-  Inference-only absorption; training explicitly disables absorption.
+  Its cited training implementation disables absorption; this is not a
+  general impossibility result for differentiable folding at smaller ranks.
 - **YOCO** — one global KV cache, cross-decoder layers reuse it.
 - **U-YOCO** — iterated self-decoder, constant cache, no compression.
 - **LLA** — loop-axis codec, 21.3× compression, batch 32 → 768 on H200.
@@ -442,9 +480,9 @@ makes LLT attractive for reasoning-heavy tasks where T is large
 - **RevNets** — analytically invertible blocks, no stored activations.
   Not trivially compatible with MLA / looped / YOCO.
 
-## Gap LLT Fills
+## Intended Combination
 
-No existing work combines:
+The proposal aims to combine:
 
 1. Loop-axis latent compression (LLA),
 2. Cross-layer cache sharing (YOCO / U-YOCO),
@@ -452,8 +490,10 @@ No existing work combines:
 4. Low-rank activation checkpointing (CompAct / LAC),
 5. Latent-only communication (LAGA / TPLA).
 
-LLT is the union of these five, applied simultaneously to a single
-shared latent C_t.
+The full five-part composition around a shared latent C_t remains a research
+target. The local prototypes validate selected resource properties of a
+modified forward model and exact checkpoints, not the complete combination
+or a literature-wide novelty claim.
 
 # Open Questions
 
@@ -473,8 +513,9 @@ cleanly, or does the gated state need its own checkpoint?
 
 ## 3. Does absorption ever help in training?
 
-Megatron-Core hard-asserts against it. But for very small d_kv / d_head
-ratios, the absorbed form might be cheaper. Is there a threshold?
+The CPU prototype demonstrates exact differentiable folding and useful
+small-rank timing regimes. The relevant open questions are the GPU-backward
+crossover, larger ranks, RoPE and quality at useful training scales.
 
 ## 4. How does the latent behave under TP sharding?
 
@@ -484,7 +525,8 @@ Does the all-reduce of attention outputs preserve the LAGA guarantees?
 ## 5. What is the right loop-conditioning for W_K^{l,i}, W_V^{l,i}?
 
 - Tied across loops (U-YOCO regime): minimal parameters, maximum sharing.
-- Loop-specific: more expressive, but breaks the "one latent" claim.
+- Loop-specific: retains one shared KV latent, but adds loop-specific maps
+  and may increase weight storage/folding work.
 - Low-rank loop embedding: middle ground.
 
 ## 6. Does the LLA compression ratio hold under training?
@@ -495,9 +537,12 @@ scratch may produce different (possibly better) loop-axis structure.
 
 ## 7. What is the wall-clock cost of transient expansion?
 
-LAGA matches explicit-form memory within 0.5%. But the expand-and-free
-pattern in backward adds kernel launches. Is the net throughput gain
-positive at NanoGPT scale, or only at frontier scale?
+The earlier rank-128, 4K decoder's absorbed path took **134.966 ms** versus
+**53.088 ms** for its matched naive-cache path; tile-fused expansion took
+**812.852 ms**. The current folded rank-32/rank-64 regimes qualify. These
+measurements show that expansion/fusion and rank must be evaluated in their
+actual schedule. GPU backward and optimized matrix-kernel performance remain
+unmeasured; see the [decoder results](benchmarks/README.md#complete-decoder-and-allocation-protocol).
 
 ## 8. Can RevNet-style reversibility be combined with MLA?
 
@@ -515,5 +560,6 @@ latent all-gather remain the dominant win at 64+ GPUs?
 ## 10. What is the right benchmark for looped reasoning?
 
 GSM8K, MATH, and code generation stress different loop depths.
-LLT's advantage grows with T, so the benchmark choice determines
-how large the measured gain appears.
+The cache-memory advantage can grow with T, while compute grows too.
+Benchmarks should compare trained quality and time-to-solution, with matched
+checkpoint policies and explicit latent budgets, as well as peak memory.

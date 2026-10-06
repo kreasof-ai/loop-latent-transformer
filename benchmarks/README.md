@@ -8,7 +8,7 @@ October 6, 2026. No changes to the Tensor checkout are needed.
 The original run below is a synthetic **single-token, single-layer attention microbenchmark**,
 with batch 1, 12 heads and head dimension 64. It does not implement a trained
 LLT, a complete transformer stack, MLPs, RoPE, backward, or distributed training.
-Its results do not verify the README's 8×H100 throughput or total-memory estimates.
+Its results do not establish H100 throughput or whole-device training memory.
 
 The follow-up measurements also cover an evolving complete decoder forward,
 isolated live tensor allocations, and CPU gradient replay. These remain synthetic
@@ -77,10 +77,12 @@ unfused expansion still needs a **12 MiB temporary buffer**. Absorption removes
 that buffer at the measured latency cost.
 
 A naive 12-layer, ten-loop stack retaining separate FP16 caches would require
-`12 MiB × 12 × 10 = 1,440 MiB` for this context, versus a hypothetical globally
-shared rank-128 cache of 1 MiB, excluding positional keys. That **1,440×** ratio
-is calculated storage arithmetic. The benchmark allocates one representative
-explicit cache, not a complete stack or its 120 distinct cache tensors.
+`12 MiB × 12 × 10 = 1,440 MiB` for this context, versus a globally shared
+rank-128 cache of 1 MiB, excluding positional keys. The later
+[4K decoder run](#complete-decoder-and-allocation-protocol) allocated these
+cache sizes. This original microbenchmark allocates only one representative
+explicit cache; the **1,440×** ratio describes raw cache storage, not whole-model
+peak memory.
 
 ## Protocol and correctness
 
@@ -304,8 +306,9 @@ reconstructs it through a rank-16 codec during backward. Its input gradient has
 7.5% relative L2 error; parameter-gradient errors range from 96.4% to 154.8% in
 this synthetic fixture. This confirms the expected bias, not a trained codec's
 quality limit. Storing only KV latent does not reconstruct evolving query,
-residual and MLP states. The proposal's backward pseudocode and its claim of
-only one extra up-projection per layer/loop remain unverified.
+residual and MLP states. The later [exact loop checkpoint path](REGIMES.md)
+retains full residual boundary states; KV-only residual reconstruction remains
+an unresolved research target.
 
 ## Reproduce the follow-up
 
