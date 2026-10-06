@@ -1,0 +1,272 @@
+{
+  "schema": "llt.regime-training.v1",
+  "status": "passed",
+  "timestamp_utc": "2026-10-06T12:07:34.892496+00:00",
+  "torch": "2.14.0+cpu",
+  "device": "cpu",
+  "processor": "AMD64 Family 25 Model 33 Stepping 2, AuthenticAMD",
+  "dtype": "float32",
+  "threads": 4,
+  "source_hashes": {
+    "regime_training_model.py": "8c0e2a928346e26b0899750c5cf42ab3521eb8a679280cf9ef2a01e891ef213a",
+    "regime_training.py": "7538c922f71c38003a77ea8d896d65f819355b0528cd099b3c5484f9f841ea1d",
+    "lac_cpu.py": "920b31c66fd905a2cce173564788a307e3ddf4ecc6c6b9a8c2d71431d5d33e2a"
+  },
+  "protocol": {
+    "samples": 3,
+    "acceptable_tax": 0.2,
+    "large_memory_reduction": 0.5,
+    "comparable_nonloop_max_ratio": 1.25,
+    "timing": "forward+cross-entropy+backward+Adam update; allocation/clones/GC/initial optimizer state excluded; hooks absent in timing runs",
+    "memory": "unique live observable CPU tensor storage, includes input, labels, weights, gradients, Adam state and operator outputs; excludes immutable fixtures/runtime/native operator scratch; not RSS/GPU VRAM",
+    "attention": "PyTorch CPU scaled-dot-product attention, causal; same API for both models; explicit scale head_width**-.5",
+    "llt": "fixed shared global KV latent from initial input; full residual state; differentiable query/output folding outside loops; exact autograd",
+    "lla": "paper is post-training inference cache codec; no native LLA pretraining memory graph claimed; parent teacher training follows naive graph",
+    "policies": [
+      "none",
+      "mlp",
+      "loop",
+      "pair"
+    ],
+    "checkpoint": "non-reentrant PyTorch exact checkpointing; identical options for both models",
+    "quality": "random weights/token targets; gradient correctness only, no learned quality comparison",
+    "order": "method order rotates by one each paired round",
+    "vocabulary": 50257,
+    "scope": "all tokens, full vocabulary cross-entropy and Adam; random targets, no quality claim"
+  },
+  "folding_validation": {
+    "passed": true,
+    "dtype": "float64",
+    "reference": "explicit full K/V and masked-softmax attention, unfolded projections",
+    "forward_max_absolute_error": 3.3306690738754696e-16,
+    "gradient_max_absolute_error": 2.168404344971009e-18
+  },
+  "cases": [
+    {
+      "width": 512,
+      "heads": 8,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 1024,
+      "vocabulary": 50257,
+      "loops": 1,
+      "methods": [
+        {
+          "loss": 10.852401733398438,
+          "parameter_bytes": 128092160,
+          "optimizer_state_bytes": 256184372,
+          "peak_live_tensor_bytes": 1279084604,
+          "peak_saved_tensor_bytes": 277250052,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 1592.1306000091136,
+            "samples_ms": [
+              1582.5165000278503,
+              1647.9291000287049,
+              1592.1306000091136
+            ],
+            "min_ms": 1582.5165000278503,
+            "max_ms": 1647.9291000287049
+          }
+        },
+        {
+          "loss": 10.852401733398438,
+          "parameter_bytes": 128092160,
+          "optimizer_state_bytes": 256184372,
+          "peak_live_tensor_bytes": 1213990972,
+          "peak_saved_tensor_bytes": 212156420,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 1693.0111999972723,
+            "samples_ms": [
+              1347.239599970635,
+              1815.1092999614775,
+              1693.0111999972723
+            ],
+            "min_ms": 1347.239599970635,
+            "max_ms": 1815.1092999614775
+          }
+        },
+        {
+          "loss": 10.852408409118652,
+          "parameter_bytes": 124225536,
+          "optimizer_state_bytes": 248451128,
+          "peak_live_tensor_bytes": 1259231296,
+          "peak_saved_tensor_bytes": 268996612,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 1524.3671999778599,
+            "samples_ms": [
+              1471.965300035663,
+              1524.3671999778599,
+              1547.8599999914877
+            ],
+            "min_ms": 1471.965300035663,
+            "max_ms": 1547.8599999914877
+          }
+        },
+        {
+          "loss": 10.852408409118652,
+          "parameter_bytes": 124225536,
+          "optimizer_state_bytes": 248451128,
+          "peak_live_tensor_bytes": 1206720576,
+          "peak_saved_tensor_bytes": 214257668,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 1418.8239999930374,
+            "samples_ms": [
+              1418.8239999930374,
+              1503.6732999724336,
+              1390.9185000229627
+            ],
+            "min_ms": 1390.9185000229627,
+            "max_ms": 1503.6732999724336
+          }
+        }
+      ],
+      "paired_latency_ratios": {
+        "llt_loop_vs_naive_none": [
+          0.8965618999663308,
+          0.9124623747139616,
+          0.8736208574943544
+        ],
+        "median": 0.8965618999663308,
+        "max": 0.9124623747139616
+      }
+    },
+    {
+      "width": 512,
+      "heads": 8,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 1024,
+      "vocabulary": 50257,
+      "loops": 16,
+      "methods": [
+        {
+          "loss": 10.853425979614258,
+          "parameter_bytes": 128092160,
+          "optimizer_state_bytes": 256184372,
+          "peak_live_tensor_bytes": 2286946364,
+          "peak_saved_tensor_bytes": 1285111812,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 6834.27049999591,
+            "samples_ms": [
+              6331.119999988005,
+              7015.473400009796,
+              6834.27049999591
+            ],
+            "min_ms": 6331.119999988005,
+            "max_ms": 7015.473400009796
+          }
+        },
+        {
+          "loss": 10.853425979614258,
+          "parameter_bytes": 128092160,
+          "optimizer_state_bytes": 256184372,
+          "peak_live_tensor_bytes": 1245448252,
+          "peak_saved_tensor_bytes": 243613700,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 8152.268200006802,
+            "samples_ms": [
+              7997.2953999531455,
+              8640.836500038859,
+              8152.268200006802
+            ],
+            "min_ms": 7997.2953999531455,
+            "max_ms": 8640.836500038859
+          }
+        },
+        {
+          "loss": 10.85352897644043,
+          "parameter_bytes": 124225536,
+          "optimizer_state_bytes": 248451128,
+          "peak_live_tensor_bytes": 2078349376,
+          "peak_saved_tensor_bytes": 1088114692,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 5450.418899999931,
+            "samples_ms": [
+              5496.340900019277,
+              5450.418899999931,
+              5426.037699973676
+            ],
+            "min_ms": 5426.037699973676,
+            "max_ms": 5496.340900019277
+          }
+        },
+        {
+          "loss": 10.85352897644043,
+          "parameter_bytes": 124225536,
+          "optimizer_state_bytes": 248451128,
+          "peak_live_tensor_bytes": 1238177856,
+          "peak_saved_tensor_bytes": 245714948,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 6635.592599981464,
+            "samples_ms": [
+              6635.592599981464,
+              6811.50189996697,
+              6277.753099973779
+            ],
+            "min_ms": 6277.753099973779,
+            "max_ms": 6811.50189996697
+          }
+        }
+      ],
+      "paired_latency_ratios": {
+        "llt_loop_vs_naive_none": [
+          1.0480914277401212,
+          0.9709254830839297,
+          0.9185695971468405
+        ],
+        "median": 0.9709254830839297,
+        "max": 1.0480914277401212
+      }
+    }
+  ]
+}

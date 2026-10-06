@@ -277,6 +277,12 @@ measures attention, a synthetic complete decoder forward, live tensor allocation
 and toy checkpoint gradients. It verifies cache savings with latency tradeoffs,
 but does not validate the H100 throughput or total-memory estimates below.
 
+A subsequent [regime search](benchmarks/REGIMES.md) finds qualifying synthetic
+inference points at rank 32–64 using folded projections, and CPU training points
+using exact loop checkpoints. Training savings are mostly from checkpointing:
+with a 50K vocabulary, LLT saves only 0.6% more memory than naive using the
+same checkpoints. Model quality and GPU training remain unverified.
+
 ## Setup
 
 - Model: NanoGPT-style decoder

@@ -1,0 +1,2962 @@
+{
+  "schema": "llt.regime-inference.v1",
+  "status": "passed",
+  "timestamp_utc": "2026-10-06T11:23:10.970134+00:00",
+  "tensor_commit": "fa006eda9f01b5b2539ad1ca7eda03bc41f253c4",
+  "source_hashes": {
+    "regime_inference.py": "87332a21432437695df17c1131b089981f37869a82c71128613ceed1da0bd597",
+    "extended_kernels.py": "3daab8b6d8b12cd01ebd2bc87f8057609840a2a206169e03c0bda15c2a2860dd",
+    "decoder_forward.py": "e5c20f58bf2f478f07eba036322ba6061e1e598942598476126058b6339fb60a"
+  },
+  "protocol": {
+    "samples": 5,
+    "repeats": 3,
+    "gpu_timestamp_period_ns": 10.0,
+    "acceptable_tax": 0.2,
+    "large_memory_reduction": 0.5,
+    "comparable_nonloop_max_ratio": 1.25,
+    "models": "naive MHA (distinct caches); LLA per-head geometry (separate K/V, loop maps, encode new trajectory); LLT global latent, folded projections",
+    "lla_source": "https://arxiv.org/html/2607.15456v2#S3",
+    "lla_scope": "random zero-mean codec geometry, no pretrained teacher/SVD/distillation/RoPE; not official LLA quality or serving reproduction",
+    "precision": "FP16 cache/base weights/codec; FP32 residual, accumulations, folded LLT query/output weights",
+    "memory": "peak live tensor allocation including weights, codecs, cache, pending token entries and workspace; excludes driver overhead",
+    "token": "S historical tokens plus exact current-token attention; LLA encodes current loop trajectory after all loops",
+    "excluded": [
+      "compilation",
+      "allocation",
+      "uploads",
+      "readback",
+      "prefill",
+      "token lookup",
+      "sampling"
+    ],
+    "quality": "none; LLT is a different forward model; comparison is geometry and resource use"
+  },
+  "cases": [
+    {
+      "context_history": 512,
+      "rank": 32,
+      "loops": 1,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 2.8760666666666665,
+            "samples_ms": [
+              2.96712,
+              2.91728,
+              2.8760666666666665,
+              2.807866666666667,
+              2.752693333333333
+            ],
+            "min_ms": 2.752693333333333,
+            "max_ms": 2.96712,
+            "host": {
+              "median_ms": 2.9424999956972897,
+              "samples_ms": [
+                2.93999999606361,
+                2.9424999956972897,
+                2.93900000785167,
+                2.9501666819366315,
+                2.9561000022416315
+              ],
+              "min_ms": 2.93900000785167,
+              "max_ms": 2.9561000022416315
+            }
+          },
+          "dispatches": 195,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.669442116214448e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 189299200,
+          "allocation_count": 104,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 18874368,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 2.94472,
+            "samples_ms": [
+              2.7670133333333333,
+              2.851813333333333,
+              2.94472,
+              3.0448,
+              3.1350933333333333
+            ],
+            "min_ms": 2.7670133333333333,
+            "max_ms": 3.1350933333333333,
+            "host": {
+              "median_ms": 3.0049000051803887,
+              "samples_ms": [
+                3.2046333265801272,
+                3.060733317397535,
+                3.0040333319144943,
+                3.0033333459869027,
+                3.0049000051803887
+              ],
+              "min_ms": 3.0033333459869027,
+              "max_ms": 3.2046333265801272
+            }
+          },
+          "dispatches": 243,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.7444092931251376e-07,
+            "codec_maximum_absolute_error": 0.0001220703125,
+            "codec_end_to_end_maximum_absolute_error": 0.000244140625
+          },
+          "peak_live_tensor_bytes": 182256640,
+          "allocation_count": 143,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 176128,
+            "weights": 170262528,
+            "cache": 9437184,
+            "codec_weights": 2359296,
+            "pending_cache_entry": 18432
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 2.3889466666666666,
+            "samples_ms": [
+              2.3889466666666666,
+              2.3904133333333335,
+              2.38868,
+              2.390893333333333,
+              2.3837866666666665
+            ],
+            "min_ms": 2.3837866666666665,
+            "max_ms": 2.390893333333333,
+            "host": {
+              "median_ms": 2.592700009699911,
+              "samples_ms": [
+                2.612266670136402,
+                2.5967666685270765,
+                2.590066675717632,
+                2.5924333410027125,
+                2.592700009699911
+              ],
+              "min_ms": 2.590066675717632,
+              "max_ms": 2.612266670136402
+            }
+          },
+          "dispatches": 151,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.6800401878014348e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 142111040,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 75008,
+            "weights": 142000128,
+            "cache": 32768,
+            "pending_cache_entry": 64
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 512,
+      "rank": 32,
+      "loops": 4,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 12.276333333333334,
+            "samples_ms": [
+              12.11848,
+              13.142863333333333,
+              12.428413333333333,
+              12.276333333333334,
+              11.627373333333333
+            ],
+            "min_ms": 11.627373333333333,
+            "max_ms": 13.142863333333333,
+            "host": {
+              "median_ms": 11.65640001030018,
+              "samples_ms": [
+                11.786599992774427,
+                11.646333344591161,
+                11.65640001030018,
+                11.603266660434505,
+                11.756933333041767
+              ],
+              "min_ms": 11.603266660434505,
+              "max_ms": 11.786599992774427
+            }
+          },
+          "dispatches": 771,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.559489106213064e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 246032896,
+          "allocation_count": 176,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 75497472,
+            "pending_cache_entry": 147456
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 11.44308,
+            "samples_ms": [
+              11.389693333333334,
+              11.44308,
+              11.446706666666666,
+              11.498373333333333,
+              11.408639999999998
+            ],
+            "min_ms": 11.389693333333334,
+            "max_ms": 11.498373333333333,
+            "host": {
+              "median_ms": 11.391266675976416,
+              "samples_ms": [
+                11.419033321241537,
+                11.387299998508146,
+                11.397133329107115,
+                11.391266675976416,
+                11.383799991259972
+              ],
+              "min_ms": 11.383799991259972,
+              "max_ms": 11.419033321241537
+            }
+          },
+          "dispatches": 891,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.023952769298788e-07,
+            "codec_maximum_absolute_error": 6.103515625e-05,
+            "codec_end_to_end_maximum_absolute_error": 0.0001220703125
+          },
+          "peak_live_tensor_bytes": 189555712,
+          "allocation_count": 179,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 397312,
+            "weights": 170262528,
+            "cache": 9437184,
+            "codec_weights": 9437184,
+            "pending_cache_entry": 18432
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 9.240426666666666,
+            "samples_ms": [
+              9.240426666666666,
+              9.239986666666667,
+              9.239986666666667,
+              9.313893333333333,
+              9.253426666666666
+            ],
+            "min_ms": 9.239986666666667,
+            "max_ms": 9.313893333333333,
+            "host": {
+              "median_ms": 9.68123332131654,
+              "samples_ms": [
+                9.683300003719827,
+                9.68123332131654,
+                9.678066669342419,
+                9.674066677689552,
+                9.693100000731647
+              ],
+              "min_ms": 9.674066677689552,
+              "max_ms": 9.693100000731647
+            }
+          },
+          "dispatches": 583,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.3405667587406143e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 142111040,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 75008,
+            "weights": 142000128,
+            "cache": 32768,
+            "pending_cache_entry": 64
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 512,
+      "rank": 32,
+      "loops": 10,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 29.26688,
+            "samples_ms": [
+              29.165013333333334,
+              29.26688,
+              29.32144,
+              29.402206666666668,
+              29.24965333333333
+            ],
+            "min_ms": 29.165013333333334,
+            "max_ms": 29.402206666666668,
+            "host": {
+              "median_ms": 27.880833329011995,
+              "samples_ms": [
+                28.277466675111402,
+                27.809433328608673,
+                27.880833329011995,
+                28.10656667376558,
+                27.81613334082067
+              ],
+              "min_ms": 27.809433328608673,
+              "max_ms": 28.277466675111402
+            }
+          },
+          "dispatches": 1923,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 5.873785306476087e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 359500288,
+          "allocation_count": 320,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 188743680,
+            "pending_cache_entry": 368640
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 30.091373333333333,
+            "samples_ms": [
+              30.153476666666666,
+              30.091373333333333,
+              30.115826666666663,
+              30.02852,
+              30.014799999999997
+            ],
+            "min_ms": 30.014799999999997,
+            "max_ms": 30.153476666666666,
+            "host": {
+              "median_ms": 28.147333340408903,
+              "samples_ms": [
+                29.028400002668302,
+                28.069299994967878,
+                28.06386665906757,
+                28.147333340408903,
+                29.282366662907105
+              ],
+              "min_ms": 28.06386665906757,
+              "max_ms": 29.282366662907105
+            }
+          },
+          "dispatches": 2187,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 5.010350842549194e-07,
+            "codec_maximum_absolute_error": 6.103515625e-05,
+            "codec_end_to_end_maximum_absolute_error": 6.103515625e-05
+          },
+          "peak_live_tensor_bytes": 204153856,
+          "allocation_count": 251,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 839680,
+            "weights": 170262528,
+            "cache": 9437184,
+            "codec_weights": 23592960,
+            "pending_cache_entry": 18432
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 25.83036,
+            "samples_ms": [
+              25.922226666666663,
+              25.83036,
+              26.088386666666665,
+              25.688346666666664,
+              25.672573333333332
+            ],
+            "min_ms": 25.672573333333332,
+            "max_ms": 26.088386666666665,
+            "host": {
+              "median_ms": 23.813366676525522,
+              "samples_ms": [
+                24.12349998485297,
+                23.82623334415257,
+                23.803566660111148,
+                23.813366676525522,
+                23.789733337859314
+              ],
+              "min_ms": 23.789733337859314,
+              "max_ms": 24.12349998485297
+            }
+          },
+          "dispatches": 1447,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.0832493486121493e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 142111040,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 75008,
+            "weights": 142000128,
+            "cache": 32768,
+            "pending_cache_entry": 64
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 512,
+      "rank": 32,
+      "loops": 16,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 46.317586666666664,
+            "samples_ms": [
+              46.43303666666666,
+              45.938520000000004,
+              46.32706666666667,
+              46.131413333333334,
+              46.317586666666664
+            ],
+            "min_ms": 45.938520000000004,
+            "max_ms": 46.43303666666666,
+            "host": {
+              "median_ms": 45.05953332409263,
+              "samples_ms": [
+                45.05953332409263,
+                45.349433339045696,
+                46.57006667306026,
+                44.97856666178753,
+                44.432933325879276
+              ],
+              "min_ms": 44.432933325879276,
+              "max_ms": 46.57006667306026
+            }
+          },
+          "dispatches": 3075,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 6.529873285421317e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 472967680,
+          "allocation_count": 464,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 301989888,
+            "pending_cache_entry": 589824
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 46.47906666666666,
+            "samples_ms": [
+              46.38969333333333,
+              46.43002666666666,
+              46.610170000000004,
+              46.47906666666666,
+              46.50728
+            ],
+            "min_ms": 46.38969333333333,
+            "max_ms": 46.610170000000004,
+            "host": {
+              "median_ms": 45.26379999394218,
+              "samples_ms": [
+                44.82989998844763,
+                45.26379999394218,
+                45.4658666664424,
+                45.309733327788614,
+                44.88429999522244
+              ],
+              "min_ms": 44.82989998844763,
+              "max_ms": 45.4658666664424
+            }
+          },
+          "dispatches": 3483,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 6.008594948814228e-07,
+            "codec_maximum_absolute_error": 3.0517578125e-05,
+            "codec_end_to_end_maximum_absolute_error": 6.103515625e-05
+          },
+          "peak_live_tensor_bytes": 218752000,
+          "allocation_count": 323,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 1282048,
+            "weights": 170262528,
+            "cache": 9437184,
+            "codec_weights": 37748736,
+            "pending_cache_entry": 18432
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 40.72864,
+            "samples_ms": [
+              40.56137333333333,
+              40.896906666666666,
+              40.732306666666666,
+              40.70634666666667,
+              40.72864
+            ],
+            "min_ms": 40.56137333333333,
+            "max_ms": 40.896906666666666,
+            "host": {
+              "median_ms": 38.46286666036273,
+              "samples_ms": [
+                38.132533334040396,
+                38.46286666036273,
+                39.419166666145124,
+                38.724066670207925,
+                38.331233333641045
+              ],
+              "min_ms": 38.132533334040396,
+              "max_ms": 39.419166666145124
+            }
+          },
+          "dispatches": 2311,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.873680533561519e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 142111040,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 75008,
+            "weights": 142000128,
+            "cache": 32768,
+            "pending_cache_entry": 64
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 4096,
+      "rank": 32,
+      "loops": 1,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 5.378666666666667,
+            "samples_ms": [
+              5.37516,
+              5.381933333333333,
+              5.378666666666667,
+              5.376173333333333,
+              5.379466666666667
+            ],
+            "min_ms": 5.37516,
+            "max_ms": 5.381933333333333,
+            "host": {
+              "median_ms": 5.620266660116613,
+              "samples_ms": [
+                5.617866661244382,
+                5.623766667364786,
+                5.624799989163876,
+                5.620266660116613,
+                5.618466665813078
+              ],
+              "min_ms": 5.617866661244382,
+              "max_ms": 5.624799989163876
+            }
+          },
+          "dispatches": 195,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.0611946027472285e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 321419776,
+          "allocation_count": 104,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 150994944,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 4.23524,
+            "samples_ms": [
+              4.23472,
+              4.23876,
+              4.233626666666667,
+              4.23524,
+              4.236626666666667
+            ],
+            "min_ms": 4.233626666666667,
+            "max_ms": 4.23876,
+            "host": {
+              "median_ms": 4.532666663484027,
+              "samples_ms": [
+                4.501233323632429,
+                4.501166675860683,
+                4.532666663484027,
+                4.53780001650254,
+                4.568266682326794
+              ],
+              "min_ms": 4.501166675860683,
+              "max_ms": 4.568266682326794
+            }
+          },
+          "dispatches": 243,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.3239193191738607e-07,
+            "codec_maximum_absolute_error": 0.0001220703125,
+            "codec_end_to_end_maximum_absolute_error": 0.000244140625
+          },
+          "peak_live_tensor_bytes": 248316928,
+          "allocation_count": 143,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 176128,
+            "weights": 170262528,
+            "cache": 75497472,
+            "codec_weights": 2359296,
+            "pending_cache_entry": 18432
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 4.408533333333334,
+            "samples_ms": [
+              4.410306666666666,
+              4.4142133333333335,
+              4.404946666666667,
+              4.408533333333334,
+              4.407186666666667
+            ],
+            "min_ms": 4.404946666666667,
+            "max_ms": 4.4142133333333335,
+            "host": {
+              "median_ms": 4.628533322829753,
+              "samples_ms": [
+                4.637099996519585,
+                4.632099997252226,
+                4.628533322829753,
+                4.627466667443514,
+                4.626733347928773
+              ],
+              "min_ms": 4.626733347928773,
+              "max_ms": 4.637099996519585
+            }
+          },
+          "dispatches": 151,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.863880705332832e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 142340416,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 75008,
+            "weights": 142000128,
+            "cache": 262144,
+            "pending_cache_entry": 64
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 4096,
+      "rank": 32,
+      "loops": 4,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 21.664066666666667,
+            "samples_ms": [
+              21.710399999999996,
+              21.650386666666666,
+              21.641306666666665,
+              21.726573333333334,
+              21.664066666666667
+            ],
+            "min_ms": 21.641306666666665,
+            "max_ms": 21.726573333333334,
+            "host": {
+              "median_ms": 21.94980000300954,
+              "samples_ms": [
+                21.922499989159405,
+                22.26743334904313,
+                22.11689999482284,
+                21.902833327961464,
+                21.94980000300954
+              ],
+              "min_ms": 21.902833327961464,
+              "max_ms": 22.26743334904313
+            }
+          },
+          "dispatches": 771,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.459627722079972e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 774515200,
+          "allocation_count": 176,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 603979776,
+            "pending_cache_entry": 147456
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 17.802453333333332,
+            "samples_ms": [
+              17.802453333333332,
+              17.866626666666665,
+              17.767826666666668,
+              17.3036,
+              17.932906666666664
+            ],
+            "min_ms": 17.3036,
+            "max_ms": 17.932906666666664,
+            "host": {
+              "median_ms": 17.347399999077123,
+              "samples_ms": [
+                17.347399999077123,
+                17.32646666156749,
+                17.33680001537626,
+                17.40856666583568,
+                17.512666662999738
+              ],
+              "min_ms": 17.32646666156749,
+              "max_ms": 17.512666662999738
+            }
+          },
+          "dispatches": 891,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.3687155942541125e-07,
+            "codec_maximum_absolute_error": 6.103515625e-05,
+            "codec_end_to_end_maximum_absolute_error": 0.0001220703125
+          },
+          "peak_live_tensor_bytes": 255616000,
+          "allocation_count": 179,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 397312,
+            "weights": 170262528,
+            "cache": 75497472,
+            "codec_weights": 9437184,
+            "pending_cache_entry": 18432
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 17.278293333333334,
+            "samples_ms": [
+              17.278293333333334,
+              17.290519999999997,
+              17.277533333333334,
+              17.291546666666665,
+              17.266186666666666
+            ],
+            "min_ms": 17.266186666666666,
+            "max_ms": 17.291546666666665,
+            "host": {
+              "median_ms": 17.851166679368664,
+              "samples_ms": [
+                17.776333319488913,
+                17.786500005361933,
+                17.851166679368664,
+                17.937533324584365,
+                18.071500002406538
+              ],
+              "min_ms": 17.776333319488913,
+              "max_ms": 18.071500002406538
+            }
+          },
+          "dispatches": 583,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.4365761885913884e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 142340416,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 75008,
+            "weights": 142000128,
+            "cache": 262144,
+            "pending_cache_entry": 64
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 4096,
+      "rank": 32,
+      "loops": 10,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 56.70729666666666,
+            "samples_ms": [
+              56.82028,
+              57.136626666666665,
+              56.54488,
+              56.70552,
+              56.70729666666666
+            ],
+            "min_ms": 56.54488,
+            "max_ms": 57.136626666666665,
+            "host": {
+              "median_ms": 54.91546667569006,
+              "samples_ms": [
+                54.779833337912955,
+                55.363000001913555,
+                54.91546667569006,
+                55.10509999779364,
+                54.85203332500532
+              ],
+              "min_ms": 54.779833337912955,
+              "max_ms": 55.363000001913555
+            }
+          },
+          "dispatches": 1923,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.678056629263793e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 1680706048,
+          "allocation_count": 320,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 1509949440,
+            "pending_cache_entry": 368640
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 45.52453333333333,
+            "samples_ms": [
+              46.33518333333333,
+              45.70345333333333,
+              45.409546666666664,
+              45.12857333333333,
+              45.52453333333333
+            ],
+            "min_ms": 45.12857333333333,
+            "max_ms": 46.33518333333333,
+            "host": {
+              "median_ms": 43.23853333092605,
+              "samples_ms": [
+                42.92456666007638,
+                43.19013333103309,
+                43.23853333092605,
+                44.207866672271244,
+                44.36403332510963
+              ],
+              "min_ms": 42.92456666007638,
+              "max_ms": 44.36403332510963
+            }
+          },
+          "dispatches": 2187,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.637755590091274e-07,
+            "codec_maximum_absolute_error": 6.103515625e-05,
+            "codec_end_to_end_maximum_absolute_error": 6.103515625e-05
+          },
+          "peak_live_tensor_bytes": 270214144,
+          "allocation_count": 251,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 839680,
+            "weights": 170262528,
+            "cache": 75497472,
+            "codec_weights": 23592960,
+            "pending_cache_entry": 18432
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 45.965203333333335,
+            "samples_ms": [
+              47.16297333333333,
+              45.965203333333335,
+              46.19664666666666,
+              45.63729,
+              45.30857666666666
+            ],
+            "min_ms": 45.30857666666666,
+            "max_ms": 47.16297333333333,
+            "host": {
+              "median_ms": 40.36723333410919,
+              "samples_ms": [
+                40.278799987087645,
+                40.36723333410919,
+                40.30610000093778,
+                40.5515333210739,
+                40.53143334264556
+              ],
+              "min_ms": 40.278799987087645,
+              "max_ms": 40.5515333210739
+            }
+          },
+          "dispatches": 1447,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.1128562013861263e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 142340416,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 75008,
+            "weights": 142000128,
+            "cache": 262144,
+            "pending_cache_entry": 64
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 4096,
+      "rank": 32,
+      "loops": 16,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 90.88484999999999,
+            "samples_ms": [
+              91.36357,
+              91.38962666666667,
+              90.88484999999999,
+              90.22255666666666,
+              90.65237333333333
+            ],
+            "min_ms": 90.22255666666666,
+            "max_ms": 91.38962666666667,
+            "host": {
+              "median_ms": 88.63663333856191,
+              "samples_ms": [
+                88.50323333172128,
+                88.7311000066499,
+                88.63663333856191,
+                88.36630000344788,
+                88.99570000357926
+              ],
+              "min_ms": 88.36630000344788,
+              "max_ms": 88.99570000357926
+            }
+          },
+          "dispatches": 3075,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.672584036329418e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 2586896896,
+          "allocation_count": 464,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 2415919104,
+            "pending_cache_entry": 589824
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 71.49941666666666,
+            "samples_ms": [
+              71.67514333333334,
+              71.3907,
+              71.49941666666666,
+              71.32753666666666,
+              71.56414333333333
+            ],
+            "min_ms": 71.32753666666666,
+            "max_ms": 71.67514333333334,
+            "host": {
+              "median_ms": 70.69566667390366,
+              "samples_ms": [
+                70.69566667390366,
+                70.87370000469188,
+                70.68726666814958,
+                70.4369999972793,
+                72.0747666588674
+              ],
+              "min_ms": 70.4369999972793,
+              "max_ms": 72.0747666588674
+            }
+          },
+          "dispatches": 3483,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.957487389183445e-07,
+            "codec_maximum_absolute_error": 6.103515625e-05,
+            "codec_end_to_end_maximum_absolute_error": 6.103515625e-05
+          },
+          "peak_live_tensor_bytes": 284812288,
+          "allocation_count": 323,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 1282048,
+            "weights": 170262528,
+            "cache": 75497472,
+            "codec_weights": 37748736,
+            "pending_cache_entry": 18432
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 72.95906333333333,
+            "samples_ms": [
+              67.10632,
+              73.21236333333333,
+              73.42192333333334,
+              70.68596,
+              72.95906333333333
+            ],
+            "min_ms": 67.10632,
+            "max_ms": 73.42192333333334,
+            "host": {
+              "median_ms": 71.25729999582593,
+              "samples_ms": [
+                71.26483332831413,
+                71.4661999954842,
+                71.25729999582593,
+                69.4320333423093,
+                65.68433332722634
+              ],
+              "min_ms": 65.68433332722634,
+              "max_ms": 71.4661999954842
+            }
+          },
+          "dispatches": 2311,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.126258391467074e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 142340416,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 75008,
+            "weights": 142000128,
+            "cache": 262144,
+            "pending_cache_entry": 64
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 512,
+      "rank": 64,
+      "loops": 1,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 2.7182666666666666,
+            "samples_ms": [
+              2.7254,
+              2.7167333333333334,
+              2.7170133333333335,
+              2.7249866666666667,
+              2.7182666666666666
+            ],
+            "min_ms": 2.7167333333333334,
+            "max_ms": 2.7254,
+            "host": {
+              "median_ms": 2.9742666714203856,
+              "samples_ms": [
+                3.0158666777424514,
+                2.9656000163716576,
+                2.9661000007763505,
+                3.0605666688643396,
+                2.9742666714203856
+              ],
+              "min_ms": 2.9656000163716576,
+              "max_ms": 3.0605666688643396
+            }
+          },
+          "dispatches": 195,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.7169825223400936e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 189299200,
+          "allocation_count": 104,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 18874368,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 3.0603199999999995,
+            "samples_ms": [
+              3.062413333333333,
+              3.0531333333333333,
+              3.0603199999999995,
+              3.06696,
+              3.058253333333333
+            ],
+            "min_ms": 3.0531333333333333,
+            "max_ms": 3.06696,
+            "host": {
+              "median_ms": 3.330066664299617,
+              "samples_ms": [
+                3.326133320418497,
+                3.320233333700647,
+                3.4283000083329775,
+                3.330066664299617,
+                3.3302666658225157
+              ],
+              "min_ms": 3.320233333700647,
+              "max_ms": 3.4283000083329775
+            }
+          },
+          "dispatches": 243,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.2356338030826706e-07,
+            "codec_maximum_absolute_error": 0.0001220703125,
+            "codec_end_to_end_maximum_absolute_error": 0.0001220703125
+          },
+          "peak_live_tensor_bytes": 194103808,
+          "allocation_count": 143,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 208384,
+            "weights": 170262528,
+            "cache": 18874368,
+            "codec_weights": 4718592,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 2.718026666666667,
+            "samples_ms": [
+              2.718026666666667,
+              2.7931899999999996,
+              2.7025466666666667,
+              2.724933333333333,
+              2.7062666666666666
+            ],
+            "min_ms": 2.7025466666666667,
+            "max_ms": 2.7931899999999996,
+            "host": {
+              "median_ms": 2.93160000971208,
+              "samples_ms": [
+                2.930700002859036,
+                2.93353331896166,
+                2.92613332082207,
+                3.025033336598426,
+                2.93160000971208
+              ],
+              "min_ms": 2.92613332082207,
+              "max_ms": 3.025033336598426
+            }
+          },
+          "dispatches": 151,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.39241861210715e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 170534016,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 104448,
+            "weights": 170360832,
+            "cache": 65536,
+            "pending_cache_entry": 128
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 512,
+      "rank": 64,
+      "loops": 10,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 30.347906666666663,
+            "samples_ms": [
+              30.347906666666663,
+              30.286076666666663,
+              30.4115,
+              30.212356666666665,
+              30.36569333333333
+            ],
+            "min_ms": 30.212356666666665,
+            "max_ms": 30.4115,
+            "host": {
+              "median_ms": 28.244933346286416,
+              "samples_ms": [
+                28.21773333319773,
+                28.07686668044577,
+                28.341766679659486,
+                28.244933346286416,
+                28.341433343787987
+              ],
+              "min_ms": 28.07686668044577,
+              "max_ms": 28.341766679659486
+            }
+          },
+          "dispatches": 1923,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 7.760157516578658e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 359500288,
+          "allocation_count": 320,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 188743680,
+            "pending_cache_entry": 368640
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 34.0473,
+            "samples_ms": [
+              34.03293333333333,
+              34.26851,
+              34.0473,
+              34.01117,
+              34.17395
+            ],
+            "min_ms": 34.01117,
+            "max_ms": 34.26851,
+            "host": {
+              "median_ms": 31.693500000983477,
+              "samples_ms": [
+                31.532533330998074,
+                31.64449999652182,
+                31.693500000983477,
+                32.28223333523298,
+                32.28030000658085
+              ],
+              "min_ms": 31.532533330998074,
+              "max_ms": 32.28223333523298
+            }
+          },
+          "dispatches": 2187,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 5.608077557339719e-07,
+            "codec_maximum_absolute_error": 3.0517578125e-05,
+            "codec_end_to_end_maximum_absolute_error": 6.103515625e-05
+          },
+          "peak_live_tensor_bytes": 237234688,
+          "allocation_count": 251,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 871936,
+            "weights": 170262528,
+            "cache": 18874368,
+            "codec_weights": 47185920,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 29.74894,
+            "samples_ms": [
+              28.950746666666664,
+              29.01337,
+              29.803726666666666,
+              30.634106666666664,
+              29.74894
+            ],
+            "min_ms": 28.950746666666664,
+            "max_ms": 30.634106666666664,
+            "host": {
+              "median_ms": 27.270133335453767,
+              "samples_ms": [
+                27.476800004175555,
+                27.265966675865155,
+                27.270133335453767,
+                27.29196666041389,
+                27.205933331667136
+              ],
+              "min_ms": 27.205933331667136,
+              "max_ms": 27.476800004175555
+            }
+          },
+          "dispatches": 1447,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.148959593635148e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 170534016,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 104448,
+            "weights": 170360832,
+            "cache": 65536,
+            "pending_cache_entry": 128
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 4096,
+      "rank": 64,
+      "loops": 1,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 5.38372,
+            "samples_ms": [
+              5.386106666666667,
+              5.49678,
+              5.382946666666666,
+              5.380093333333334,
+              5.38372
+            ],
+            "min_ms": 5.380093333333334,
+            "max_ms": 5.49678,
+            "host": {
+              "median_ms": 5.777633322092394,
+              "samples_ms": [
+                5.778899998404086,
+                5.777633322092394,
+                5.771933336897443,
+                5.786933334699522,
+                5.773566682667782
+              ],
+              "min_ms": 5.771933336897443,
+              "max_ms": 5.786933334699522
+            }
+          },
+          "dispatches": 195,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.459775609864323e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 321419776,
+          "allocation_count": 104,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 150994944,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 5.87285,
+            "samples_ms": [
+              5.94548,
+              5.87875,
+              5.866953333333334,
+              5.793923333333333,
+              5.87285
+            ],
+            "min_ms": 5.793923333333333,
+            "max_ms": 5.94548,
+            "host": {
+              "median_ms": 6.11209999381875,
+              "samples_ms": [
+                6.11209999381875,
+                6.09729999753957,
+                6.101866679576536,
+                6.116200005635619,
+                6.187266670167446
+              ],
+              "min_ms": 6.09729999753957,
+              "max_ms": 6.187266670167446
+            }
+          },
+          "dispatches": 243,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.382982789983501e-07,
+            "codec_maximum_absolute_error": 0.0001220703125,
+            "codec_end_to_end_maximum_absolute_error": 0.000244140625
+          },
+          "peak_live_tensor_bytes": 326224384,
+          "allocation_count": 143,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 208384,
+            "weights": 170262528,
+            "cache": 150994944,
+            "codec_weights": 4718592,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 5.845959999999999,
+            "samples_ms": [
+              5.845959999999999,
+              5.880863333333333,
+              5.968476666666667,
+              5.84432,
+              5.8447466666666665
+            ],
+            "min_ms": 5.84432,
+            "max_ms": 5.968476666666667,
+            "host": {
+              "median_ms": 6.121400006425877,
+              "samples_ms": [
+                6.16539999221762,
+                6.0732999894147115,
+                6.121400006425877,
+                6.143366665734599,
+                6.083866658930977
+              ],
+              "min_ms": 6.0732999894147115,
+              "max_ms": 6.16539999221762
+            }
+          },
+          "dispatches": 151,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.251991066375524e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 170992768,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 104448,
+            "weights": 170360832,
+            "cache": 524288,
+            "pending_cache_entry": 128
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 4096,
+      "rank": 64,
+      "loops": 10,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 57.87112333333334,
+            "samples_ms": [
+              57.95871333333333,
+              57.86188666666666,
+              57.85724333333334,
+              58.22683,
+              57.87112333333334
+            ],
+            "min_ms": 57.85724333333334,
+            "max_ms": 58.22683,
+            "host": {
+              "median_ms": 55.61076667315016,
+              "samples_ms": [
+                56.04156665503979,
+                55.61076667315016,
+                55.41609999878953,
+                55.40526666057607,
+                55.75096665415913
+              ],
+              "min_ms": 55.40526666057607,
+              "max_ms": 56.04156665503979
+            }
+          },
+          "dispatches": 1923,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.9989917726958026e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 1680706048,
+          "allocation_count": 320,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 1509949440,
+            "pending_cache_entry": 368640
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 62.45630333333333,
+            "samples_ms": [
+              62.21089,
+              62.45630333333333,
+              62.54398333333333,
+              60.65061666666666,
+              62.610346666666665
+            ],
+            "min_ms": 60.65061666666666,
+            "max_ms": 62.610346666666665,
+            "host": {
+              "median_ms": 58.80336667178199,
+              "samples_ms": [
+                58.71056666364893,
+                58.85390000184998,
+                58.80336667178199,
+                58.89893334824592,
+                58.779200015123934
+              ],
+              "min_ms": 58.71056666364893,
+              "max_ms": 58.89893334824592
+            }
+          },
+          "dispatches": 2187,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.416340203094004e-07,
+            "codec_maximum_absolute_error": 3.0517578125e-05,
+            "codec_end_to_end_maximum_absolute_error": 6.103515625e-05
+          },
+          "peak_live_tensor_bytes": 369355264,
+          "allocation_count": 251,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 871936,
+            "weights": 170262528,
+            "cache": 150994944,
+            "codec_weights": 47185920,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 60.771276666666665,
+            "samples_ms": [
+              61.27640666666667,
+              60.72740666666667,
+              60.771276666666665,
+              60.56296666666666,
+              61.299523333333326
+            ],
+            "min_ms": 60.56296666666666,
+            "max_ms": 61.299523333333326,
+            "host": {
+              "median_ms": 59.026566663912185,
+              "samples_ms": [
+                59.026566663912185,
+                59.17843332281336,
+                59.16706666660806,
+                56.424333325897656,
+                56.18640000466257
+              ],
+              "min_ms": 56.18640000466257,
+              "max_ms": 59.17843332281336
+            }
+          },
+          "dispatches": 1447,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.031537449960098e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 170992768,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 104448,
+            "weights": 170360832,
+            "cache": 524288,
+            "pending_cache_entry": 128
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 8192,
+      "rank": 32,
+      "loops": 1,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 8.537353333333334,
+            "samples_ms": [
+              8.42052,
+              8.53831,
+              8.532449999999999,
+              8.537353333333334,
+              8.54017
+            ],
+            "min_ms": 8.42052,
+            "max_ms": 8.54017,
+            "host": {
+              "median_ms": 8.943033327038089,
+              "samples_ms": [
+                8.943033327038089,
+                8.928499999456108,
+                8.953233327095708,
+                8.911666673763344,
+                8.984700000534454
+              ],
+              "min_ms": 8.911666673763344,
+              "max_ms": 8.984700000534454
+            }
+          },
+          "dispatches": 195,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.1582840087353006e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 472414720,
+          "allocation_count": 104,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 301989888,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 6.370799999999999,
+            "samples_ms": [
+              6.370626666666666,
+              6.370799999999999,
+              6.5043,
+              6.598516666666666,
+              6.370146666666667
+            ],
+            "min_ms": 6.370146666666667,
+            "max_ms": 6.598516666666666,
+            "host": {
+              "median_ms": 6.7355666736451285,
+              "samples_ms": [
+                6.679333338979632,
+                6.741933349985629,
+                6.655533332377672,
+                6.738700011434655,
+                6.7355666736451285
+              ],
+              "min_ms": 6.655533332377672,
+              "max_ms": 6.741933349985629
+            }
+          },
+          "dispatches": 243,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.029465547837006e-07,
+            "codec_maximum_absolute_error": 0.0001220703125,
+            "codec_end_to_end_maximum_absolute_error": 0.000244140625
+          },
+          "peak_live_tensor_bytes": 323814400,
+          "allocation_count": 143,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 176128,
+            "weights": 170262528,
+            "cache": 150994944,
+            "codec_weights": 2359296,
+            "pending_cache_entry": 18432
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 6.072146666666666,
+            "samples_ms": [
+              6.072146666666666,
+              6.198196666666667,
+              6.069453333333333,
+              6.067346666666666,
+              6.198466666666666
+            ],
+            "min_ms": 6.067346666666666,
+            "max_ms": 6.198466666666666,
+            "host": {
+              "median_ms": 6.38129998696968,
+              "samples_ms": [
+                6.38129998696968,
+                6.41229999018833,
+                6.414399986776213,
+                6.294966675341129,
+                6.356199989871432
+              ],
+              "min_ms": 6.294966675341129,
+              "max_ms": 6.414399986776213
+            }
+          },
+          "dispatches": 151,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.891769389472664e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 142602560,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 75008,
+            "weights": 142000128,
+            "cache": 524288,
+            "pending_cache_entry": 64
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 8192,
+      "rank": 32,
+      "loops": 10,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 88.71882999999998,
+            "samples_ms": [
+              88.30135,
+              88.71882999999998,
+              88.35583333333334,
+              88.82223666666665,
+              89.76857666666666
+            ],
+            "min_ms": 88.30135,
+            "max_ms": 89.76857666666666,
+            "host": {
+              "median_ms": 86.53713333963726,
+              "samples_ms": [
+                86.55556667751323,
+                86.53713333963726,
+                86.59790000335003,
+                86.1312000003333,
+                86.32639999268577
+              ],
+              "min_ms": 86.1312000003333,
+              "max_ms": 86.59790000335003
+            }
+          },
+          "dispatches": 1923,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.52094172911721e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 3190655488,
+          "allocation_count": 320,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 3019898880,
+            "pending_cache_entry": 368640
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 64.08306333333333,
+            "samples_ms": [
+              64.3147,
+              64.08306333333333,
+              64.21035666666667,
+              64.04095,
+              63.862803333333325
+            ],
+            "min_ms": 63.862803333333325,
+            "max_ms": 64.3147,
+            "host": {
+              "median_ms": 60.90513333523025,
+              "samples_ms": [
+                60.53560000145808,
+                61.804600001778454,
+                61.46643332128102,
+                60.86886666404704,
+                60.90513333523025
+              ],
+              "min_ms": 60.53560000145808,
+              "max_ms": 61.804600001778454
+            }
+          },
+          "dispatches": 2187,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.6889476834046633e-07,
+            "codec_maximum_absolute_error": 6.103515625e-05,
+            "codec_end_to_end_maximum_absolute_error": 6.103515625e-05
+          },
+          "peak_live_tensor_bytes": 345711616,
+          "allocation_count": 251,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 839680,
+            "weights": 170262528,
+            "cache": 150994944,
+            "codec_weights": 23592960,
+            "pending_cache_entry": 18432
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 63.093963333333335,
+            "samples_ms": [
+              62.890809999999995,
+              62.812459999999994,
+              63.093963333333335,
+              63.202783333333336,
+              63.26942
+            ],
+            "min_ms": 62.812459999999994,
+            "max_ms": 63.26942,
+            "host": {
+              "median_ms": 61.54233333654702,
+              "samples_ms": [
+                61.39186666890358,
+                61.751100001856685,
+                61.54233333654702,
+                61.404733336530626,
+                61.771799984853715
+              ],
+              "min_ms": 61.39186666890358,
+              "max_ms": 61.771799984853715
+            }
+          },
+          "dispatches": 1447,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.7225096743688226e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 142602560,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 75008,
+            "weights": 142000128,
+            "cache": 524288,
+            "pending_cache_entry": 64
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 8192,
+      "rank": 64,
+      "loops": 1,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 8.541273333333333,
+            "samples_ms": [
+              8.554203333333332,
+              8.550716666666666,
+              8.541273333333333,
+              8.540846666666665,
+              8.537426666666667
+            ],
+            "min_ms": 8.537426666666667,
+            "max_ms": 8.554203333333332,
+            "host": {
+              "median_ms": 8.756000005329648,
+              "samples_ms": [
+                8.775166662720343,
+                8.756000005329648,
+                8.761899992047498,
+                8.682466655348739,
+                8.686866669449955
+              ],
+              "min_ms": 8.682466655348739,
+              "max_ms": 8.775166662720343
+            }
+          },
+          "dispatches": 195,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.95330369309743e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 472414720,
+          "allocation_count": 104,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 301989888,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 8.88704,
+            "samples_ms": [
+              8.89292,
+              8.88704,
+              8.88528,
+              8.905566666666667,
+              8.880803333333333
+            ],
+            "min_ms": 8.880803333333333,
+            "max_ms": 8.905566666666667,
+            "host": {
+              "median_ms": 9.194733342155814,
+              "samples_ms": [
+                9.376566663073996,
+                9.42459999350831,
+                9.194733342155814,
+                9.15773333205531,
+                9.189833343649903
+              ],
+              "min_ms": 9.15773333205531,
+              "max_ms": 9.42459999350831
+            }
+          },
+          "dispatches": 243,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 1.795670673820915e-07,
+            "codec_maximum_absolute_error": 0.0001220703125,
+            "codec_end_to_end_maximum_absolute_error": 0.000244140625
+          },
+          "peak_live_tensor_bytes": 477219328,
+          "allocation_count": 143,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 208384,
+            "weights": 170262528,
+            "cache": 301989888,
+            "codec_weights": 4718592,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 8.649213333333334,
+            "samples_ms": [
+              8.649213333333334,
+              8.525373333333333,
+              8.532919999999999,
+              8.650053333333334,
+              8.687386666666667
+            ],
+            "min_ms": 8.525373333333333,
+            "max_ms": 8.687386666666667,
+            "host": {
+              "median_ms": 8.857266666988531,
+              "samples_ms": [
+                8.76723334658891,
+                8.820633326346675,
+                8.864166661320874,
+                8.887366663354138,
+                8.857266666988531
+              ],
+              "min_ms": 8.76723334658891,
+              "max_ms": 8.887366663354138
+            }
+          },
+          "dispatches": 151,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.0200611589027417e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 171517056,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 104448,
+            "weights": 170360832,
+            "cache": 1048576,
+            "pending_cache_entry": 128
+          }
+        }
+      ]
+    },
+    {
+      "context_history": 8192,
+      "rank": 64,
+      "loops": 10,
+      "width": 768,
+      "heads": 12,
+      "layers": 12,
+      "methods": [
+        {
+          "method": "naive",
+          "timing": {
+            "median_ms": 88.92030333333332,
+            "samples_ms": [
+              88.92030333333332,
+              89.19643666666667,
+              88.88135333333332,
+              88.88793666666668,
+              89.02388333333333
+            ],
+            "min_ms": 88.88135333333332,
+            "max_ms": 89.19643666666667,
+            "host": {
+              "median_ms": 87.31966667498152,
+              "samples_ms": [
+                86.26843335029359,
+                86.74496666450675,
+                87.45266665937379,
+                87.4693333171308,
+                87.31966667498152
+              ],
+              "min_ms": 86.26843335029359,
+              "max_ms": 87.4693333171308
+            }
+          },
+          "dispatches": 1923,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.72365170222999e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 3190655488,
+          "allocation_count": 320,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 122368,
+            "weights": 170262528,
+            "cache": 3019898880,
+            "pending_cache_entry": 368640
+          }
+        },
+        {
+          "method": "lla",
+          "timing": {
+            "median_ms": 92.96575999999999,
+            "samples_ms": [
+              93.12583333333333,
+              92.96575999999999,
+              93.51208333333334,
+              92.92565333333333,
+              92.28697333333332
+            ],
+            "min_ms": 92.28697333333332,
+            "max_ms": 93.51208333333334,
+            "host": {
+              "median_ms": 89.561566671667,
+              "samples_ms": [
+                89.39949999330565,
+                89.64276666908215,
+                89.47726667004947,
+                89.561566671667,
+                89.6917666735438
+              ],
+              "min_ms": 89.39949999330565,
+              "max_ms": 89.6917666735438
+            }
+          },
+          "dispatches": 2187,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 2.4706891499359784e-07,
+            "codec_maximum_absolute_error": 3.0517578125e-05,
+            "codec_end_to_end_maximum_absolute_error": 6.103515625e-05
+          },
+          "peak_live_tensor_bytes": 520350208,
+          "allocation_count": 251,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 871936,
+            "weights": 170262528,
+            "cache": 301989888,
+            "codec_weights": 47185920,
+            "pending_cache_entry": 36864
+          }
+        },
+        {
+          "method": "llt",
+          "timing": {
+            "median_ms": 87.88006999999999,
+            "samples_ms": [
+              87.87163,
+              87.82299333333333,
+              87.88006999999999,
+              88.02903666666667,
+              88.26056666666666
+            ],
+            "min_ms": 87.82299333333333,
+            "max_ms": 88.26056666666666,
+            "host": {
+              "median_ms": 86.29953333487113,
+              "samples_ms": [
+                86.4590666606091,
+                86.29953333487113,
+                86.60030000222226,
+                86.17446666661029,
+                84.47159999438252
+              ],
+              "min_ms": 84.47159999438252,
+              "max_ms": 86.60030000222226
+            }
+          },
+          "dispatches": 1447,
+          "validation": {
+            "passed": true,
+            "replays": 5,
+            "maximum_absolute_error": 3.450718899511429e-07,
+            "codec_maximum_absolute_error": 0,
+            "codec_end_to_end_maximum_absolute_error": 0
+          },
+          "peak_live_tensor_bytes": 171517056,
+          "allocation_count": 69,
+          "allocation_bytes": {
+            "input": 3072,
+            "workspace": 104448,
+            "weights": 170360832,
+            "cache": 1048576,
+            "pending_cache_entry": 128
+          }
+        }
+      ]
+    }
+  ],
+  "device": {
+    "ordinal": 0,
+    "provider": "webgpu",
+    "arch": "webgpu-portable-v1",
+    "name": "AMD Radeon RX 6700 XT",
+    "adapter": {
+      "vendor": "AMD proprietary driver",
+      "architecture": "",
+      "device": "AMD Radeon RX 6700 XT",
+      "description": "26.6.2 (AMD proprietary shader compiler)",
+      "stackgroup_min_size": 4,
+      "stackgroup_max_size": 128,
+      "vendor_id": 4098,
+      "device_id": 29663,
+      "adapter_type": "DiscreteGPU",
+      "backend_type": "Vulkan"
+    },
+    "features": [
+      "shader-f16",
+      "subgroup",
+      "timestamp-query",
+      "timestamp-query-inside-passes"
+    ],
+    "limits": {
+      "max-bind-groups": 8,
+      "max-bind-groups-plus-vertex-buffers": 0,
+      "max-bindings-per-bind-group": 1000,
+      "max-buffer-size": 134217728,
+      "max-color-attachment-bytes-per-sample": 0,
+      "max-color-attachments": 0,
+      "max-compute-invocations-per-workgroup": 1024,
+      "max-compute-workgroup-size-x": 1024,
+      "max-compute-workgroup-size-y": 1024,
+      "max-compute-workgroup-size-z": 1024,
+      "max-compute-workgroup-storage-size": 32768,
+      "max-compute-workgroups-per-dimension": 65535,
+      "max-dynamic-storage-buffers-per-pipeline-layout": 8,
+      "max-dynamic-uniform-buffers-per-pipeline-layout": 8,
+      "max-inter-stage-shader-variables": 0,
+      "max-non-sampler-bindings": 1000000,
+      "max-push-constant-size": 256,
+      "max-sampled-textures-per-shader-stage": 16,
+      "max-samplers-per-shader-stage": 16,
+      "max-storage-buffer-binding-size": 134217728,
+      "max-storage-buffers-per-shader-stage": 8,
+      "max-storage-textures-per-shader-stage": 4,
+      "max-texture-array-layers": 8192,
+      "max-texture-dimension-1d": 16384,
+      "max-texture-dimension-2d": 16384,
+      "max-texture-dimension-3d": 8192,
+      "max-uniform-buffer-binding-size": 2147483647,
+      "max-uniform-buffers-per-shader-stage": 12,
+      "max-vertex-attributes": 64,
+      "max-vertex-buffer-array-stride": 16383,
+      "max-vertex-buffers": 16,
+      "min-storage-buffer-offset-alignment": 32,
+      "min-uniform-buffer-offset-alignment": 32
+    },
+    "prepared_encoding": "native",
+    "prepared_submission": "native"
+  },
+  "artifacts": [
+    {
+      "source_sha256": "47b7968c766ed01c951316749319c6678accd71834b06f80bc0e44e0d37a93a0",
+      "artifact": "artifacts\\47b7968c766ed01c9513.tbin",
+      "artifact_sha256": "454cc386b35c81fe76d6dfdb2cb14d51371a41714341a58c5724dda873c08e2a",
+      "pipeline_ms": 80.82169998669997,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "0d8f23a5a6cc472e6e3266a655f82fb2d4d206d33814c79e5602586b71eb0318",
+      "artifact": "artifacts\\0d8f23a5a6cc472e6e32.tbin",
+      "artifact_sha256": "7213f1ba3797215d52c1ac4c36955ae097c03d5c614b0a572d02feb48bdbd5a8",
+      "pipeline_ms": 1.8368000164628029,
+      "workgroup_bytes": 3076
+    },
+    {
+      "source_sha256": "28e00c4e5833eb969c2518ee81661f2e32624ac63fd4e4e36a4c0b5ec6f580cd",
+      "artifact": "artifacts\\28e00c4e5833eb969c25.tbin",
+      "artifact_sha256": "1d3020f8ea20e799d134563e05ccf0ad1ff62e7b0e646785a37e77a7b1234942",
+      "pipeline_ms": 2.7595999999903142,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "790132c66502cc70cc93d920b8c0def93cd579706da2fe0c8af50e7b3e557b86",
+      "artifact": "artifacts\\790132c66502cc70cc93.tbin",
+      "artifact_sha256": "77fd5dec7d53ad872cf2a2d8af4cb382864141e1b945ac1e982c5dd0d4188967",
+      "pipeline_ms": 2.245000039692968,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "a09eb8b1edfd6577f591b7527d32ce31ec32e3554f8a6281e70fe0e07204537f",
+      "artifact": "artifacts\\a09eb8b1edfd6577f591.tbin",
+      "artifact_sha256": "17b5a6a59736b086df4c2978c426d2749afe058210eafe7c1f1ef7667c5438ea",
+      "pipeline_ms": 1.3319000136107206,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "ff5fdd9a35882c1e67ab44f9956994526fdd0270f605748ee7b640d8a65f3659",
+      "artifact": "artifacts\\ff5fdd9a35882c1e67ab.tbin",
+      "artifact_sha256": "360d035b019cb74e1a824dd490392b85c137ebd4054bdc08780f64ecd7734104",
+      "pipeline_ms": 1.3058999902568758,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "02c912c30e04def4b89c0c26978b2366655f3a93b92c0fed441ea18f7ca6ad4f",
+      "artifact": "artifacts\\02c912c30e04def4b89c.tbin",
+      "artifact_sha256": "6762ec78dad82faae5f7f5eb4fcf80c48e8cdaa709678b60d97e64c1ceeb7116",
+      "pipeline_ms": 3.5536999930627644,
+      "workgroup_bytes": 8784
+    },
+    {
+      "source_sha256": "4113c6e37f475af8d2748f49c6b9957794f54e9ef450c4485b06b762ff14941e",
+      "artifact": "artifacts\\4113c6e37f475af8d274.tbin",
+      "artifact_sha256": "e77962c5cb6b18d9f9ef6dff81348678c122e919d1d2a3c133ef05f5df6bcad5",
+      "pipeline_ms": 2.140600001439452,
+      "workgroup_bytes": 4552
+    },
+    {
+      "source_sha256": "cdc5a366cb890b2df8dafee7f911ae7b1ecefdab8d9cfe475867939634a326d0",
+      "artifact": "artifacts\\cdc5a366cb890b2df8da.tbin",
+      "artifact_sha256": "d5d7366193a4e8c945dd34ebac98b00a8e8d96dd22d5fb3959842b43ba6a6a52",
+      "pipeline_ms": 2.223399991635233,
+      "workgroup_bytes": 396
+    },
+    {
+      "source_sha256": "34dc1c796052cb261c89b6a6ce0e97d24e0edeb3ef10690928a5859e282779ec",
+      "artifact": "artifacts\\34dc1c796052cb261c89.tbin",
+      "artifact_sha256": "2fe0b3d37f2d2dc021f42fe29a455057fbb08116d4d1b07e08cc18cb2c13f45c",
+      "pipeline_ms": 1.3838000013493001,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "9db33579e9c126d045d145472dd384dd0ca65eefe559c9287662525a25227f86",
+      "artifact": "artifacts\\9db33579e9c126d045d1.tbin",
+      "artifact_sha256": "8777b8de82d2ff8410bbcdb59ec42f7c44e8e8a2055c95a67b5769f071144fa3",
+      "pipeline_ms": 2.2163999965414405,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "ba2dc08b3edaef40e56e433872832accad361da6b0e9c3c0d8cf2585c4e02c58",
+      "artifact": "artifacts\\ba2dc08b3edaef40e56e.tbin",
+      "artifact_sha256": "2be02bdd5eba1c2d7240d0ba56090a820b0b3fbe6698c83dd838062c21ea3a50",
+      "pipeline_ms": 1.6543000238016248,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "4e69fd86b0f0d0fe5861159ff03f79aebc25577a57657ac48eb588eb77c4b495",
+      "artifact": "artifacts\\4e69fd86b0f0d0fe5861.tbin",
+      "artifact_sha256": "ca671a1f390594bc601c0d055f22e5b155a28ee695b1b35c5a3b0f6c37ca509c",
+      "pipeline_ms": 2.5058999890461564,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "be79b9278b49b9a5fd1211c0682b674ee079c9333189b7282bae9b842e5b8344",
+      "artifact": "artifacts\\be79b9278b49b9a5fd12.tbin",
+      "artifact_sha256": "a0ce744376270443ae1cd8dcbcb0fa80d3012b5184bfcefbdfaa2ca85aff926c",
+      "pipeline_ms": 2.4292999878525734,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "0ca2676ec2b90276b45e9945cdc79672cea6112f44b552bc83083084f2234e1c",
+      "artifact": "artifacts\\0ca2676ec2b90276b45e.tbin",
+      "artifact_sha256": "b61200a9d21399cde8b5299884c77caf7c54368dd0885fa06bf8bf62ef091263",
+      "pipeline_ms": 1.7260999884456396,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "d5b514bdc8073b66968c450615dd45515a39b4e932c829e63514098ec55b61eb",
+      "artifact": "artifacts\\d5b514bdc8073b66968c.tbin",
+      "artifact_sha256": "0c9409cf38e9add9e19fae2cda807a3c79cc8ed5b4d21f802c54b51d648f4fe9",
+      "pipeline_ms": 1.9721999997273088,
+      "workgroup_bytes": 128
+    },
+    {
+      "source_sha256": "6938d15a7ac940b1a69084a81cbf2031b7decae5f17f0662987d242b84f97003",
+      "artifact": "artifacts\\6938d15a7ac940b1a690.tbin",
+      "artifact_sha256": "116f41b4298e86bddbb9212f01f4a6e6b52ed4c82b2ae0663ae9615b130815ca",
+      "pipeline_ms": 3.6492000217549503,
+      "workgroup_bytes": 4432
+    },
+    {
+      "source_sha256": "425aa47cffe7874a0c447e5b463fe3a69d0b6974f8493e95028974000fe58159",
+      "artifact": "artifacts\\425aa47cffe7874a0c44.tbin",
+      "artifact_sha256": "fc4733769e94d49b7878cc1d6e15a58fd2264e5ddca396cb0337a05027502b1e",
+      "pipeline_ms": 2.287300012540072,
+      "workgroup_bytes": 2376
+    },
+    {
+      "source_sha256": "3bcc5218131062e38cb801a70e6961b9d9d2b9e5a93504eef81a7749104ac3c8",
+      "artifact": "artifacts\\3bcc5218131062e38cb8.tbin",
+      "artifact_sha256": "f22e0b55e5f9db2dc6c5429bb49713ae99675489cc3ee30a95f5b34fa26c780e",
+      "pipeline_ms": 1.8457999685779214,
+      "workgroup_bytes": 256
+    },
+    {
+      "source_sha256": "b6e070ab614caba4f724e3e5c6c2dbb837259755cc74a99f29e5ef59c4d972f5",
+      "artifact": "artifacts\\b6e070ab614caba4f724.tbin",
+      "artifact_sha256": "c1d89f437d053fd6128a362e902b5adf4dde86b830a0669862c03ef268d40b3f",
+      "pipeline_ms": 2.965899999253452,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "5b74c160622f46f994f20ec9d684e9aafc2da7728868969c8344529a55fc4dbe",
+      "artifact": "artifacts\\5b74c160622f46f994f2.tbin",
+      "artifact_sha256": "5f70840e98655effa3f315b1c137076501d3e81316b1f727e2d5966ef5e494e4",
+      "pipeline_ms": 1.9739000126719475,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "eaf63ea1e172f3a50ee65472466bfc0d6bc01a7d70c25cbf04ed73c39c9b323d",
+      "artifact": "artifacts\\eaf63ea1e172f3a50ee6.tbin",
+      "artifact_sha256": "860954c9f585ba35d8816f5f0532947b46a348334dae5c7e24c376b29e8163a1",
+      "pipeline_ms": 2.543099981267005,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "3262577620e51276d4343f38a7497b5aeef90261c36cd54dd42610e4112561cc",
+      "artifact": "artifacts\\3262577620e51276d434.tbin",
+      "artifact_sha256": "f23b68501e2f7f081025926c0ef37a571f46186aeccec4034ff66e88717ea99f",
+      "pipeline_ms": 1.8999000312760472,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "c99d56c83e3882c5e297bc18f38edc13b0e4fea98a6af8966140206b848194eb",
+      "artifact": "artifacts\\c99d56c83e3882c5e297.tbin",
+      "artifact_sha256": "726b461ba91480aff06605d5a0da2b9f16b39175a05d4290ab26c011e83d51a8",
+      "pipeline_ms": 1.868500025011599,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "a2de1c3949cf8414704734280108561b40fb1a3a6d5b53f6d542fd72b5c50525",
+      "artifact": "artifacts\\a2de1c3949cf84147047.tbin",
+      "artifact_sha256": "959ea6655d11ecdfd1c5f51fa6e0cb69e684113af3ec5214fbfaea0d6793ffc0",
+      "pipeline_ms": 15.114100009668618,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "62ab3df966109c3522626567aaf4e08dd71d17da474821e44bda8cc495535078",
+      "artifact": "artifacts\\62ab3df966109c352262.tbin",
+      "artifact_sha256": "f6b1aafe9c2ab1ee9e5833e35ed14532b08649e5ced04d10428906252b73da1f",
+      "pipeline_ms": 54.433299985248595,
+      "workgroup_bytes": 4432
+    },
+    {
+      "source_sha256": "408125bb739edb5bf76c3ce4df2210835d1f9d0682cc6e752e7212a353bd29a3",
+      "artifact": "artifacts\\408125bb739edb5bf76c.tbin",
+      "artifact_sha256": "a178c71c53892d9d9a0f3b6c9b8d72b21750960306fa199634e4c474b552dc97",
+      "pipeline_ms": 2.5695000076666474,
+      "workgroup_bytes": 268
+    },
+    {
+      "source_sha256": "f950557277734b14be04a301e40860cc3be988e895f777ae3f29602256d3793a",
+      "artifact": "artifacts\\f950557277734b14be04.tbin",
+      "artifact_sha256": "bc5743a10165e3108e9fb72f42607f45b35063009e3e21cc8d7b9bdd811b3bf9",
+      "pipeline_ms": 9.11469996208325,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "9475bd1d33f18bcc7df2e34430628950a9e3a90b8fb16554c7b2ee7f83b89b6e",
+      "artifact": "artifacts\\9475bd1d33f18bcc7df2.tbin",
+      "artifact_sha256": "70ff129aa4ea764d61f4777afa2f14eaabdaad4600c75e9758506affb01d41c4",
+      "pipeline_ms": 1.6181000391952693,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "b74e3159571cded8ab94d59417b79b9fdd7e4f177c1d0641b91ad17446d65376",
+      "artifact": "artifacts\\b74e3159571cded8ab94.tbin",
+      "artifact_sha256": "2be62c552c8ea4b3a916a417e0884b4b29a1558e374f8b24483b0b7ac762ec94",
+      "pipeline_ms": 6.032700010109693,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "453b6902adff44d0325b9de47fc6020cdb2fe1dfcd9bcc5666001f0d9bfaf7dc",
+      "artifact": "artifacts\\453b6902adff44d0325b.tbin",
+      "artifact_sha256": "130e39e9c53c2e6e0fc5280132999fd3fa73ab27bde976e2b7b6596e38cc05e9",
+      "pipeline_ms": 5.590800021309406,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "33428398e4e45d78dab8bc7c9e4d14951798b15fb96940c724a36233ec3369aa",
+      "artifact": "artifacts\\33428398e4e45d78dab8.tbin",
+      "artifact_sha256": "89406208b8352d94f32cb52e57fe8874754d20d4ca56c0f87d36eb112644fd7b",
+      "pipeline_ms": 5.477999977301806,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "fbbe2445ad79ac8d43b981a2119c9000ba6b0500e6560f610fedd638f0194de5",
+      "artifact": "artifacts\\fbbe2445ad79ac8d43b9.tbin",
+      "artifact_sha256": "20a685804663822d12f20c336f9a4e6e0822ff5423f0fe22776d04b281f2509f",
+      "pipeline_ms": 10.412200004793704,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "fac3656df1316099222f3f4e4d969728cb3f17e7b1fdb60e816065afd75861d5",
+      "artifact": "artifacts\\fac3656df1316099222f.tbin",
+      "artifact_sha256": "c55a1f996e560f13137c8d616df31188dbf1717f339675dbf3fba532087120fc",
+      "pipeline_ms": 2.3766999947838485,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "2ab6ed6433bcf4f6164f1d86d7713c502c434bd9ee88d189af1697b5c442543e",
+      "artifact": "artifacts\\2ab6ed6433bcf4f6164f.tbin",
+      "artifact_sha256": "9bb82bea10fd70df292dc6849fcae52a0067de385cdf498785fc63553febaa09",
+      "pipeline_ms": 1.8766000284813344,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "d14ffc5336298e4fbc2ef5a9ef4e85525f77ec5926fd30fbdf4f4c00b7f60a31",
+      "artifact": "artifacts\\d14ffc5336298e4fbc2e.tbin",
+      "artifact_sha256": "0c060d2d34774598eaf101d06ad95d08768b15267380af118c0093778ec07720",
+      "pipeline_ms": 1.5845000161789358,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "79232c876c8f967ec7e5c4a02a707a5a302e7cd585c7a927f36ba5d9c6adc172",
+      "artifact": "artifacts\\79232c876c8f967ec7e5.tbin",
+      "artifact_sha256": "3f029f3305589e342f3932258ef6199971aee20b3b4081195bbca65631ddd4c6",
+      "pipeline_ms": 2.033500000834465,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "4232d64ec759773dd5c51af438e7cf8af2267cbd23cdf2c732d8fa33baf8386d",
+      "artifact": "artifacts\\4232d64ec759773dd5c5.tbin",
+      "artifact_sha256": "91ca88a1ea6f3c6afcd3f535efa5ae84712fc64beea2c8908db04d28c1431408",
+      "pipeline_ms": 5.826600012369454,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "2ac2d749340d29bf3fe3ec07e77c3e0fd1f5667f1399810610363f32d49b8a99",
+      "artifact": "artifacts\\2ac2d749340d29bf3fe3.tbin",
+      "artifact_sha256": "6cb2667be5f3e0a0153a03d5e41e342b7b78232f747b25c8b853569c3d55fe51",
+      "pipeline_ms": 5.45519997831434,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "d62666dfa3a810c334be831325a6bc7c513f8b0345e9cf3fd10b41bf0cf0f43e",
+      "artifact": "artifacts\\d62666dfa3a810c334be.tbin",
+      "artifact_sha256": "21a0b37c396cf6b43f329bc8036aa5ff308bed7065f081af5c97236ce03ba282",
+      "pipeline_ms": 6.8103999947197735,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "3f4f6a29562df2e67fd381f7dd9e233a11e79dce0ee45a67a9279f35a9a6dfea",
+      "artifact": "artifacts\\3f4f6a29562df2e67fd3.tbin",
+      "artifact_sha256": "ec6e570dc9cd3053862d1a971842da5310ac387bf5a94123d0d9cace75d2fae7",
+      "pipeline_ms": 5.5951999966055155,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "73448f85c072e48ac54cb21d7244c2d9d85ce81bc7aee7b028bf9cf7a9e4a286",
+      "artifact": "artifacts\\73448f85c072e48ac54c.tbin",
+      "artifact_sha256": "93f84cae00cf9e5aa9d0d2f999a9389d03170966559f8dc3354c82cd5f837e2f",
+      "pipeline_ms": 5.547199980355799,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "9d062f058882e630ceed6373fa6f8e422ed8e961e2c17ba9d2d14e37ed6b6e94",
+      "artifact": "artifacts\\9d062f058882e630ceed.tbin",
+      "artifact_sha256": "0507244e07b71953d9fbfe850980d9abecd6f7dd19bdf3cd74717bea644bf411",
+      "pipeline_ms": 5.781000014394522,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "1d1a863d7846290e3594a344cc32e69d7953bbc98c7579b07951eb762a111b2e",
+      "artifact": "artifacts\\1d1a863d7846290e3594.tbin",
+      "artifact_sha256": "519509505bb0fcf7b83dcfc20c18ee4677454e5208a5575feabd692b26a01756",
+      "pipeline_ms": 10.357399994973093,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "34a25b44bde5b8c8418b0c1701014c860259a39c2f1ba7980c55c99c6a2c8dbb",
+      "artifact": "artifacts\\34a25b44bde5b8c8418b.tbin",
+      "artifact_sha256": "f63ee8319c4641768d3fad08cf9ffd41d5db353fc695e9c5762500fbb11da0e3",
+      "pipeline_ms": 2.024299988988787,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "f4a35c207380358323705bd890147c712e597b5c535cdc06c221917b3955ecca",
+      "artifact": "artifacts\\f4a35c20738035832370.tbin",
+      "artifact_sha256": "7e58ba1fa2c85cd54620c7a153ef2f62e16f2fa95c1eba38626554176d91284a",
+      "pipeline_ms": 1.6199999954551458,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "c2e9762c03528eb684e986a57721543328a5a1bdf8db2257366b30e7d86f4fed",
+      "artifact": "artifacts\\c2e9762c03528eb684e9.tbin",
+      "artifact_sha256": "d1d150e87b29a6d6da16a9029f757d07f245aa5b3755d8a758a9dde40db89a21",
+      "pipeline_ms": 1.5858000260777771,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "72bdc527fcb15d693a1fdecab01e9d49c1d7b96eb9c9cae26d5b949c5ff98760",
+      "artifact": "artifacts\\72bdc527fcb15d693a1f.tbin",
+      "artifact_sha256": "92b7e36426826be45926bf14621a5a2f98f04b2b8804588af55d4bc1b61b56f0",
+      "pipeline_ms": 1.5924000181257725,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "ca1bd40e216edbb36a2b3c076608d62eba04a504c2fa8c820c9e055642c1eb24",
+      "artifact": "artifacts\\ca1bd40e216edbb36a2b.tbin",
+      "artifact_sha256": "69ff8debdab1e8f25336fe96f51c9ea6553261c37d914b06b4998ce7aaa36751",
+      "pipeline_ms": 1.5780000248923898,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "bf129e14027b32f25d5e9a5b57b027a755704d181ae094e3c900c7075c81a2c6",
+      "artifact": "artifacts\\bf129e14027b32f25d5e.tbin",
+      "artifact_sha256": "fba23b4a1e58abf4d6b5ec03881db9b35cddb07044a0052c772914c4f5b3a810",
+      "pipeline_ms": 1.5888999914750457,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "3001223c367be5ae0ba2a2ac172b2e6d70f5d12425b893452e08fd486c5b3f5f",
+      "artifact": "artifacts\\3001223c367be5ae0ba2.tbin",
+      "artifact_sha256": "e99809c2e8b03c1ef4da13653fb10e67fb49f5f5a93f88087abf5f81736fec39",
+      "pipeline_ms": 1.5492000384256244,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "73575ef481484b6a503e1c89a77dfda3be90a3143e98048e020cac1ee5fe4439",
+      "artifact": "artifacts\\73575ef481484b6a503e.tbin",
+      "artifact_sha256": "8a476096f0cb24accf0dfc9cbce6a79215cb1f90c31bfed98cd537e6d2f60fb5",
+      "pipeline_ms": 1.5548000228591263,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "94b4f51640c81d07a9645807721dc98075385bf09f7ac542e12df169ac57fe7d",
+      "artifact": "artifacts\\94b4f51640c81d07a964.tbin",
+      "artifact_sha256": "92f83417dee06f87e992dc855f03c7aeca8635ebc2e179148d617505d4be6b76",
+      "pipeline_ms": 1.6051999991759658,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "f220b6cc53c6d42096d4fbe39ae25df5fe5cca6c92772ffdd6665478cecd4667",
+      "artifact": "artifacts\\f220b6cc53c6d42096d4.tbin",
+      "artifact_sha256": "f0e6ffc30d36ed7fc203b7bb9e63b2b2a4ddec0e78079d4bf0787c5bc5d9d370",
+      "pipeline_ms": 2.4246000102721155,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "4324b35421a44f81b79737f8956b7a3a891ddb02d0f5916142ea15d03cf2e9c7",
+      "artifact": "artifacts\\4324b35421a44f81b797.tbin",
+      "artifact_sha256": "25e6d09152d982e3a39f9e6c1ad38cd99aed66f1f135549a92feefd368f21a25",
+      "pipeline_ms": 5.467199953272939,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "74cee2fd9b33ee05467477d8e2072bc09c90a06977c051020b154b55a5edcaad",
+      "artifact": "artifacts\\74cee2fd9b33ee054674.tbin",
+      "artifact_sha256": "cf518dcc53899110a533152949a1fb0bfba48688e67ee06891798a3f05425409",
+      "pipeline_ms": 5.470199976116419,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "c9151f724b1bb178e14450406202291bf2f123108b71983812e1bdcfd0ecbef9",
+      "artifact": "artifacts\\c9151f724b1bb178e144.tbin",
+      "artifact_sha256": "cd46975ff3b88dcdf2c2a90c6de911176e914954c5c0e1b96efb0b0e7a58196e",
+      "pipeline_ms": 5.4790000431239605,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "eb74602ced107d078fdf57fc3a370422315e38592bbf98562f7a2307e418a6cd",
+      "artifact": "artifacts\\eb74602ced107d078fdf.tbin",
+      "artifact_sha256": "6cad80ddfc73f8eb96322c155f7a046db1cd450e3c12d0a61183751c1a754ada",
+      "pipeline_ms": 5.499499966390431,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "592fa725aa63c3bbad0e7aa604b149abe0983634bf1a83ee6194021c110c544e",
+      "artifact": "artifacts\\592fa725aa63c3bbad0e.tbin",
+      "artifact_sha256": "126426a278618965282dc4bc220bae3248ac90f7ddc9df98233ad3836f94f82f",
+      "pipeline_ms": 5.808799993246794,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "3c8ecaf924cdb76986032763e655dd79b6469a63c733ae34b6343282b794f32c",
+      "artifact": "artifacts\\3c8ecaf924cdb7698603.tbin",
+      "artifact_sha256": "0865f99d4eff0fcb56307277ad49187e3408679427f49e8927529e59124c26c0",
+      "pipeline_ms": 5.557800002861768,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "6f4cdda57780c5061f731e82b688ee15eb41016a9fa15916e4c329f4926c228a",
+      "artifact": "artifacts\\6f4cdda57780c5061f73.tbin",
+      "artifact_sha256": "d143520ac50e7bb4e4fc6f13682a43feaba08427e71ed1552821c9dfc8d51f5c",
+      "pipeline_ms": 9.98749997233972,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "65bbb8af0ac91d139a14a5ae5ba33406b8c8e2eefaeb021e77a7958eb8f316a7",
+      "artifact": "artifacts\\65bbb8af0ac91d139a14.tbin",
+      "artifact_sha256": "3c2f6f094f2bc313a5dd50f011101a61d749f8345b2cd44f07fbc5b854253ea0",
+      "pipeline_ms": 3.6053999792784452,
+      "workgroup_bytes": 8784
+    },
+    {
+      "source_sha256": "4bd9ef55a16604228e48dea90016a9913ecc5002bee0309a4b2b34fadc308e76",
+      "artifact": "artifacts\\4bd9ef55a16604228e48.tbin",
+      "artifact_sha256": "968c3e13e05e213973bb4aa829dfed983b4cd9675093bfcad782b0d1f04f85fa",
+      "pipeline_ms": 55.58230000315234,
+      "workgroup_bytes": 4432
+    },
+    {
+      "source_sha256": "8b1b520c646ab25567d799f1d5a035fa9efcf0117529a488be55fc470cb161dc",
+      "artifact": "artifacts\\8b1b520c646ab25567d7.tbin",
+      "artifact_sha256": "343c3715457bead5acab10cf41b27c020fec4e6e5bf9ee36374714418dccfb8b",
+      "pipeline_ms": 3.396900021471083,
+      "workgroup_bytes": 4432
+    },
+    {
+      "source_sha256": "9775f32b680e99081fc963e5b0b0c3afb2d0a8127e3beaef420d9a5a6af86d98",
+      "artifact": "artifacts\\9775f32b680e99081fc9.tbin",
+      "artifact_sha256": "f408de3212c3c9e6ef9de8d0bb1b591c62a0089ecb451d69f2ffd852f0d66e68",
+      "pipeline_ms": 1.858700008597225,
+      "workgroup_bytes": 256
+    },
+    {
+      "source_sha256": "d09552ebd825050d940303d0e6726d8868d44c53e14d759d893683ef585e351f",
+      "artifact": "artifacts\\d09552ebd825050d9403.tbin",
+      "artifact_sha256": "1dce36fb1f050f74284cd74e0f67c8ae372361b512f1ed536e44be0b25c41c16",
+      "pipeline_ms": 3.6741000367328525,
+      "workgroup_bytes": 8784
+    },
+    {
+      "source_sha256": "da026542d4d65a17e7940323c64cfb18e555b488a4e749fbcc71445128adf923",
+      "artifact": "artifacts\\da026542d4d65a17e794.tbin",
+      "artifact_sha256": "a560808592128126434259564edeab0e98aa0bd4ee03541a9559689cbcef86df",
+      "pipeline_ms": 1.9879000028595328,
+      "workgroup_bytes": 256
+    },
+    {
+      "source_sha256": "e7c3409104a3f5fe209d525a79a83858f978828db75c50c8892c1401d255fdb7",
+      "artifact": "artifacts\\e7c3409104a3f5fe209d.tbin",
+      "artifact_sha256": "e8f6b0db47e4fb68f1cb7a92643f35d5a8f6880f4a4a1840fccb297ffd2aaca5",
+      "pipeline_ms": 10.119899990968406,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "f4be508cdd76a0e64f88f9e577890c6ef34c92e5e965fcb7481d70dfea8eef26",
+      "artifact": "artifacts\\f4be508cdd76a0e64f88.tbin",
+      "artifact_sha256": "c151ae507291fa1d4a923a2d65b299d0d14abe987e64970e579aaeb9d1de2ffd",
+      "pipeline_ms": 2.8026000363752246,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "795163d16ed258bfee729a8a8074fd927274bee407624d69bd824dbf6a12b2d8",
+      "artifact": "artifacts\\795163d16ed258bfee72.tbin",
+      "artifact_sha256": "f1329d1943affa6f5d5ef52e1a25ffa1a89bb32a101c8c99757ca02706b6e610",
+      "pipeline_ms": 1.6296000103466213,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "652e3f392127258306df08e652a343309438d480e91c02d1f37424d3950f66b3",
+      "artifact": "artifacts\\652e3f392127258306df.tbin",
+      "artifact_sha256": "69a1db4fa79317dc313b8ea69ae47c97fc44a3f44b08e0b971b5b2c4471506a6",
+      "pipeline_ms": 1.9316999823786318,
+      "workgroup_bytes": 0
+    },
+    {
+      "source_sha256": "786c6ceaf0c2906f896428f77a0809501e5aca74833c8b8009b179991b5d741b",
+      "artifact": "artifacts\\786c6ceaf0c2906f8964.tbin",
+      "artifact_sha256": "350d63a2dbb868f27bc531a22a3dc7eff6069aa5168e6caeda3ece60237c67d3",
+      "pipeline_ms": 2.768100006505847,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "8572e1e402bb9f1e9de3f687e57be69381dc1322743551dacf3b548438dd3167",
+      "artifact": "artifacts\\8572e1e402bb9f1e9de3.tbin",
+      "artifact_sha256": "c7a03e23b53e26eadf52115963445dc48c1aec3450175353d824215971c542a1",
+      "pipeline_ms": 3.653899999335408,
+      "workgroup_bytes": 8784
+    },
+    {
+      "source_sha256": "3b1db0abf0253b2726936744e256383e0f8a39a2707b0f99640247083dc28b5c",
+      "artifact": "artifacts\\3b1db0abf0253b272693.tbin",
+      "artifact_sha256": "b578fa1c93822adab86ea8887693b20257c24be08bcf9a9effada6ed92564ee0",
+      "pipeline_ms": 83.29899999080226,
+      "workgroup_bytes": 396
+    },
+    {
+      "source_sha256": "a636f7ab6df51445630ee6a0da11c167386e1378f89aeecd739e17a742be8f6b",
+      "artifact": "artifacts\\a636f7ab6df51445630e.tbin",
+      "artifact_sha256": "f1abcf65c98630d949c952d9ebe58ef3a80b91e2ec3b3873b26df320fd96d79f",
+      "pipeline_ms": 10.712600022088736,
+      "workgroup_bytes": 512
+    },
+    {
+      "source_sha256": "7145f324bca410f84ea329f94af4be3f10c9ef8f471435c7e6de1aa71e6049f1",
+      "artifact": "artifacts\\7145f324bca410f84ea3.tbin",
+      "artifact_sha256": "5a85096a88960e6aec2a48834efdada78c2fee7ef82f34d210b1e5f502945ef5",
+      "pipeline_ms": 3.668899997137487,
+      "workgroup_bytes": 8784
+    },
+    {
+      "source_sha256": "03d140b7ef545be887a5355f47bb09a8688621e372339f228ff40e9c91609888",
+      "artifact": "artifacts\\03d140b7ef545be887a5.tbin",
+      "artifact_sha256": "27613b5d16e57ff9e3d4294c72249d596a5eb76ccd2e9a148073b3c647c37f55",
+      "pipeline_ms": 3.704699978698045,
+      "workgroup_bytes": 8784
+    },
+    {
+      "source_sha256": "3851fe44332fe99a62ef0c22351dd5b6d525fb089722b66ad017164b59ba58a6",
+      "artifact": "artifacts\\3851fe44332fe99a62ef.tbin",
+      "artifact_sha256": "843fb4b1fa0b0cb5ad30874d5dd007bb7a380a68f490406f837062843eed4920",
+      "pipeline_ms": 3.6229999968782067,
+      "workgroup_bytes": 8784
+    },
+    {
+      "source_sha256": "916d1407dd3046558acce83ddb29d9b772454f30f7c073a86c47acb9f23a9b13",
+      "artifact": "artifacts\\916d1407dd3046558acc.tbin",
+      "artifact_sha256": "3b8bf156c84579e75cd62dabbf249af92f5557f29f8d0e131ea72d42aaa79ed5",
+      "pipeline_ms": 55.29809999279678,
+      "workgroup_bytes": 4432
+    },
+    {
+      "source_sha256": "1b7c09f51ead8a247d7b924b40c9b6fe70222c0df50e484b2b5481afab56903e",
+      "artifact": "artifacts\\1b7c09f51ead8a247d7b.tbin",
+      "artifact_sha256": "52408a1fcd7217df50bd4a7bb840d7a4e07f3c0b206ecb244b1abb07e8dd6737",
+      "pipeline_ms": 114.48409996228293,
+      "workgroup_bytes": 4432
+    },
+    {
+      "source_sha256": "9ad97b48bb097484fe91810b0d5300d5a3e6c03b92650629faaa68dfe2324f57",
+      "artifact": "artifacts\\9ad97b48bb097484fe91.tbin",
+      "artifact_sha256": "40ad669998806bcdba78ddfcbb875c133c60cb83fa404b34ad71352436aa8727",
+      "pipeline_ms": 3.701200010254979,
+      "workgroup_bytes": 8784
+    },
+    {
+      "source_sha256": "9f96fb26576100d85f9e288eb6afb20b68527d7e88178bb979c620e013c341be",
+      "artifact": "artifacts\\9f96fb26576100d85f9e.tbin",
+      "artifact_sha256": "8f1b94fc184abc47690f28610f724bc9ca8a1250debdb86d10273a4fafaec9ae",
+      "pipeline_ms": 3.7813999806530774,
+      "workgroup_bytes": 8784
+    }
+  ]
+}

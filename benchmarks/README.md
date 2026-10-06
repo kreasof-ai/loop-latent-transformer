@@ -14,6 +14,11 @@ The follow-up measurements also cover an evolving complete decoder forward,
 isolated live tensor allocations, and CPU gradient replay. These remain synthetic
 prototypes; they do not test trained-model quality or the proposed training system.
 
+A later [regime search](REGIMES.md) adds folded query/output projections, a
+per-head LLA geometry comparison, and exact CPU training checkpoints. It finds
+lower-rank points that meet explicit memory and latency criteria. Its results
+use a different, optimized implementation from the unfused decoder below.
+
 ## Measured latency
 
 Context 4,096; ten repeated attention calls. These are medians of **GPU execution

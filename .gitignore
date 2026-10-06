@@ -8,3 +8,5 @@ benchmarks/results/partition-debug/
 benchmarks/results/rx6700xt/
 benchmarks/results/extended-smoke/
 benchmarks/results/decoder-smoke/
+benchmarks/results/regime-inference-smoke/
+benchmarks/results/regime-training-smoke/

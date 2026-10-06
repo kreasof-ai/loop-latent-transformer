@@ -1,0 +1,2906 @@
+{
+  "schema": "llt.regime-training.v1",
+  "status": "passed",
+  "timestamp_utc": "2026-10-06T11:39:30.654081+00:00",
+  "torch": "2.14.0+cpu",
+  "device": "cpu",
+  "processor": "AMD64 Family 25 Model 33 Stepping 2, AuthenticAMD",
+  "dtype": "float32",
+  "threads": 4,
+  "source_hashes": {
+    "regime_training.py": "7538c922f71c38003a77ea8d896d65f819355b0528cd099b3c5484f9f841ea1d",
+    "lac_cpu.py": "920b31c66fd905a2cce173564788a307e3ddf4ecc6c6b9a8c2d71431d5d33e2a"
+  },
+  "protocol": {
+    "samples": 3,
+    "acceptable_tax": 0.2,
+    "large_memory_reduction": 0.5,
+    "comparable_nonloop_max_ratio": 1.25,
+    "timing": "forward+cross-entropy+backward+Adam update; allocation/clones/GC/initial optimizer state excluded; hooks absent in timing runs",
+    "memory": "unique live observable CPU tensor storage, includes input, labels, weights, gradients, Adam state and operator outputs; excludes immutable fixtures/runtime/native operator scratch; not RSS/GPU VRAM",
+    "attention": "PyTorch CPU scaled-dot-product attention, causal; same API for both models; explicit scale head_width**-.5",
+    "llt": "fixed shared global KV latent from initial input; full residual state; differentiable query/output folding outside loops; exact autograd",
+    "lla": "paper is post-training inference cache codec; no native LLA pretraining memory graph claimed; parent teacher training follows naive graph",
+    "policies": [
+      "none",
+      "mlp",
+      "loop",
+      "pair"
+    ],
+    "checkpoint": "non-reentrant PyTorch exact checkpointing; identical options for both models",
+    "quality": "random weights/token targets; gradient correctness only, no learned quality comparison"
+  },
+  "folding_validation": {
+    "passed": true,
+    "dtype": "float64",
+    "reference": "explicit full K/V and masked-softmax attention, unfolded projections",
+    "forward_max_absolute_error": 3.3306690738754696e-16,
+    "gradient_max_absolute_error": 2.168404344971009e-18
+  },
+  "cases": [
+    {
+      "width": 256,
+      "heads": 4,
+      "layers": 2,
+      "rank": 16,
+      "batch": 1,
+      "sequence": 64,
+      "loops": 1,
+      "methods": [
+        {
+          "loss": 4.8831257820129395,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 29000248,
+          "peak_saved_tensor_bytes": 2264836,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 12.178200006019324,
+            "samples_ms": [
+              11.505100002977997,
+              12.178200006019324,
+              13.775400002487004
+            ]
+          }
+        },
+        {
+          "loss": 4.8831257820129395,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 29000248,
+          "peak_saved_tensor_bytes": 1084676,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 16.376700019463897,
+            "samples_ms": [
+              16.376700019463897,
+              14.782399986870587,
+              16.5998000302352
+            ]
+          }
+        },
+        {
+          "loss": 4.8831257820129395,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 29000248,
+          "peak_saved_tensor_bytes": 230148,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 18.39250000193715,
+            "samples_ms": [
+              18.622700008563697,
+              18.39250000193715,
+              17.249300028197467
+            ]
+          }
+        },
+        {
+          "loss": 4.8831257820129395,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 29000248,
+          "peak_saved_tensor_bytes": 230148,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 17.32599997194484,
+            "samples_ms": [
+              16.688400006387383,
+              21.355299977585673,
+              17.32599997194484
+            ]
+          }
+        },
+        {
+          "loss": 4.883060932159424,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 25133628,
+          "peak_saved_tensor_bytes": 2138116,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 10.306500014849007,
+            "samples_ms": [
+              10.261300019919872,
+              10.306500014849007,
+              10.671700001694262
+            ]
+          }
+        },
+        {
+          "loss": 4.883060932159424,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 25133628,
+          "peak_saved_tensor_bytes": 957956,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 11.606199957896024,
+            "samples_ms": [
+              11.606199957896024,
+              11.5164999733679,
+              14.873300038743764
+            ]
+          }
+        },
+        {
+          "loss": 4.883060932159424,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 25133628,
+          "peak_saved_tensor_bytes": 295940,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 14.078999985940754,
+            "samples_ms": [
+              12.605900003109127,
+              14.078999985940754,
+              14.916499960236251
+            ]
+          }
+        },
+        {
+          "loss": 4.883060932159424,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 25133628,
+          "peak_saved_tensor_bytes": 295940,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 14.238599978853017,
+            "samples_ms": [
+              14.108599978499115,
+              14.238599978853017,
+              14.49149998370558
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 256,
+      "heads": 4,
+      "layers": 2,
+      "rank": 16,
+      "batch": 1,
+      "sequence": 64,
+      "loops": 10,
+      "methods": [
+        {
+          "loss": 4.882574558258057,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 46788156,
+          "peak_saved_tensor_bytes": 21166852,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 93.86550000635907,
+            "samples_ms": [
+              93.86550000635907,
+              85.5411000084132,
+              94.41699995659292
+            ]
+          }
+        },
+        {
+          "loss": 4.882574558258057,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 36756796,
+          "peak_saved_tensor_bytes": 9365252,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 106.51579999830574,
+            "samples_ms": [
+              97.75949997128919,
+              111.09880002913997,
+              106.51579999830574
+            ]
+          }
+        },
+        {
+          "loss": 4.882574558258057,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 30510652,
+          "peak_saved_tensor_bytes": 819972,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 130.25809999089688,
+            "samples_ms": [
+              130.25809999089688,
+              132.94550002319738,
+              101.61809995770454
+            ]
+          }
+        },
+        {
+          "loss": 4.882574558258057,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 32283196,
+          "peak_saved_tensor_bytes": 492292,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 124.19599998975173,
+            "samples_ms": [
+              117.56309994962066,
+              124.19599998975173,
+              126.53800001135096
+            ]
+          }
+        },
+        {
+          "loss": 4.882139682769775,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 38260544,
+          "peak_saved_tensor_bytes": 16911364,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 68.21500003570691,
+            "samples_ms": [
+              71.07810000889003,
+              68.21500003570691,
+              65.34530001226813
+            ]
+          }
+        },
+        {
+          "loss": 4.882139682769775,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 28229184,
+          "peak_saved_tensor_bytes": 5109764,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 96.82679997058585,
+            "samples_ms": [
+              91.80429996922612,
+              96.9883999787271,
+              96.82679997058585
+            ]
+          }
+        },
+        {
+          "loss": 4.882139682769775,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 25653056,
+          "peak_saved_tensor_bytes": 885764,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 102.68150002229959,
+            "samples_ms": [
+              94.32289999676868,
+              102.68150002229959,
+              106.68849997455254
+            ]
+          }
+        },
+        {
+          "loss": 4.882139682769775,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 26966848,
+          "peak_saved_tensor_bytes": 558084,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 94.94520002044737,
+            "samples_ms": [
+              94.94520002044737,
+              90.41180001804605,
+              103.30890002660453
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 256,
+      "heads": 4,
+      "layers": 2,
+      "rank": 16,
+      "batch": 1,
+      "sequence": 64,
+      "loops": 16,
+      "methods": [
+        {
+          "loss": 4.881935119628906,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 59389500,
+          "peak_saved_tensor_bytes": 33768196,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 146.8006999930367,
+            "samples_ms": [
+              146.8006999930367,
+              149.00710002984852,
+              144.94890003697947
+            ]
+          }
+        },
+        {
+          "loss": 4.881935119628906,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 42277180,
+          "peak_saved_tensor_bytes": 14885636,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 169.59509998559952,
+            "samples_ms": [
+              169.74819998722523,
+              155.2095000515692,
+              169.59509998559952
+            ]
+          }
+        },
+        {
+          "loss": 4.881935119628906,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 30903868,
+          "peak_saved_tensor_bytes": 1213188,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 197.9943999904208,
+            "samples_ms": [
+              205.92010003747419,
+              197.9943999904208,
+              188.2925999816507
+            ]
+          }
+        },
+        {
+          "loss": 4.881935119628906,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 32479804,
+          "peak_saved_tensor_bytes": 688900,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 218.87410001363605,
+            "samples_ms": [
+              218.87410001363605,
+              222.40229998715222,
+              213.39059999445453
+            ]
+          }
+        },
+        {
+          "loss": 4.881437301635742,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 48109376,
+          "peak_saved_tensor_bytes": 26760196,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 93.89080002438277,
+            "samples_ms": [
+              91.92289999919012,
+              106.09189997194335,
+              93.89080002438277
+            ]
+          }
+        },
+        {
+          "loss": 4.881437301635742,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 30997056,
+          "peak_saved_tensor_bytes": 7877636,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 143.60780001152307,
+            "samples_ms": [
+              143.88240000698715,
+              143.60780001152307,
+              143.24299996951595
+            ]
+          }
+        },
+        {
+          "loss": 4.881437301635742,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 26046272,
+          "peak_saved_tensor_bytes": 1278980,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 146.10589999938384,
+            "samples_ms": [
+              146.10589999938384,
+              161.8635999620892,
+              143.61229998758063
+            ]
+          }
+        },
+        {
+          "loss": 4.881437301635742,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 27163456,
+          "peak_saved_tensor_bytes": 754692,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 151.2963999994099,
+            "samples_ms": [
+              154.70620000269264,
+              151.2963999994099,
+              125.89260004460812
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 256,
+      "heads": 4,
+      "layers": 2,
+      "rank": 16,
+      "batch": 1,
+      "sequence": 64,
+      "loops": 32,
+      "methods": [
+        {
+          "loss": 4.879868030548096,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 92993084,
+          "peak_saved_tensor_bytes": 67371780,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 246.54219998046756,
+            "samples_ms": [
+              246.54219998046756,
+              228.3117999904789,
+              288.30309998011217
+            ]
+          }
+        },
+        {
+          "loss": 4.879868030548096,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 56998204,
+          "peak_saved_tensor_bytes": 29606660,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 347.90649998467416,
+            "samples_ms": [
+              347.90649998467416,
+              328.22179998038337,
+              348.97380002075806
+            ]
+          }
+        },
+        {
+          "loss": 4.879868030548096,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 31952444,
+          "peak_saved_tensor_bytes": 2261764,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 387.9037000006065,
+            "samples_ms": [
+              398.4235000098124,
+              387.9037000006065,
+              383.08950001373887
+            ]
+          }
+        },
+        {
+          "loss": 4.879868030548096,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 33004092,
+          "peak_saved_tensor_bytes": 1213188,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 391.85079996241257,
+            "samples_ms": [
+              393.9972000080161,
+              356.50739999255165,
+              391.85079996241257
+            ]
+          }
+        },
+        {
+          "loss": 4.879553318023682,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 74372928,
+          "peak_saved_tensor_bytes": 53023748,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 201.39579998794943,
+            "samples_ms": [
+              196.30680000409484,
+              208.14980001887307,
+              201.39579998794943
+            ]
+          }
+        },
+        {
+          "loss": 4.879553318023682,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 38378048,
+          "peak_saved_tensor_bytes": 15258628,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 224.77029997389764,
+            "samples_ms": [
+              285.4712000116706,
+              213.3023999631405,
+              224.77029997389764
+            ]
+          }
+        },
+        {
+          "loss": 4.879553318023682,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 27094848,
+          "peak_saved_tensor_bytes": 2327556,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 292.76610002852976,
+            "samples_ms": [
+              261.35720004094765,
+              292.76610002852976,
+              314.65170002775267
+            ]
+          }
+        },
+        {
+          "loss": 4.879553318023682,
+          "parameter_bytes": 5455872,
+          "optimizer_state_bytes": 10911800,
+          "peak_live_tensor_bytes": 27687744,
+          "peak_saved_tensor_bytes": 1278980,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 307.5111999642104,
+            "samples_ms": [
+              307.35389998881146,
+              338.81089999340475,
+              307.5111999642104
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 256,
+      "heads": 4,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 64,
+      "loops": 1,
+      "methods": [
+        {
+          "loss": 4.8831257820129395,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 29000248,
+          "peak_saved_tensor_bytes": 2264836,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 14.612300030421466,
+            "samples_ms": [
+              14.846100006252527,
+              14.612300030421466,
+              14.589699974749237
+            ]
+          }
+        },
+        {
+          "loss": 4.8831257820129395,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 29000248,
+          "peak_saved_tensor_bytes": 1084676,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 15.477500041015446,
+            "samples_ms": [
+              16.33319997927174,
+              15.33019996713847,
+              15.477500041015446
+            ]
+          }
+        },
+        {
+          "loss": 4.8831257820129395,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 29000248,
+          "peak_saved_tensor_bytes": 230148,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 18.18359998287633,
+            "samples_ms": [
+              19.848700030706823,
+              17.869400035124272,
+              18.18359998287633
+            ]
+          }
+        },
+        {
+          "loss": 4.8831257820129395,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 29000248,
+          "peak_saved_tensor_bytes": 230148,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 17.728000006172806,
+            "samples_ms": [
+              17.728000006172806,
+              19.282100023701787,
+              17.535399994812906
+            ]
+          }
+        },
+        {
+          "loss": 4.883085250854492,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 25461308,
+          "peak_saved_tensor_bytes": 2469892,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 12.404500041157007,
+            "samples_ms": [
+              12.812400003895164,
+              12.404500041157007,
+              12.105499976314604
+            ]
+          }
+        },
+        {
+          "loss": 4.883085250854492,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 25461308,
+          "peak_saved_tensor_bytes": 1289732,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 14.52109997626394,
+            "samples_ms": [
+              14.59840004099533,
+              14.52109997626394,
+              14.403200009837747
+            ]
+          }
+        },
+        {
+          "loss": 4.883085250854492,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 25461308,
+          "peak_saved_tensor_bytes": 295940,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 14.258500013966113,
+            "samples_ms": [
+              15.624799998477101,
+              14.188600005581975,
+              14.258500013966113
+            ]
+          }
+        },
+        {
+          "loss": 4.883085250854492,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 25461308,
+          "peak_saved_tensor_bytes": 295940,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 15.586199995595962,
+            "samples_ms": [
+              13.824200024828315,
+              15.625,
+              15.586199995595962
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 256,
+      "heads": 4,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 64,
+      "loops": 10,
+      "methods": [
+        {
+          "loss": 4.882574558258057,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 46788156,
+          "peak_saved_tensor_bytes": 21166852,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 89.46829999331385,
+            "samples_ms": [
+              95.36789997946471,
+              89.46829999331385,
+              80.3897000150755
+            ]
+          }
+        },
+        {
+          "loss": 4.882574558258057,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 36756796,
+          "peak_saved_tensor_bytes": 9365252,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 112.49919998226687,
+            "samples_ms": [
+              112.49919998226687,
+              114.12920005386695,
+              105.79259996302426
+            ]
+          }
+        },
+        {
+          "loss": 4.882574558258057,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 30510652,
+          "peak_saved_tensor_bytes": 819972,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 100.58399999979883,
+            "samples_ms": [
+              100.58399999979883,
+              97.04900003271177,
+              140.20619995426387
+            ]
+          }
+        },
+        {
+          "loss": 4.882574558258057,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 32283196,
+          "peak_saved_tensor_bytes": 492292,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 114.73889998160303,
+            "samples_ms": [
+              113.85720001999289,
+              114.73889998160303,
+              126.00139999995008
+            ]
+          }
+        },
+        {
+          "loss": 4.882379531860352,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 39628608,
+          "peak_saved_tensor_bytes": 17832964,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 70.5057000159286,
+            "samples_ms": [
+              70.5057000159286,
+              63.94459999864921,
+              74.15950001450256
+            ]
+          }
+        },
+        {
+          "loss": 4.882379531860352,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 29597248,
+          "peak_saved_tensor_bytes": 6031364,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 96.79999999934807,
+            "samples_ms": [
+              96.87350003514439,
+              96.77629999350756,
+              96.79999999934807
+            ]
+          }
+        },
+        {
+          "loss": 4.882379531860352,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 26496832,
+          "peak_saved_tensor_bytes": 885764,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 107.24809998646379,
+            "samples_ms": [
+              107.24809998646379,
+              107.05779999261722,
+              107.85380000015721
+            ]
+          }
+        },
+        {
+          "loss": 4.882379531860352,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 27876160,
+          "peak_saved_tensor_bytes": 558084,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 100.8365000016056,
+            "samples_ms": [
+              93.93520001322031,
+              100.8365000016056,
+              101.81459999876097
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 256,
+      "heads": 4,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 64,
+      "loops": 16,
+      "methods": [
+        {
+          "loss": 4.881935119628906,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 59389500,
+          "peak_saved_tensor_bytes": 33768196,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 134.30149998748675,
+            "samples_ms": [
+              118.57180000515655,
+              134.30149998748675,
+              140.55290003307164
+            ]
+          }
+        },
+        {
+          "loss": 4.881935119628906,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 42277180,
+          "peak_saved_tensor_bytes": 14885636,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 174.11859997082502,
+            "samples_ms": [
+              165.66180001245812,
+              176.32500000763685,
+              174.11859997082502
+            ]
+          }
+        },
+        {
+          "loss": 4.881935119628906,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 30903868,
+          "peak_saved_tensor_bytes": 1213188,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 178.712600027211,
+            "samples_ms": [
+              205.34460002090782,
+              178.712600027211,
+              168.9691999927163
+            ]
+          }
+        },
+        {
+          "loss": 4.881935119628906,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 32479804,
+          "peak_saved_tensor_bytes": 688900,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 217.46230003191158,
+            "samples_ms": [
+              222.81220002332702,
+              217.46230003191158,
+              192.26829998660833
+            ]
+          }
+        },
+        {
+          "loss": 4.881807804107666,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 49870656,
+          "peak_saved_tensor_bytes": 28075012,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 107.67890000715852,
+            "samples_ms": [
+              117.25479998858646,
+              107.67890000715852,
+              86.04500000365078
+            ]
+          }
+        },
+        {
+          "loss": 4.881807804107666,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 32758336,
+          "peak_saved_tensor_bytes": 9192452,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 128.12980002490804,
+            "samples_ms": [
+              117.3125000204891,
+              128.12980002490804,
+              146.93869999609888
+            ]
+          }
+        },
+        {
+          "loss": 4.881807804107666,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 26890048,
+          "peak_saved_tensor_bytes": 1278980,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 175.8082999731414,
+            "samples_ms": [
+              173.29539998900145,
+              232.76639997493476,
+              175.8082999731414
+            ]
+          }
+        },
+        {
+          "loss": 4.881807804107666,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 28072768,
+          "peak_saved_tensor_bytes": 754692,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 168.87520003365353,
+            "samples_ms": [
+              164.11589999916032,
+              168.87520003365353,
+              170.68139999173582
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 256,
+      "heads": 4,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 64,
+      "loops": 32,
+      "methods": [
+        {
+          "loss": 4.879868030548096,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 92993084,
+          "peak_saved_tensor_bytes": 67371780,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 277.77569997124374,
+            "samples_ms": [
+              256.4105000346899,
+              277.77569997124374,
+              295.87539995554835
+            ]
+          }
+        },
+        {
+          "loss": 4.879868030548096,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 56998204,
+          "peak_saved_tensor_bytes": 29606660,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 344.24220002256334,
+            "samples_ms": [
+              335.87040001293644,
+              344.24220002256334,
+              347.5227999733761
+            ]
+          }
+        },
+        {
+          "loss": 4.879868030548096,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 31952444,
+          "peak_saved_tensor_bytes": 2261764,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 422.09180002100766,
+            "samples_ms": [
+              422.09180002100766,
+              434.73530001938343,
+              414.40990002593026
+            ]
+          }
+        },
+        {
+          "loss": 4.879868030548096,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 33004092,
+          "peak_saved_tensor_bytes": 1213188,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 428.3378000254743,
+            "samples_ms": [
+              432.25900002289563,
+              419.86720002023503,
+              428.3378000254743
+            ]
+          }
+        },
+        {
+          "loss": 4.880202770233154,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 77182784,
+          "peak_saved_tensor_bytes": 55387140,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 208.89880001777783,
+            "samples_ms": [
+              187.37130000954494,
+              209.4472000026144,
+              208.89880001777783
+            ]
+          }
+        },
+        {
+          "loss": 4.880202770233154,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 41187904,
+          "peak_saved_tensor_bytes": 17622020,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 290.2686000452377,
+            "samples_ms": [
+              290.317100007087,
+              290.2686000452377,
+              276.5745000215247
+            ]
+          }
+        },
+        {
+          "loss": 4.880202770233154,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 27938624,
+          "peak_saved_tensor_bytes": 2327556,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 316.04919995879754,
+            "samples_ms": [
+              316.04919995879754,
+              288.54759997921064,
+              345.4710000078194
+            ]
+          }
+        },
+        {
+          "loss": 4.880202770233154,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 28597056,
+          "peak_saved_tensor_bytes": 1278980,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 307.02819995349273,
+            "samples_ms": [
+              278.6853999714367,
+              333.7128999992274,
+              307.02819995349273
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 256,
+      "heads": 4,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 256,
+      "loops": 1,
+      "methods": [
+        {
+          "loss": 4.880488872528076,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 30292028,
+          "peak_saved_tensor_bytes": 9059332,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 29.976699966937304,
+            "samples_ms": [
+              30.154000036418438,
+              29.976699966937304,
+              24.43879999918863
+            ]
+          }
+        },
+        {
+          "loss": 4.880488872528076,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 29493304,
+          "peak_saved_tensor_bytes": 4338692,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 34.09430000465363,
+            "samples_ms": [
+              35.255499999038875,
+              31.18009999161586,
+              34.09430000465363
+            ]
+          }
+        },
+        {
+          "loss": 4.880488872528076,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 30292028,
+          "peak_saved_tensor_bytes": 920580,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 40.442499972414225,
+            "samples_ms": [
+              40.518199966754764,
+              40.442499972414225,
+              38.72319997753948
+            ]
+          }
+        },
+        {
+          "loss": 4.880488872528076,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 30292028,
+          "peak_saved_tensor_bytes": 920580,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 41.02529998635873,
+            "samples_ms": [
+              43.63709996687248,
+              32.717599999159575,
+              41.02529998635873
+            ]
+          }
+        },
+        {
+          "loss": 4.880439281463623,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 26885184,
+          "peak_saved_tensor_bytes": 8306692,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 27.101100014988333,
+            "samples_ms": [
+              27.101100014988333,
+              27.762999990954995,
+              25.392500043381006
+            ]
+          }
+        },
+        {
+          "loss": 4.880439281463623,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 25954364,
+          "peak_saved_tensor_bytes": 3586052,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 31.839200004469603,
+            "samples_ms": [
+              23.558399989269674,
+              31.839200004469603,
+              31.94780001649633
+            ]
+          }
+        },
+        {
+          "loss": 4.880439281463623,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 26885184,
+          "peak_saved_tensor_bytes": 1183748,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 30.754299950785935,
+            "samples_ms": [
+              28.350900043733418,
+              32.74840000085533,
+              30.754299950785935
+            ]
+          }
+        },
+        {
+          "loss": 4.880439281463623,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 26885184,
+          "peak_saved_tensor_bytes": 1183748,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 32.8752999776043,
+            "samples_ms": [
+              32.70149999298155,
+              32.8752999776043,
+              33.133800025098026
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 256,
+      "heads": 4,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 256,
+      "loops": 10,
+      "methods": [
+        {
+          "loss": 4.88059139251709,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 105900092,
+          "peak_saved_tensor_bytes": 84667396,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 246.91980000352487,
+            "samples_ms": [
+              239.36110001523048,
+              246.91980000352487,
+              247.6244000135921
+            ]
+          }
+        },
+        {
+          "loss": 4.88059139251709,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 63665212,
+          "peak_saved_tensor_bytes": 37460996,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 309.56779996631667,
+            "samples_ms": [
+              301.0708999936469,
+              319.11420001415536,
+              309.56779996631667
+            ]
+          }
+        },
+        {
+          "loss": 4.88059139251709,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 38680636,
+          "peak_saved_tensor_bytes": 3279876,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 331.7300000344403,
+            "samples_ms": [
+              331.7300000344403,
+              256.4868999761529,
+              376.4330999692902
+            ]
+          }
+        },
+        {
+          "loss": 4.88059139251709,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 45770812,
+          "peak_saved_tensor_bytes": 1969156,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 343.0939999525435,
+            "samples_ms": [
+              357.102699985262,
+              307.7326999627985,
+              343.0939999525435
+            ]
+          }
+        },
+        {
+          "loss": 4.880032539367676,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 88337472,
+          "peak_saved_tensor_bytes": 69758980,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 202.8905000188388,
+            "samples_ms": [
+              208.70110002579167,
+              196.80999999400228,
+              202.8905000188388
+            ]
+          }
+        },
+        {
+          "loss": 4.880032539367676,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 46135360,
+          "peak_saved_tensor_bytes": 22552580,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 236.42670002300292,
+            "samples_ms": [
+              238.3646999951452,
+              236.42670002300292,
+              203.45860003726557
+            ]
+          }
+        },
+        {
+          "loss": 4.880032539367676,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 33733696,
+          "peak_saved_tensor_bytes": 3543044,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 246.37589999474585,
+            "samples_ms": [
+              200.76029998017475,
+              246.37589999474585,
+              274.76970001589507
+            ]
+          }
+        },
+        {
+          "loss": 4.880032539367676,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 39251008,
+          "peak_saved_tensor_bytes": 2232324,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 278.4287999966182,
+            "samples_ms": [
+              279.26010004011914,
+              278.4287999966182,
+              252.58510001003742
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 256,
+      "heads": 4,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 256,
+      "loops": 16,
+      "methods": [
+        {
+          "loss": 4.880527973175049,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 156305468,
+          "peak_saved_tensor_bytes": 135072772,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 389.365800016094,
+            "samples_ms": [
+              435.3177999728359,
+              340.38750000763685,
+              389.365800016094
+            ]
+          }
+        },
+        {
+          "loss": 4.880527973175049,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 85746748,
+          "peak_saved_tensor_bytes": 59542532,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 491.9217000133358,
+            "samples_ms": [
+              470.7256000256166,
+              505.1773999584839,
+              491.9217000133358
+            ]
+          }
+        },
+        {
+          "loss": 4.880527973175049,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 40253500,
+          "peak_saved_tensor_bytes": 4852740,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 553.8253999548033,
+            "samples_ms": [
+              558.8281999807805,
+              463.39590003481135,
+              553.8253999548033
+            ]
+          }
+        },
+        {
+          "loss": 4.880527973175049,
+          "parameter_bytes": 6422528,
+          "optimizer_state_bytes": 12845108,
+          "peak_live_tensor_bytes": 46557244,
+          "peak_saved_tensor_bytes": 2755588,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 522.2152000060305,
+            "samples_ms": [
+              522.2152000060305,
+              455.78040002146736,
+              555.5338999838568
+            ]
+          }
+        },
+        {
+          "loss": 4.879543781280518,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 129305664,
+          "peak_saved_tensor_bytes": 110727172,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 294.85679999925196,
+            "samples_ms": [
+              294.85679999925196,
+              282.4294000165537,
+              334.7444999963045
+            ]
+          }
+        },
+        {
+          "loss": 4.879543781280518,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 58779712,
+          "peak_saved_tensor_bytes": 35196932,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 391.17749995784834,
+            "samples_ms": [
+              391.17749995784834,
+              367.7220999961719,
+              391.8470999924466
+            ]
+          }
+        },
+        {
+          "loss": 4.879543781280518,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 35306560,
+          "peak_saved_tensor_bytes": 5115908,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 457.2539000073448,
+            "samples_ms": [
+              457.2539000073448,
+              458.01050000591204,
+              423.5365000204183
+            ]
+          }
+        },
+        {
+          "loss": 4.879543781280518,
+          "parameter_bytes": 5537792,
+          "optimizer_state_bytes": 11075640,
+          "peak_live_tensor_bytes": 40037440,
+          "peak_saved_tensor_bytes": 3018756,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 418.3377000153996,
+            "samples_ms": [
+              440.21329999668524,
+              381.3056999933906,
+              418.3377000153996
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 512,
+      "heads": 8,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 128,
+      "loops": 1,
+      "methods": [
+        {
+          "loss": 4.883477210998535,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 114885688,
+          "peak_saved_tensor_bytes": 8990212,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 53.71259996900335,
+            "samples_ms": [
+              39.72060000523925,
+              55.43989996658638,
+              53.71259996900335
+            ]
+          }
+        },
+        {
+          "loss": 4.883477210998535,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 114885688,
+          "peak_saved_tensor_bytes": 4270596,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 62.21300002653152,
+            "samples_ms": [
+              63.30140004865825,
+              61.596999992616475,
+              62.21300002653152
+            ]
+          }
+        },
+        {
+          "loss": 4.883477210998535,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 114885688,
+          "peak_saved_tensor_bytes": 853508,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 70.39130001794547,
+            "samples_ms": [
+              70.39130001794547,
+              72.3287999862805,
+              69.58810001378879
+            ]
+          }
+        },
+        {
+          "loss": 4.883477210998535,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 114885688,
+          "peak_saved_tensor_bytes": 853508,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 69.72110003698617,
+            "samples_ms": [
+              69.72110003698617,
+              69.73699998343363,
+              66.86019996413961
+            ]
+          }
+        },
+        {
+          "loss": 4.883482933044434,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 99419196,
+          "peak_saved_tensor_bytes": 9793540,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 47.84720001043752,
+            "samples_ms": [
+              48.25239995261654,
+              44.551200000569224,
+              47.84720001043752
+            ]
+          }
+        },
+        {
+          "loss": 4.883482933044434,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 99419196,
+          "peak_saved_tensor_bytes": 5073924,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 53.061300015542656,
+            "samples_ms": [
+              53.58489998616278,
+              53.061300015542656,
+              51.73070001183078
+            ]
+          }
+        },
+        {
+          "loss": 4.883482933044434,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 99419196,
+          "peak_saved_tensor_bytes": 1116164,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 56.91909999586642,
+            "samples_ms": [
+              47.2211999585852,
+              58.891399996355176,
+              56.91909999586642
+            ]
+          }
+        },
+        {
+          "loss": 4.883482933044434,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 99419196,
+          "peak_saved_tensor_bytes": 1116164,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 43.97239995887503,
+            "samples_ms": [
+              55.547399970237166,
+              43.97239995887503,
+              43.964299955405295
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 512,
+      "heads": 8,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 128,
+      "loops": 10,
+      "methods": [
+        {
+          "loss": 4.885754108428955,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 186018876,
+          "peak_saved_tensor_bytes": 84579844,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 413.37590001057833,
+            "samples_ms": [
+              330.6457999860868,
+              439.76280000060797,
+              413.37590001057833
+            ]
+          }
+        },
+        {
+          "loss": 4.885754108428955,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 145902140,
+          "peak_saved_tensor_bytes": 37383684,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 484.9277999601327,
+            "samples_ms": [
+              469.131899997592,
+              517.184600001201,
+              484.9277999601327
+            ]
+          }
+        },
+        {
+          "loss": 4.885754108428955,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 120925244,
+          "peak_saved_tensor_bytes": 3212804,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 494.74759999429807,
+            "samples_ms": [
+              515.218700049445,
+              472.3542000283487,
+              494.74759999429807
+            ]
+          }
+        },
+        {
+          "loss": 4.885754108428955,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 128013372,
+          "peak_saved_tensor_bytes": 1902084,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 591.011599986814,
+            "samples_ms": [
+              530.3063000319526,
+              593.2009000098333,
+              591.011599986814
+            ]
+          }
+        },
+        {
+          "loss": 4.885757923126221,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 156364352,
+          "peak_saved_tensor_bytes": 71227396,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 341.8752000434324,
+            "samples_ms": [
+              313.42610000865534,
+              344.6789999725297,
+              341.8752000434324
+            ]
+          }
+        },
+        {
+          "loss": 4.885757923126221,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 116247616,
+          "peak_saved_tensor_bytes": 24031236,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 406.84730000793934,
+            "samples_ms": [
+              394.4013000000268,
+              406.84730000793934,
+              407.69289998570457
+            ]
+          }
+        },
+        {
+          "loss": 4.885757923126221,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 103853632,
+          "peak_saved_tensor_bytes": 3475460,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 441.16059999214485,
+            "samples_ms": [
+              343.07199995964766,
+              441.16059999214485,
+              448.67859996156767
+            ]
+          }
+        },
+        {
+          "loss": 4.885757923126221,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 109368896,
+          "peak_saved_tensor_bytes": 2164740,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 444.8672000435181,
+            "samples_ms": [
+              321.71719998586923,
+              454.81480000307783,
+              444.8672000435181
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 512,
+      "heads": 8,
+      "layers": 2,
+      "rank": 32,
+      "batch": 1,
+      "sequence": 128,
+      "loops": 16,
+      "methods": [
+        {
+          "loss": 4.887452602386475,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 236411964,
+          "peak_saved_tensor_bytes": 134972932,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 710.2138000191189,
+            "samples_ms": [
+              571.7745000147261,
+              716.318599996157,
+              710.2138000191189
+            ]
+          }
+        },
+        {
+          "loss": 4.887452602386475,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 167977532,
+          "peak_saved_tensor_bytes": 59459076,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 738.898599985987,
+            "samples_ms": [
+              694.4789999979548,
+              738.898599985987,
+              790.3394000022672
+            ]
+          }
+        },
+        {
+          "loss": 4.887452602386475,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 122498108,
+          "peak_saved_tensor_bytes": 4785668,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 741.7183000361547,
+            "samples_ms": [
+              810.146400006488,
+              741.7183000361547,
+              698.5452999942936
+            ]
+          }
+        },
+        {
+          "loss": 4.887452602386475,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 128799804,
+          "peak_saved_tensor_bytes": 2688516,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 921.7544000130147,
+            "samples_ms": [
+              822.4284000461921,
+              921.7544000130147,
+              932.4625000008382
+            ]
+          }
+        },
+        {
+          "loss": 4.887425899505615,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 197320256,
+          "peak_saved_tensor_bytes": 112183300,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 548.0401000240818,
+            "samples_ms": [
+              548.0401000240818,
+              551.5381000004709,
+              544.3428999860771
+            ]
+          }
+        },
+        {
+          "loss": 4.887425899505615,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 128885824,
+          "peak_saved_tensor_bytes": 36669444,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 634.1394999762997,
+            "samples_ms": [
+              653.8456000271253,
+              547.0721999881789,
+              634.1394999762997
+            ]
+          }
+        },
+        {
+          "loss": 4.887425899505615,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 105426496,
+          "peak_saved_tensor_bytes": 5048324,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 564.379200048279,
+            "samples_ms": [
+              693.6557999579236,
+              564.379200048279,
+              548.5894000157714
+            ]
+          }
+        },
+        {
+          "loss": 4.887425899505615,
+          "parameter_bytes": 21561344,
+          "optimizer_state_bytes": 43122744,
+          "peak_live_tensor_bytes": 110155328,
+          "peak_saved_tensor_bytes": 2951172,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 691.8256000499241,
+            "samples_ms": [
+              714.0089999884367,
+              691.8256000499241,
+              658.5677999537438
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 512,
+      "heads": 8,
+      "layers": 2,
+      "rank": 16,
+      "batch": 1,
+      "sequence": 128,
+      "loops": 1,
+      "methods": [
+        {
+          "loss": 4.883477210998535,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 114885688,
+          "peak_saved_tensor_bytes": 8990212,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 53.442300006281585,
+            "samples_ms": [
+              50.94159999862313,
+              53.442300006281585,
+              54.80480002006516
+            ]
+          }
+        },
+        {
+          "loss": 4.883477210998535,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 114885688,
+          "peak_saved_tensor_bytes": 4270596,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 59.95329999132082,
+            "samples_ms": [
+              64.0140000032261,
+              59.95329999132082,
+              41.14129999652505
+            ]
+          }
+        },
+        {
+          "loss": 4.883477210998535,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 114885688,
+          "peak_saved_tensor_bytes": 853508,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 58.68380004540086,
+            "samples_ms": [
+              57.223399984650314,
+              68.4818000299856,
+              58.68380004540086
+            ]
+          }
+        },
+        {
+          "loss": 4.883477210998535,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 114885688,
+          "peak_saved_tensor_bytes": 853508,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 67.51590000931174,
+            "samples_ms": [
+              66.8137000175193,
+              67.899200017564,
+              67.51590000931174
+            ]
+          }
+        },
+        {
+          "loss": 4.883462905883789,
+          "parameter_bytes": 21397504,
+          "optimizer_state_bytes": 42795064,
+          "peak_live_tensor_bytes": 98763836,
+          "peak_saved_tensor_bytes": 8474628,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 42.67320001963526,
+            "samples_ms": [
+              42.827899975236505,
+              42.67320001963526,
+              42.574800027068704
+            ]
+          }
+        },
+        {
+          "loss": 4.883462905883789,
+          "parameter_bytes": 21397504,
+          "optimizer_state_bytes": 42795064,
+          "peak_live_tensor_bytes": 98763836,
+          "peak_saved_tensor_bytes": 3755012,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 49.31769997347146,
+            "samples_ms": [
+              49.066799983847886,
+              49.31769997347146,
+              49.69650000566617
+            ]
+          }
+        },
+        {
+          "loss": 4.883462905883789,
+          "parameter_bytes": 21397504,
+          "optimizer_state_bytes": 42795064,
+          "peak_live_tensor_bytes": 98763836,
+          "peak_saved_tensor_bytes": 1116164,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 53.16700000548735,
+            "samples_ms": [
+              53.401999990455806,
+              53.16700000548735,
+              53.13740001292899
+            ]
+          }
+        },
+        {
+          "loss": 4.883462905883789,
+          "parameter_bytes": 21397504,
+          "optimizer_state_bytes": 42795064,
+          "peak_live_tensor_bytes": 98763836,
+          "peak_saved_tensor_bytes": 1116164,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 40.52040004171431,
+            "samples_ms": [
+              40.56900000432506,
+              39.876499969977885,
+              40.52040004171431
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "width": 512,
+      "heads": 8,
+      "layers": 2,
+      "rank": 16,
+      "batch": 1,
+      "sequence": 128,
+      "loops": 16,
+      "methods": [
+        {
+          "loss": 4.887452602386475,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 236411964,
+          "peak_saved_tensor_bytes": 134972932,
+          "model": "naive",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 604.0775000001304,
+            "samples_ms": [
+              469.4556000176817,
+              604.0775000001304,
+              649.2978000314906
+            ]
+          }
+        },
+        {
+          "loss": 4.887452602386475,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 167977532,
+          "peak_saved_tensor_bytes": 59459076,
+          "model": "naive",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 753.9960999856703,
+            "samples_ms": [
+              816.9016999891028,
+              753.9960999856703,
+              749.8645999585278
+            ]
+          }
+        },
+        {
+          "loss": 4.887452602386475,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 122498108,
+          "peak_saved_tensor_bytes": 4785668,
+          "model": "naive",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 826.2523000012152,
+            "samples_ms": [
+              826.2523000012152,
+              926.3091000029817,
+              797.4891999620013
+            ]
+          }
+        },
+        {
+          "loss": 4.887452602386475,
+          "parameter_bytes": 25427968,
+          "optimizer_state_bytes": 50855988,
+          "peak_live_tensor_bytes": 128799804,
+          "peak_saved_tensor_bytes": 2688516,
+          "model": "naive",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 928.5130999633111,
+            "samples_ms": [
+              927.8849000111222,
+              950.002100027632,
+              928.5130999633111
+            ]
+          }
+        },
+        {
+          "loss": 4.887091159820557,
+          "parameter_bytes": 21397504,
+          "optimizer_state_bytes": 42795064,
+          "peak_live_tensor_bytes": 190783040,
+          "peak_saved_tensor_bytes": 106932228,
+          "model": "llt",
+          "policy": "none",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 520.7973000360653,
+            "samples_ms": [
+              521.8108000117354,
+              520.7973000360653,
+              519.2725000088103
+            ]
+          }
+        },
+        {
+          "loss": 4.887091159820557,
+          "parameter_bytes": 21397504,
+          "optimizer_state_bytes": 42795064,
+          "peak_live_tensor_bytes": 122348608,
+          "peak_saved_tensor_bytes": 31418372,
+          "model": "llt",
+          "policy": "mlp",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 573.6144999973476,
+            "samples_ms": [
+              570.3496999922208,
+              573.6144999973476,
+              611.5243999520317
+            ]
+          }
+        },
+        {
+          "loss": 4.887091159820557,
+          "parameter_bytes": 21397504,
+          "optimizer_state_bytes": 42795064,
+          "peak_live_tensor_bytes": 102559296,
+          "peak_saved_tensor_bytes": 5048324,
+          "model": "llt",
+          "policy": "loop",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 642.2044999781065,
+            "samples_ms": [
+              692.3322000075132,
+              642.2044999781065,
+              623.3395000454038
+            ]
+          }
+        },
+        {
+          "loss": 4.887091159820557,
+          "parameter_bytes": 21397504,
+          "optimizer_state_bytes": 42795064,
+          "peak_live_tensor_bytes": 107025984,
+          "peak_saved_tensor_bytes": 2951172,
+          "model": "llt",
+          "policy": "pair",
+          "validation": {
+            "passed": true,
+            "gradient_max_absolute_error": 0.0
+          },
+          "timing": {
+            "median_ms": 649.3687000474893,
+            "samples_ms": [
+              598.861999984365,
+              654.1513999691233,
+              649.3687000474893
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
