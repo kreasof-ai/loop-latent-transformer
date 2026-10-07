@@ -435,6 +435,18 @@ justify their compute, and whether LLT retains that improvement with its
 smaller shared latent. A qualifying synthetic memory/latency point alone
 does not establish reasoning quality.
 
+The [2026-10-07 literature check](research/LITERATURE_2026-10-07.md) covers
+23 recent papers and identifies direct puzzle baselines and cache-sharing
+controls. A whole-grid solver can discard previous-loop activations during
+inference, so its naive inference memory need not grow with loop count as
+autoregressive historical KV does. Measure the puzzle solver directly.
+
+The current prototype's fixed input cache also lacks a write path for other
+positions to read newly inferred solver states. Test an uncompressed static
+cache control and a mutable compressed workspace to distinguish rank loss
+from communication loss. The workspace variant is a proposed quality ablation,
+not part of the current resource measurements.
+
 # Terminology
 
 ## Established
@@ -473,6 +485,26 @@ does not establish reasoning quality.
 - "Latent replay" — ambiguous with latent replay in RL.
 
 # Related Work
+
+## Recent Looped Models — Literature Check, 2026-10-07
+
+See the [complete 23-paper review](research/LITERATURE_2026-10-07.md) for
+version-pinned sources, reported evidence and experiment priorities.
+
+- [**LPT**](https://arxiv.org/html/2610.02383v1) reuses first-loop context KV
+  per layer while retaining later-loop local windows.
+- [**Rethinking at Fixed Points**](https://arxiv.org/html/2610.06833v1)
+  studies terminal KV sharing and truncated-gradient training.
+- [**Gated Recurrent Transformers**](https://arxiv.org/html/2608.15062v4)
+  tests first, last and averaged recurrent KV with evolving gated state.
+- [**Thinking with Looped Flows**](https://arxiv.org/html/2609.11801v1) and
+  [**GRAM**](https://arxiv.org/html/2605.19376v2) are direct ARC-AGI/Sudoku
+  baselines with evolving solver states and different training objectives.
+
+Sharing KV across loops is established prior work. LLT's remaining target is
+trained reasoning quality with a smaller cache shared across layers and loops,
+alongside a measured memory/latency advantage. Exact finite-depth checkpointing
+and truncated/local-objective training require separate comparisons.
 
 ## Compression of KV Cache
 
