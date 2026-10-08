@@ -1,0 +1,342 @@
+{
+  "status": "passed",
+  "arguments": {
+    "phase": "inference",
+    "model": "stacked",
+    "loops": 11,
+    "backend": "torch",
+    "samples": 9,
+    "repeats": 3
+  },
+  "started_utc": "2026-10-08T13:51:29Z",
+  "config": {
+    "kind": "naive",
+    "width": 768,
+    "heads": 12,
+    "layers": 132,
+    "loops": 1,
+    "rank": 64,
+    "vocab": 50304,
+    "max_seq": 1025,
+    "untied": false,
+    "gelu": "none",
+    "mlp_width": 3072
+  },
+  "parameter_count": 1012335360,
+  "effective_depth": 132,
+  "unique_layers": 132,
+  "stacked_parameter_target": 1012335360,
+  "sequence_length": 1024,
+  "batch_size": 4,
+  "checkpoint_policy": "none",
+  "parameter_bytes": 4049341440,
+  "prompt_eager": {
+    "gpu_samples_ms": [
+      77.47977447509766,
+      77.4092788696289,
+      76.76435089111328,
+      76.6904296875,
+      76.906494140625,
+      76.97417449951172,
+      76.80921936035156,
+      76.83369445800781,
+      76.95462036132812
+    ],
+    "wall_samples_ms": [
+      77.54141699842876,
+      77.43890300480416,
+      76.79197000106797,
+      76.72000800084788,
+      76.93607300461736,
+      77.002594996884,
+      76.83799099322641,
+      76.86253199790372,
+      76.98314400477102
+    ],
+    "gpu_median_ms": 76.906494140625,
+    "wall_median_ms": 76.93607300461736,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 6413552640,
+        "peak_reserved_bytes": 6434062336,
+        "allocated_after_bytes": 6294417408
+      },
+      {
+        "peak_allocated_bytes": 6413552640,
+        "peak_reserved_bytes": 6434062336,
+        "allocated_after_bytes": 6294417408
+      },
+      {
+        "peak_allocated_bytes": 6413552640,
+        "peak_reserved_bytes": 6434062336,
+        "allocated_after_bytes": 6294417408
+      },
+      {
+        "peak_allocated_bytes": 6413552640,
+        "peak_reserved_bytes": 6434062336,
+        "allocated_after_bytes": 6294417408
+      },
+      {
+        "peak_allocated_bytes": 6413552640,
+        "peak_reserved_bytes": 6434062336,
+        "allocated_after_bytes": 6294417408
+      },
+      {
+        "peak_allocated_bytes": 6413552640,
+        "peak_reserved_bytes": 6434062336,
+        "allocated_after_bytes": 6294417408
+      },
+      {
+        "peak_allocated_bytes": 6413552640,
+        "peak_reserved_bytes": 6434062336,
+        "allocated_after_bytes": 6294417408
+      },
+      {
+        "peak_allocated_bytes": 6413552640,
+        "peak_reserved_bytes": 6434062336,
+        "allocated_after_bytes": 6294417408
+      },
+      {
+        "peak_allocated_bytes": 6413552640,
+        "peak_reserved_bytes": 6434062336,
+        "allocated_after_bytes": 6294417408
+      }
+    ],
+    "peak_allocated_bytes": 6413552640
+  },
+  "prompt_graph": {
+    "gpu_samples_ms": [
+      74.86156717936198,
+      74.77077229817708,
+      74.63833618164062,
+      74.55777994791667,
+      74.76462809244792,
+      74.74483235677083,
+      74.787841796875,
+      74.75712076822917,
+      74.65710957845052
+    ],
+    "gpu_median_ms": 74.75712076822917,
+    "baseline_allocated_bytes": 6302534656,
+    "capture_peak_allocated_bytes": 6422072320,
+    "capture_peak_reserved_bytes": 6641680384,
+    "replay_peak_allocated_bytes": 6302937088,
+    "replay_peak_reserved_bytes": 6545211392,
+    "repeats_per_sample": 3
+  },
+  "startup_eager": {
+    "gpu_samples_ms": [
+      82.76172637939453,
+      82.74720001220703,
+      83.14777374267578,
+      83.1292495727539,
+      83.26041412353516,
+      83.06800079345703,
+      83.35667419433594,
+      83.0033950805664,
+      82.90815734863281
+    ],
+    "wall_samples_ms": [
+      82.8124480030965,
+      82.78277700446779,
+      83.17830600572051,
+      83.15619500353932,
+      83.28910900308983,
+      83.09599399945,
+      83.3867809997173,
+      83.03141200303799,
+      82.93871900241356
+    ],
+    "gpu_median_ms": 83.06800079345703,
+    "wall_median_ms": 83.09599399945,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 9617928192,
+        "peak_reserved_bytes": 10326376448,
+        "allocated_after_bytes": 7956983808
+      },
+      {
+        "peak_allocated_bytes": 9617928192,
+        "peak_reserved_bytes": 10326376448,
+        "allocated_after_bytes": 7956983808
+      },
+      {
+        "peak_allocated_bytes": 9617928192,
+        "peak_reserved_bytes": 10326376448,
+        "allocated_after_bytes": 7956983808
+      },
+      {
+        "peak_allocated_bytes": 9617928192,
+        "peak_reserved_bytes": 10326376448,
+        "allocated_after_bytes": 7956983808
+      },
+      {
+        "peak_allocated_bytes": 9617928192,
+        "peak_reserved_bytes": 10326376448,
+        "allocated_after_bytes": 7956983808
+      },
+      {
+        "peak_allocated_bytes": 9617928192,
+        "peak_reserved_bytes": 10326376448,
+        "allocated_after_bytes": 7956983808
+      },
+      {
+        "peak_allocated_bytes": 9617928192,
+        "peak_reserved_bytes": 10326376448,
+        "allocated_after_bytes": 7956983808
+      },
+      {
+        "peak_allocated_bytes": 9617928192,
+        "peak_reserved_bytes": 10326376448,
+        "allocated_after_bytes": 7956983808
+      },
+      {
+        "peak_allocated_bytes": 9617928192,
+        "peak_reserved_bytes": 10326376448,
+        "allocated_after_bytes": 7956983808
+      }
+    ],
+    "peak_allocated_bytes": 9617928192
+  },
+  "startup_graph": {
+    "gpu_samples_ms": [
+      80.6655985514323,
+      80.91102091471355,
+      80.873779296875,
+      81.1315205891927,
+      81.17828369140625,
+      81.24382019042969,
+      81.24416097005208,
+      81.05232238769531,
+      81.18203735351562
+    ],
+    "gpu_median_ms": 81.1315205891927,
+    "baseline_allocated_bytes": 6302534656,
+    "capture_peak_allocated_bytes": 9626447872,
+    "capture_peak_reserved_bytes": 14371782656,
+    "replay_peak_allocated_bytes": 7965503488,
+    "replay_peak_reserved_bytes": 9942597632,
+    "repeats_per_sample": 3
+  },
+  "cache_bytes": 1662566400,
+  "fold_bytes": 0,
+  "decode_eager": {
+    "gpu_samples_ms": [
+      60.88908767700195,
+      61.511680603027344,
+      60.82457733154297,
+      61.294593811035156,
+      61.34783935546875,
+      61.18707275390625,
+      61.090816497802734,
+      61.00371170043945,
+      62.70259094238281
+    ],
+    "wall_samples_ms": [
+      60.933501001272816,
+      61.53261599683901,
+      60.84604799980298,
+      61.317730993323494,
+      61.369299997750204,
+      61.20849800208816,
+      61.11362500087125,
+      61.025432994938456,
+      62.72507199901156
+    ],
+    "gpu_median_ms": 61.18707275390625,
+    "wall_median_ms": 61.20849800208816,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 7957454336,
+        "peak_reserved_bytes": 9865003008,
+        "allocated_after_bytes": 7957386752
+      },
+      {
+        "peak_allocated_bytes": 7957454336,
+        "peak_reserved_bytes": 9865003008,
+        "allocated_after_bytes": 7957386752
+      },
+      {
+        "peak_allocated_bytes": 7957454336,
+        "peak_reserved_bytes": 9865003008,
+        "allocated_after_bytes": 7957386752
+      },
+      {
+        "peak_allocated_bytes": 7957454336,
+        "peak_reserved_bytes": 9865003008,
+        "allocated_after_bytes": 7957386752
+      },
+      {
+        "peak_allocated_bytes": 7957454336,
+        "peak_reserved_bytes": 9865003008,
+        "allocated_after_bytes": 7957386752
+      },
+      {
+        "peak_allocated_bytes": 7957454336,
+        "peak_reserved_bytes": 9865003008,
+        "allocated_after_bytes": 7957386752
+      },
+      {
+        "peak_allocated_bytes": 7957454336,
+        "peak_reserved_bytes": 9865003008,
+        "allocated_after_bytes": 7957386752
+      },
+      {
+        "peak_allocated_bytes": 7957454336,
+        "peak_reserved_bytes": 9865003008,
+        "allocated_after_bytes": 7957386752
+      },
+      {
+        "peak_allocated_bytes": 7957454336,
+        "peak_reserved_bytes": 9865003008,
+        "allocated_after_bytes": 7957386752
+      }
+    ],
+    "peak_allocated_bytes": 7957454336
+  },
+  "decode_graph": {
+    "gpu_samples_ms": [
+      13.730133056640625,
+      13.319466908772787,
+      13.31814448038737,
+      13.318826039632162,
+      13.316436767578125,
+      13.319146474202475,
+      13.32155736287435,
+      13.317461649576822,
+      13.31438954671224
+    ],
+    "gpu_median_ms": 13.318826039632162,
+    "baseline_allocated_bytes": 7965504000,
+    "capture_peak_allocated_bytes": 7965974016,
+    "capture_peak_reserved_bytes": 9888071680,
+    "replay_peak_allocated_bytes": 7965906432,
+    "replay_peak_reserved_bytes": 8256487424,
+    "repeats_per_sample": 3
+  },
+  "prepared_weight_bytes": 1945829376,
+  "inference_protocol": "Prepared BF16 linear weights, FP32 master/embedding/residual; prompt=last logits without KV stores; startup includes KV allocation/copy and LLT fold rebuild; decode=one supplied token with 1024-token history; captured rewind included.",
+  "duration_seconds": 18.67771174600057,
+  "provenance": {
+    "llt_commit": "bb09330ea7b4e45b83f88119ea459f1583f18525",
+    "tensor_commit": "a86159cea38d801ae18f740b0e62dea08a77c565",
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "sources": {
+      "experiments/l40s/loop_sweep.py": "930d47ffb8708ba13ad83f14a461ed1c67e9df1df3e12f4455aca69ac188dd30",
+      "experiments/l40s/model.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+      "experiments/l40s/tensor_model.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+      "experiments/l40s/prepared_inference.py": "64ff5add22486377e0ce39a2cb561ee5de0db3842744280295611d41b2de80e4",
+      "experiments/l40s/nanogpt_scale.py": "cfacf0fc9d9d84ab49adfaef58fd538e7e76a48dd79448c84a89d05f6c463813"
+    },
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "capability": [
+      8,
+      9
+    ],
+    "native_cpp_executor": true,
+    "driver": "595.91.07",
+    "nvrtc": "/home/sagemaker-user/tensor/build/nvrtc-12.9"
+  }
+}

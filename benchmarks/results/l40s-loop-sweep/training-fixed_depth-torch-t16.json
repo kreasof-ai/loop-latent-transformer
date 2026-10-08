@@ -1,0 +1,149 @@
+{
+  "status": "out_of_memory",
+  "arguments": {
+    "phase": "training",
+    "model": "fixed_depth",
+    "loops": 16,
+    "backend": "torch",
+    "samples": 9,
+    "repeats": 3
+  },
+  "started_utc": "2026-10-08T14:28:30Z",
+  "config": {
+    "kind": "naive",
+    "width": 768,
+    "heads": 12,
+    "layers": 12,
+    "loops": 1,
+    "rank": 64,
+    "vocab": 50304,
+    "max_seq": 1025,
+    "untied": false,
+    "gelu": "none",
+    "mlp_width": 72192
+  },
+  "parameter_count": 1437008640,
+  "effective_depth": 12,
+  "unique_layers": 12,
+  "stacked_parameter_target": 1437008640,
+  "sequence_length": 1024,
+  "batch_size": 4,
+  "checkpoint_policy": "none",
+  "stage": "training_graph",
+  "parameter_bytes": 5748034560,
+  "training_eager": {
+    "gpu_samples_ms": [
+      353.3352966308594,
+      351.1961975097656,
+      352.1535339355469,
+      352.79052734375,
+      353.3455505371094,
+      352.9809875488281,
+      354.2343444824219,
+      352.8622131347656,
+      354.5313415527344
+    ],
+    "wall_samples_ms": [
+      353.4573359938804,
+      351.2951719967532,
+      352.24310599733144,
+      352.87603200413287,
+      353.4372659996734,
+      353.0763270027819,
+      354.3361490010284,
+      352.9608440003358,
+      354.6236670008511
+    ],
+    "gpu_median_ms": 352.9809875488281,
+    "wall_median_ms": 353.0763270027819,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 37801769984,
+        "peak_reserved_bytes": 40433090560,
+        "allocated_after_bytes": 23050178048
+      },
+      {
+        "peak_allocated_bytes": 37801770496,
+        "peak_reserved_bytes": 40433090560,
+        "allocated_after_bytes": 23050178560
+      },
+      {
+        "peak_allocated_bytes": 37801771008,
+        "peak_reserved_bytes": 40433090560,
+        "allocated_after_bytes": 23050179072
+      },
+      {
+        "peak_allocated_bytes": 37801771520,
+        "peak_reserved_bytes": 40433090560,
+        "allocated_after_bytes": 23050179584
+      },
+      {
+        "peak_allocated_bytes": 37801772032,
+        "peak_reserved_bytes": 40433090560,
+        "allocated_after_bytes": 23050180096
+      },
+      {
+        "peak_allocated_bytes": 37801772544,
+        "peak_reserved_bytes": 40433090560,
+        "allocated_after_bytes": 23050180608
+      },
+      {
+        "peak_allocated_bytes": 37801773056,
+        "peak_reserved_bytes": 40433090560,
+        "allocated_after_bytes": 23050181120
+      },
+      {
+        "peak_allocated_bytes": 37801773568,
+        "peak_reserved_bytes": 40433090560,
+        "allocated_after_bytes": 23050181632
+      },
+      {
+        "peak_allocated_bytes": 37801774080,
+        "peak_reserved_bytes": 40433090560,
+        "allocated_after_bytes": 23050182144
+      }
+    ],
+    "peak_allocated_bytes": 37801774080
+  },
+  "losses_eager": [
+    10.991413116455078,
+    10.64009952545166,
+    11.44231128692627,
+    10.369233131408691,
+    9.895983695983887,
+    9.534927368164062,
+    9.162130355834961,
+    8.868477821350098,
+    8.660877227783203,
+    8.54765510559082,
+    8.414989471435547,
+    8.343646049499512
+  ],
+  "all_parameter_gradients_finite": true,
+  "error": "CUDA out of memory. Tried to allocate 786.00 MiB. GPU 0 has a total capacity of 44.39 GiB of which 219.31 MiB is free. Including non-PyTorch memory, this process has 44.17 GiB memory in use. Of the allocated memory 33.33 GiB is allocated by PyTorch, with 32.21 MiB allocated in private pools (e.g., CUDA Graphs), and 10.32 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)",
+  "failed_peak_allocated_bytes": 35766822912,
+  "failed_peak_reserved_bytes": 46865055744,
+  "duration_seconds": 20.675196559997858,
+  "provenance": {
+    "llt_commit": "2155cade946370595d78e37b17bf8a8a303c159c",
+    "tensor_commit": "a86159cea38d801ae18f740b0e62dea08a77c565",
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "sources": {
+      "experiments/l40s/loop_sweep.py": "930d47ffb8708ba13ad83f14a461ed1c67e9df1df3e12f4455aca69ac188dd30",
+      "experiments/l40s/model.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+      "experiments/l40s/tensor_model.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+      "experiments/l40s/prepared_inference.py": "64ff5add22486377e0ce39a2cb561ee5de0db3842744280295611d41b2de80e4",
+      "experiments/l40s/nanogpt_scale.py": "cfacf0fc9d9d84ab49adfaef58fd538e7e76a48dd79448c84a89d05f6c463813"
+    },
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "capability": [
+      8,
+      9
+    ],
+    "native_cpp_executor": true,
+    "driver": "595.91.07",
+    "nvrtc": "/home/sagemaker-user/tensor/build/nvrtc-12.9"
+  }
+}

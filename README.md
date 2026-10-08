@@ -25,6 +25,35 @@ Constant total training memory and constant total communication have **not**
 been demonstrated: exact loop checkpoints retain full residual boundary states,
 and compute still grows with T.
 
+## Four-model loop sweep — 2026-10-08
+
+The [four-model L40S report](benchmarks/L40S_LOOP_SWEEP.md) profiles **LLT,
+Naive Loop, an independent deeper stack, and a fixed-depth model with exactly
+the stack’s parameter count**, at **batch 4, sequence 1024, and every loop count
+1–16**. It retains 256 Tensor/PyTorch cases, six controlled capture retries,
+eight correctness checks and 544 audited CUDA artifacts. The fixed-depth
+control widens its MLPs while keeping width 768, 12 heads and 12 layers.
+
+At T=16, Tensor LLT graph training takes **411.77 ms / 25.11 GiB**, versus
+**492.07 ms / 27.45 GiB** for Tensor Naive Loop. PyTorch LLT training is faster
+and smaller at this loop count (**350.49 ms / 23.47 GiB**). LLT training memory
+grows with T; its initial Tensor memory advantage crosses over at nine loops.
+
+Tensor cached LLT inference takes **8.26 ms / 0.78 GiB**, versus Naive Loop’s
+**13.13 ms / 3.11 GiB**. The shared KV store remains approximately **0.50 MiB**,
+while naive/stack KV reaches **2306 MiB**. The wider fixed-depth control has
+1.437B parameters and takes **9.56 ms with Tensor versus 5.04 ms with PyTorch**
+for cached decoding. Parameter budgets and trained quality differ across models.
+
+The 192-layer stack completes eager Tensor training at **853.31 ms / 42.02 GiB**;
+PyTorch eager training OOMs at T=15–16 with these allocator settings. Capture
+limits are reported separately: releasing eager gradients recovers five failed
+captures, including the fixed-depth PyTorch T=16 case, but Tensor’s T=16 stack
+capture still OOMs. See [all cases as CSV](benchmarks/results/l40s-loop-sweep/summary.csv),
+[latency/memory tables](benchmarks/results/l40s-loop-sweep/tables.md), and
+[reproduction](experiments/l40s/LOOP_SWEEP.md). Tensor development records remain
+in the [Tensor repository](https://github.com/kreasof-ai/tensor).
+
 ## Optimized Tensor and actual nanoGPT — 2026-10-08
 
 The [nanoGPT-scale L40S report](benchmarks/L40S_NANOGPT.md) follows the

@@ -1,0 +1,153 @@
+{
+  "status": "out_of_memory",
+  "arguments": {
+    "model": "stacked",
+    "backend": "tensor",
+    "loops": 16,
+    "phase": "training",
+    "samples": 9,
+    "repeats": 3
+  },
+  "capture_setup": {
+    "protocol": "Clear eager gradients, collect garbage, and empty cached allocations after graph warmup, before capture",
+    "source_sha256": "b2bf31428f55628dc7c61268e4c63189a0f5ebf86cdf4026445b68191ca3da3e",
+    "source_snapshot": "sources/b2bf31428f55628dc7c61268e4c63189a0f5ebf86cdf4026445b68191ca3da3e/loop_sweep_recovery.py"
+  },
+  "config": {
+    "kind": "naive",
+    "width": 768,
+    "heads": 12,
+    "layers": 192,
+    "loops": 1,
+    "rank": 64,
+    "vocab": 50304,
+    "max_seq": 1025,
+    "untied": false,
+    "gelu": "none",
+    "mlp_width": 3072
+  },
+  "parameter_count": 1437008640,
+  "effective_depth": 192,
+  "unique_layers": 192,
+  "stacked_parameter_target": 1437008640,
+  "sequence_length": 1024,
+  "batch_size": 4,
+  "checkpoint_policy": "none",
+  "stage": "training_graph",
+  "parameter_bytes": 5748034560,
+  "training_eager": {
+    "gpu_samples_ms": [
+      865.349609375,
+      864.9103393554688,
+      852.252685546875,
+      857.9952392578125,
+      853.8204345703125,
+      844.2093505859375,
+      849.201171875,
+      860.5511474609375,
+      861.390869140625
+    ],
+    "wall_samples_ms": [
+      865.4038929962553,
+      864.9485200003255,
+      852.2934150023502,
+      858.0317070009187,
+      853.8543850008864,
+      844.244724001328,
+      849.2349410007591,
+      860.5851120009902,
+      861.4250629980233
+    ],
+    "gpu_median_ms": 857.9952392578125,
+    "wall_median_ms": 858.0317070009187,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 45123049984,
+        "peak_reserved_bytes": 46984593408,
+        "allocated_after_bytes": 23620898304
+      },
+      {
+        "peak_allocated_bytes": 45123050496,
+        "peak_reserved_bytes": 46984593408,
+        "allocated_after_bytes": 23620898816
+      },
+      {
+        "peak_allocated_bytes": 45123051008,
+        "peak_reserved_bytes": 46984593408,
+        "allocated_after_bytes": 23620899328
+      },
+      {
+        "peak_allocated_bytes": 45123051520,
+        "peak_reserved_bytes": 46984593408,
+        "allocated_after_bytes": 23620899840
+      },
+      {
+        "peak_allocated_bytes": 45123052032,
+        "peak_reserved_bytes": 46984593408,
+        "allocated_after_bytes": 23620900352
+      },
+      {
+        "peak_allocated_bytes": 45123052544,
+        "peak_reserved_bytes": 46984593408,
+        "allocated_after_bytes": 23620900864
+      },
+      {
+        "peak_allocated_bytes": 45123053056,
+        "peak_reserved_bytes": 46984593408,
+        "allocated_after_bytes": 23620901376
+      },
+      {
+        "peak_allocated_bytes": 45123053568,
+        "peak_reserved_bytes": 46984593408,
+        "allocated_after_bytes": 23620901888
+      },
+      {
+        "peak_allocated_bytes": 45123054080,
+        "peak_reserved_bytes": 46984593408,
+        "allocated_after_bytes": 23620902400
+      }
+    ],
+    "peak_allocated_bytes": 45123054080
+  },
+  "losses_eager": [
+    10.974796295166016,
+    10.814485549926758,
+    10.072416305541992,
+    9.602678298950195,
+    9.21243667602539,
+    8.886929512023926,
+    8.654236793518066,
+    8.504297256469727,
+    8.411043167114258,
+    8.355106353759766,
+    8.323751449584961,
+    8.308349609375
+  ],
+  "all_parameter_gradients_finite": true,
+  "error": "CUDA out of memory. Tried to allocate 394.00 MiB. GPU 0 has a total capacity of 44.39 GiB of which 203.31 MiB is free. Including non-PyTorch memory, this process has 44.19 GiB memory in use. Of the allocated memory 41.33 GiB is allocated by PyTorch, and 2.34 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)",
+  "failed_peak_allocated_bytes": 45123054080,
+  "failed_peak_reserved_bytes": 47087353856,
+  "duration_seconds": 30.871516182996857,
+  "provenance": {
+    "llt_commit": "2155cade946370595d78e37b17bf8a8a303c159c",
+    "tensor_commit": "a86159cea38d801ae18f740b0e62dea08a77c565",
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "sources": {
+      "experiments/l40s/loop_sweep.py": "930d47ffb8708ba13ad83f14a461ed1c67e9df1df3e12f4455aca69ac188dd30",
+      "experiments/l40s/model.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+      "experiments/l40s/tensor_model.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+      "experiments/l40s/prepared_inference.py": "64ff5add22486377e0ce39a2cb561ee5de0db3842744280295611d41b2de80e4",
+      "experiments/l40s/nanogpt_scale.py": "cfacf0fc9d9d84ab49adfaef58fd538e7e76a48dd79448c84a89d05f6c463813"
+    },
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "capability": [
+      8,
+      9
+    ],
+    "native_cpp_executor": true,
+    "driver": "595.91.07",
+    "nvrtc": "/home/sagemaker-user/tensor/build/nvrtc-12.9"
+  }
+}

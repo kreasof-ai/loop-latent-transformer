@@ -1,0 +1,154 @@
+{
+  "status": "out_of_memory",
+  "arguments": {
+    "phase": "training",
+    "model": "stacked",
+    "loops": 15,
+    "backend": "tensor",
+    "samples": 9,
+    "repeats": 3
+  },
+  "started_utc": "2026-10-08T14:18:14Z",
+  "config": {
+    "kind": "naive",
+    "width": 768,
+    "heads": 12,
+    "layers": 180,
+    "loops": 1,
+    "rank": 64,
+    "vocab": 50304,
+    "max_seq": 1025,
+    "untied": false,
+    "gelu": "none",
+    "mlp_width": 3072
+  },
+  "parameter_count": 1352073984,
+  "effective_depth": 180,
+  "unique_layers": 180,
+  "stacked_parameter_target": 1352073984,
+  "sequence_length": 1024,
+  "batch_size": 4,
+  "checkpoint_policy": "none",
+  "stage": "training_graph",
+  "parameter_bytes": 5408295936,
+  "training_eager": {
+    "gpu_samples_ms": [
+      791.8806762695312,
+      784.7968139648438,
+      791.806884765625,
+      803.3003540039062,
+      797.001708984375,
+      787.433349609375,
+      791.81005859375,
+      794.1600952148438,
+      791.2632446289062
+    ],
+    "wall_samples_ms": [
+      791.931592997571,
+      784.8339119955199,
+      791.8402510040323,
+      803.3341979971738,
+      797.0358959937585,
+      787.4692359982873,
+      791.843131002679,
+      794.2009679973125,
+      791.2953730046866
+    ],
+    "gpu_median_ms": 791.81005859375,
+    "wall_median_ms": 791.843131002679,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 42414934528,
+        "peak_reserved_bytes": 44168118272,
+        "allocated_after_bytes": 22222323200
+      },
+      {
+        "peak_allocated_bytes": 42414935040,
+        "peak_reserved_bytes": 44168118272,
+        "allocated_after_bytes": 22222323712
+      },
+      {
+        "peak_allocated_bytes": 42414935552,
+        "peak_reserved_bytes": 44168118272,
+        "allocated_after_bytes": 22222324224
+      },
+      {
+        "peak_allocated_bytes": 42414936064,
+        "peak_reserved_bytes": 44168118272,
+        "allocated_after_bytes": 22222324736
+      },
+      {
+        "peak_allocated_bytes": 42414936576,
+        "peak_reserved_bytes": 44168118272,
+        "allocated_after_bytes": 22222325248
+      },
+      {
+        "peak_allocated_bytes": 42414937088,
+        "peak_reserved_bytes": 44168118272,
+        "allocated_after_bytes": 22222325760
+      },
+      {
+        "peak_allocated_bytes": 42414937600,
+        "peak_reserved_bytes": 44168118272,
+        "allocated_after_bytes": 22222326272
+      },
+      {
+        "peak_allocated_bytes": 42414938112,
+        "peak_reserved_bytes": 44168118272,
+        "allocated_after_bytes": 22222326784
+      },
+      {
+        "peak_allocated_bytes": 42414938624,
+        "peak_reserved_bytes": 44168118272,
+        "allocated_after_bytes": 22222327296
+      }
+    ],
+    "peak_allocated_bytes": 42414938624
+  },
+  "losses_eager": [
+    10.981452941894531,
+    10.813989639282227,
+    10.067146301269531,
+    9.607987403869629,
+    9.209127426147461,
+    8.876534461975098,
+    8.645999908447266,
+    8.499927520751953,
+    8.408655166625977,
+    8.353114128112793,
+    8.322315216064453,
+    8.30752944946289
+  ],
+  "all_parameter_gradients_finite": true,
+  "error": "CUDA error: out of memory\nSearch for `cudaErrorMemoryAllocation' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nThe CUDA driver logged these messages, which may provide useful details:\nFailed to allocate resources for the kernel nodes on each ctx\nReturning 2 (CUDA_ERROR_OUT_OF_MEMORY) from cuGraphInstantiateWithFlags\n\n",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/loop_sweep.py\", line 86, in graph_measure\n    result = fn()\n             ^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/loop_sweep.py\", line 177, in step\n    loss = m.loss(x,y)\n           ^^^^^^^^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/tensor_model.py\", line 148, in loss\n    logits = self(tokens, policy).flatten(0, 1)\n             ^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/tensor/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1783, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/tensor/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1794, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/tensor_model.py\", line 137, in forward\n    x = step(x, loop, *shared)\n        ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/tensor_model.py\", line 112, in step\n    block, z = self.blocks[idx], self.normalize(state)\n                                 ^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/tensor_model.py\", line 52, in normalize\n    return self.ops.rms_norm(x, self.norm_weight, eps=1e-5) if self.ops else norm(x)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/tensor/packages/tensor-torch/src/tensor_torch/llt.py\", line 380, in rms_norm\n    return _RMS.apply(x, weight, self, eps)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/tensor/packages/tensor-torch/src/tensor_torch/llt.py\", line 503, in forward\n    out, inv = ops.training(p, [\"out\", \"inv\"], xx, w)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/tensor/packages/tensor-torch/src/tensor_torch/llt.py\", line 251, in training\n    return self.call(\n           ^^^^^^^^^^\n  File \"/home/sagemaker-user/tensor/packages/tensor-torch/src/tensor_torch/llt.py\", line 145, in call\n    result = self.plans[key](*args)\n             ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/tensor/packages/tensor-torch/src/tensor_torch/bridge.py\", line 428, in __call__\n    output = self._native(*args)\n             ^^^^^^^^^^^^^^^^^^^\ntorch.OutOfMemoryError: CUDA out of memory. Tried to allocate 12.00 MiB. GPU 0 has a total capacity of 44.39 GiB of which 7.31 MiB is free. Including non-PyTorch memory, this process has 44.38 GiB memory in use. Of the allocated memory 35.72 GiB is allocated by PyTorch, with 621.87 MiB allocated in private pools (e.g., CUDA Graphs), and 8.15 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/loop_sweep.py\", line 268, in main\n    run(a,out)\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/loop_sweep.py\", line 191, in run\n    out['training_graph'] = graph_measure(step,a.samples,a.repeats)\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/loop_sweep.py\", line 85, in graph_measure\n    with torch.cuda.graph(graph, stream=stream):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/tensor/.venv/lib/python3.12/site-packages/torch/cuda/graphs.py\", line 1210, in __exit__\n    self.cuda_graph.capture_end()\n  File \"/home/sagemaker-user/tensor/.venv/lib/python3.12/site-packages/torch/cuda/graphs.py\", line 665, in capture_end\n    self.instantiate()\n  File \"/home/sagemaker-user/tensor/.venv/lib/python3.12/site-packages/torch/cuda/graphs.py\", line 675, in instantiate\n    super().instantiate()\ntorch.AcceleratorError: CUDA error: out of memory\nSearch for `cudaErrorMemoryAllocation' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nThe CUDA driver logged these messages, which may provide useful details:\nFailed to allocate resources for the kernel nodes on each ctx\nReturning 2 (CUDA_ERROR_OUT_OF_MEMORY) from cuGraphInstantiateWithFlags\n\n\n",
+  "duration_seconds": 32.41169591600192,
+  "provenance": {
+    "llt_commit": "2155cade946370595d78e37b17bf8a8a303c159c",
+    "tensor_commit": "a86159cea38d801ae18f740b0e62dea08a77c565",
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "sources": {
+      "experiments/l40s/loop_sweep.py": "930d47ffb8708ba13ad83f14a461ed1c67e9df1df3e12f4455aca69ac188dd30",
+      "experiments/l40s/model.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+      "experiments/l40s/tensor_model.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+      "experiments/l40s/prepared_inference.py": "64ff5add22486377e0ce39a2cb561ee5de0db3842744280295611d41b2de80e4",
+      "experiments/l40s/nanogpt_scale.py": "cfacf0fc9d9d84ab49adfaef58fd538e7e76a48dd79448c84a89d05f6c463813"
+    },
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "capability": [
+      8,
+      9
+    ],
+    "native_cpp_executor": true,
+    "driver": "595.91.07",
+    "nvrtc": "/home/sagemaker-user/tensor/build/nvrtc-12.9"
+  },
+  "classification": {
+    "reason": "Explicit CUDA allocation OOM chained through graph capture/instantiate",
+    "original_record": "observed-capture-oom/training-stacked-tensor-t15.json",
+    "original_sha256": "a2a32825d161a78e05a94eacc085daeba71ffc3aa528a0b776b89d02ac82a037",
+    "classifier_source_sha256": "b4087f95fd71022756fd79197d14c486af4a2411759d1c8bc6e2bb3d892e8ff5"
+  }
+}

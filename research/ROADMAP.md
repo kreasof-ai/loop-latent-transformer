@@ -70,6 +70,11 @@ remain separate research work.
 
 ### L04 — Re-run complete systems and memory studies
 
+- [x] Profile LLT, naive looping, independent stacks, and an exact stack-parameter
+  matched fixed-depth control at B4/S1024 for every loop count 1–16. Retain
+  Tensor/PyTorch eager and graph latency/peak allocation, OOM stages, and
+  controlled gradient-release capture retries. See [the sweep report](../benchmarks/L40S_LOOP_SWEEP.md).
+
 - [ ] Benchmark trained-model prefill, first-token latency, multi-token decode,
   throughput, and latency distributions; include folding/setup and cache updates.
 - [x] Sweep batch, context, rank, layers, width, vocabulary, and loop count. Test

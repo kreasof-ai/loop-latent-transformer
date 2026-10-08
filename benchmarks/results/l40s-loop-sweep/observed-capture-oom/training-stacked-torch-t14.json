@@ -1,0 +1,148 @@
+{
+  "status": "error",
+  "arguments": {
+    "phase": "training",
+    "model": "stacked",
+    "loops": 14,
+    "backend": "torch",
+    "samples": 9,
+    "repeats": 3
+  },
+  "started_utc": "2026-10-08T14:11:46Z",
+  "config": {
+    "kind": "naive",
+    "width": 768,
+    "heads": 12,
+    "layers": 168,
+    "loops": 1,
+    "rank": 64,
+    "vocab": 50304,
+    "max_seq": 1025,
+    "untied": false,
+    "gelu": "none",
+    "mlp_width": 3072
+  },
+  "parameter_count": 1267139328,
+  "effective_depth": 168,
+  "unique_layers": 168,
+  "stacked_parameter_target": 1267139328,
+  "sequence_length": 1024,
+  "batch_size": 4,
+  "checkpoint_policy": "none",
+  "stage": "training_graph",
+  "parameter_bytes": 5068557312,
+  "training_eager": {
+    "gpu_samples_ms": [
+      453.4209899902344,
+      449.94354248046875,
+      450.1174621582031,
+      451.02899169921875,
+      449.9517517089844,
+      450.50579833984375,
+      450.7821960449219,
+      449.78265380859375,
+      449.8872375488281
+    ],
+    "wall_samples_ms": [
+      453.47900799970375,
+      449.9854449968552,
+      450.1582149969181,
+      451.068687994848,
+      449.98625299922423,
+      450.5403510047472,
+      450.8186260063667,
+      449.8205609997967,
+      449.9239239958115
+    ],
+    "gpu_median_ms": 450.1174621582031,
+    "wall_median_ms": 450.1582149969181,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 42947112960,
+        "peak_reserved_bytes": 44717572096,
+        "allocated_after_bytes": 20610486784
+      },
+      {
+        "peak_allocated_bytes": 42947113472,
+        "peak_reserved_bytes": 44717572096,
+        "allocated_after_bytes": 20610487296
+      },
+      {
+        "peak_allocated_bytes": 42947113984,
+        "peak_reserved_bytes": 44717572096,
+        "allocated_after_bytes": 20610487808
+      },
+      {
+        "peak_allocated_bytes": 42947114496,
+        "peak_reserved_bytes": 44717572096,
+        "allocated_after_bytes": 20610488320
+      },
+      {
+        "peak_allocated_bytes": 42947115008,
+        "peak_reserved_bytes": 44717572096,
+        "allocated_after_bytes": 20610488832
+      },
+      {
+        "peak_allocated_bytes": 42947115520,
+        "peak_reserved_bytes": 44717572096,
+        "allocated_after_bytes": 20610489344
+      },
+      {
+        "peak_allocated_bytes": 42947116032,
+        "peak_reserved_bytes": 44717572096,
+        "allocated_after_bytes": 20610489856
+      },
+      {
+        "peak_allocated_bytes": 42947116544,
+        "peak_reserved_bytes": 44717572096,
+        "allocated_after_bytes": 20610490368
+      },
+      {
+        "peak_allocated_bytes": 42947117056,
+        "peak_reserved_bytes": 44717572096,
+        "allocated_after_bytes": 20610490880
+      }
+    ],
+    "peak_allocated_bytes": 42947117056
+  },
+  "losses_eager": [
+    10.986384391784668,
+    10.879274368286133,
+    10.169514656066895,
+    9.675686836242676,
+    9.286919593811035,
+    8.95353889465332,
+    8.702043533325195,
+    8.534699440002441,
+    8.429588317871094,
+    8.366048812866211,
+    8.329936027526855,
+    8.311514854431152
+  ],
+  "all_parameter_gradients_finite": true,
+  "error": "CUDA error: out of memory\nSearch for `cudaErrorMemoryAllocation' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nThe CUDA driver logged these messages, which may provide useful details:\nFailed to allocate resources for the kernel nodes on each ctx\nReturning 2 (CUDA_ERROR_OUT_OF_MEMORY) from cuGraphInstantiateWithFlags\n\n",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/loop_sweep.py\", line 86, in graph_measure\n    result = fn()\n             ^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/loop_sweep.py\", line 177, in step\n    loss = m.loss(x,y)\n           ^^^^^^^^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/tensor_model.py\", line 148, in loss\n    logits = self(tokens, policy).flatten(0, 1)\n             ^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/tensor/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1783, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/tensor/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1794, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/tensor_model.py\", line 137, in forward\n    x = step(x, loop, *shared)\n        ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/tensor_model.py\", line 126, in step\n    state = self.add(state, delta)\n            ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/tensor_model.py\", line 55, in add\n    return self.ops.add(x, y) if self.ops else x + y\n                                               ~~^~~\ntorch.OutOfMemoryError: CUDA out of memory. Tried to allocate 12.00 MiB. GPU 0 has a total capacity of 44.39 GiB of which 11.31 MiB is free. Including non-PyTorch memory, this process has 44.38 GiB memory in use. Of the allocated memory 35.22 GiB is allocated by PyTorch, with 303.27 MiB allocated in private pools (e.g., CUDA Graphs), and 8.63 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/loop_sweep.py\", line 268, in main\n    run(a,out)\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/loop_sweep.py\", line 191, in run\n    out['training_graph'] = graph_measure(step,a.samples,a.repeats)\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/loop_sweep.py\", line 85, in graph_measure\n    with torch.cuda.graph(graph, stream=stream):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/tensor/.venv/lib/python3.12/site-packages/torch/cuda/graphs.py\", line 1210, in __exit__\n    self.cuda_graph.capture_end()\n  File \"/home/sagemaker-user/tensor/.venv/lib/python3.12/site-packages/torch/cuda/graphs.py\", line 665, in capture_end\n    self.instantiate()\n  File \"/home/sagemaker-user/tensor/.venv/lib/python3.12/site-packages/torch/cuda/graphs.py\", line 675, in instantiate\n    super().instantiate()\ntorch.AcceleratorError: CUDA error: out of memory\nSearch for `cudaErrorMemoryAllocation' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nThe CUDA driver logged these messages, which may provide useful details:\nFailed to allocate resources for the kernel nodes on each ctx\nReturning 2 (CUDA_ERROR_OUT_OF_MEMORY) from cuGraphInstantiateWithFlags\n\n\n",
+  "duration_seconds": 22.166908646999218,
+  "provenance": {
+    "llt_commit": "bb09330ea7b4e45b83f88119ea459f1583f18525",
+    "tensor_commit": "a86159cea38d801ae18f740b0e62dea08a77c565",
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "sources": {
+      "experiments/l40s/loop_sweep.py": "930d47ffb8708ba13ad83f14a461ed1c67e9df1df3e12f4455aca69ac188dd30",
+      "experiments/l40s/model.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+      "experiments/l40s/tensor_model.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+      "experiments/l40s/prepared_inference.py": "64ff5add22486377e0ce39a2cb561ee5de0db3842744280295611d41b2de80e4",
+      "experiments/l40s/nanogpt_scale.py": "cfacf0fc9d9d84ab49adfaef58fd538e7e76a48dd79448c84a89d05f6c463813"
+    },
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "capability": [
+      8,
+      9
+    ],
+    "native_cpp_executor": true,
+    "driver": "595.91.07",
+    "nvrtc": "/home/sagemaker-user/tensor/build/nvrtc-12.9"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "tensor_repository": "https://github.com/kreasof-ai/tensor",
+  "llt_numerical_source_commit": "2155cade946370595d78e37b17bf8a8a303c159c",
+  "tensor_commit": "a86159cea38d801ae18f740b0e62dea08a77c565",
+  "runtime_binary_sha256": {
+    "_executor_2_14.cpython-312-x86_64-linux-gnu.so": "0716696345eaceb596b2b6611f322762a8ad071c0517c29e1dd72f3780314b67",
+    "_launch.abi3.so": "7421706b1868dc723d7b6061723b928f48f7423f35de8a45e31ef10f512cbf44"
+  },
+  "sources": {
+    "experiments/l40s/loop_sweep.py": "930d47ffb8708ba13ad83f14a461ed1c67e9df1df3e12f4455aca69ac188dd30",
+    "experiments/l40s/loop_sweep_summary.py": "9a23e2bc566fdf055fdcb11eda212b313ee6e761b3fd6bea2d7cfba07597be33",
+    "experiments/l40s/loop_sweep_manifest.py": "a669d636987ee2e03f25b6a7dd9934538386a9552034e173bbe8dbf5c1bae11c",
+    "experiments/l40s/loop_sweep_report.py": "6cc61d2502e62a6ac654b06cddfa48f473a81d8d74fee7ad1ff003e976e0a50b",
+    "experiments/l40s/loop_sweep_record.py": "b4087f95fd71022756fd79197d14c486af4a2411759d1c8bc6e2bb3d892e8ff5",
+    "experiments/l40s/loop_sweep_recovery.py": "b2bf31428f55628dc7c61268e4c63189a0f5ebf86cdf4026445b68191ca3da3e",
+    "experiments/l40s/run_loop_sweep.sh": "78f7c3283d57e5ba86dca739007e99546d818d3d006a0267e554a4fc3042f661",
+    "experiments/l40s/run_loop_sweep_recovery.sh": "1b590c8d50aebac75140fc3bf68ab48f789b95981d3bc735a33e89155ba04d49",
+    "experiments/l40s/LOOP_SWEEP.md": "0c3fcafd61ff1b19dde2566f1b67f55e148f1d2a411f8ef1707ddd11b0303521",
+    "experiments/l40s/model.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+    "experiments/l40s/tensor_model.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+    "experiments/l40s/prepared_inference.py": "64ff5add22486377e0ce39a2cb561ee5de0db3842744280295611d41b2de80e4",
+    "experiments/l40s/nanogpt_scale.py": "cfacf0fc9d9d84ab49adfaef58fd538e7e76a48dd79448c84a89d05f6c463813"
+  },
+  "audit_sha256": "0e6f086df4a6e64543d8bed4dbe01521ec2b6e8e5083c9394ab5f335f7739216",
+  "case_count": 256,
+  "correctness_count": 8
+}
