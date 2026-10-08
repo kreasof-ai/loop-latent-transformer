@@ -17,3 +17,4 @@ benchmarks/results/l40s/*.log
 benchmarks/results/l40s-native/*.log
 benchmarks/results/l40s-native/checkpoints/
 benchmarks/results/l40s-nanogpt/*.log
+benchmarks/results/l40s-loop-sweep/*.log

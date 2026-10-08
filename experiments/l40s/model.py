@@ -25,6 +25,7 @@ class Config:
     max_seq: int = 8192
     untied: bool = False
     gelu: str = 'tanh'
+    mlp_width: int | None = None
 
 
 def norm(x):
@@ -37,8 +38,10 @@ class Block(nn.Module):
         super().__init__()
         self.q = nn.Linear(c.width, c.width, bias=False)
         self.o = nn.Linear(c.width, c.width, bias=False)
-        self.w1 = nn.Linear(c.width, c.width * 4, bias=False)
-        self.w2 = nn.Linear(c.width * 4, c.width, bias=False)
+        hidden = c.mlp_width if c.mlp_width is not None else c.width * 4
+        assert hidden > 0
+        self.w1 = nn.Linear(c.width, hidden, bias=False)
+        self.w2 = nn.Linear(hidden, c.width, bias=False)
         if c.kind == 'naive':
             self.k = nn.Linear(c.width, c.width, bias=False)
             self.v = nn.Linear(c.width, c.width, bias=False)
