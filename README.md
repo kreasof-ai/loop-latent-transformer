@@ -30,7 +30,7 @@ and compute still grows with T.
 The new [L40S report](benchmarks/L40S.md) prioritizes kernels and memory scaling:
 30 decoder geometries, ten causal-prefill geometries, 20 GPU-training geometries,
 attention/partition sweeps through 64K histories, and an independent rotating
-decoder repeat. Tensor supplies custom CUDA attention kernels; PyTorch supplies
+decoder repeat. [Tensor](https://github.com/kreasof-ai/tensor) supplies custom CUDA attention kernels; PyTorch supplies
 other model operators and training backward. All correctness checks pass, and
 149 CUDA binaries have verified provenance.
 
@@ -49,7 +49,11 @@ This confirms that checkpointing and the vocabulary/optimizer floor must be
 counted explicitly. Trained quality, RoPE and distributed scaling remain open.
 
 See [raw results, figures and reproduction](benchmarks/L40S.md) and the
-[Tensor feature gaps and compiler reproducer](experiments/l40s/TENSOR_FOLLOWUPS.md).
+[Tensor feature gaps and compiler reproducer](https://github.com/kreasof-ai/tensor/blob/main/docs/research/llt-l40s-followups.md).
+
+Complete the [Tensor kernel and training readiness gate](https://github.com/kreasof-ai/tensor/blob/main/docs/plan/llt-readiness.md)
+before resuming the [LLT architecture, quality, and scaling roadmap](research/ROADMAP.md).
+Tensor development plans and logs are maintained in its repository.
 
 ## Earlier provisional evidence — 2026-10-06
 
@@ -60,7 +64,7 @@ synthetic resource comparisons, not equal-quality trained-model comparisons.
 
 ### GPU inference
 
-RX 6700 XT, Vulkan via the local Tensor runtime; width 768, 12 layers,
+RX 6700 XT, Vulkan via the [Tensor](https://github.com/kreasof-ai/tensor) runtime; width 768, 12 layers,
 12 heads of width 64, batch 1, 4,096 historical tokens, ten loops and
 256 output logits. Nine-sample repeats of the folded implementation measured:
 

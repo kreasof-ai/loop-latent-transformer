@@ -11,7 +11,7 @@ folded per head; the folds remain differentiable in training. The `layerwise`
 control computes one such latent per layer, also from initial embeddings. This
 is a geometry control, not a faithful DeepSeek/YOCO/LLA reproduction.
 
-Tensor owns custom CUDA attention kernels, compiled via TileLang/TIRx and NVRTC
+[Tensor](https://github.com/kreasof-ai/tensor) owns custom CUDA attention kernels, compiled via TileLang/TIRx and NVRTC
 into sm_89 `.tbin` files and launched via `tensor-torch`. PyTorch owns linear
 layers, MLPs, normalization, embeddings and all training backward/optimizer work.
 The reported `tensor` decoder/prefill backend means **Tensor attention in an
@@ -19,22 +19,30 @@ otherwise PyTorch model**. The PyTorch control forces CUDA Flash SDPA.
 
 ## Setup and reproduction
 
-The tested environment is the sibling Tensor checkout at the commit recorded
-in each raw report. Install that checkout's pinned compiler environment:
+Install [Tensor](https://github.com/kreasof-ai/tensor) at the revision recorded
+in the raw reports. From the LLT repository root, the following creates a separate
+checkout and installs the pinned compiler environment:
 
 ```bash
-cd ../tensor
+llt_project_root="$PWD"
+export TENSOR_CHECKOUT="$(mktemp -d)/tensor"
+git clone https://github.com/kreasof-ai/tensor "$TENSOR_CHECKOUT"
+cd "$TENSOR_CHECKOUT"
+git checkout caf0118d870739b176a88f487ae9e54de1d5d214
 uv sync --locked
 uv pip install --python .venv/bin/python --no-deps -e packages/tensor-torch
 uv run --no-sync python tools/bootstrap_nvrtc.py --out build/nvrtc-12.9
-cd ../loop-latent-transformer
+export LLT_PYTHON="$TENSOR_CHECKOUT/.venv/bin/python"
+export TENSOR_NVRTC_HOME="$TENSOR_CHECKOUT/build/nvrtc-12.9"
+cd "$llt_project_root"
 bash experiments/l40s/run.sh
 python experiments/l40s/summarize.py --plots
 ```
 
 The last command needs matplotlib; it is available in the machine's base Python.
 Do not use a later `uv sync` to remove the separately installed Torch adapter.
-`LLT_PYTHON` and `TENSOR_NVRTC_HOME` override the default paths. Individual phases
+`TENSOR_CHECKOUT`, `LLT_PYTHON`, and `TENSOR_NVRTC_HOME` configure the installation
+used by the experiment. Individual phases
 can be rerun using the commands in `run.sh`. Reports are overwritten; archive a
 completed output directory before another independent run.
 

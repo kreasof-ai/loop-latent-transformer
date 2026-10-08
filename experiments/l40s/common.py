@@ -15,7 +15,7 @@ import torch
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'benchmarks/results/l40s'
-TENSOR = ROOT.parent / 'tensor'
+TENSOR = Path(os.environ.get('TENSOR_CHECKOUT', ROOT.parent / 'tensor')).resolve()
 
 
 def digest(path):

@@ -2,8 +2,9 @@
 set -euo pipefail
 llt_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 cd "$llt_root"
-export TENSOR_NVRTC_HOME="${TENSOR_NVRTC_HOME:-$llt_root/../tensor/build/nvrtc-12.9}"
-llt_python="${LLT_PYTHON:-$llt_root/../tensor/.venv/bin/python}"
+export TENSOR_CHECKOUT="${TENSOR_CHECKOUT:-$llt_root/../tensor}"
+export TENSOR_NVRTC_HOME="${TENSOR_NVRTC_HOME:-$TENSOR_CHECKOUT/build/nvrtc-12.9}"
+llt_python="${LLT_PYTHON:-$TENSOR_CHECKOUT/.venv/bin/python}"
 llt_results="$llt_root/benchmarks/results/l40s"
 mkdir -p "$llt_results"
 "$llt_python" experiments/l40s/check.py > "$llt_results/correctness.log" 2>&1
