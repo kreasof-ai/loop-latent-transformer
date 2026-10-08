@@ -1,0 +1,202 @@
+{
+  "status": "passed",
+  "arguments": {
+    "phase": "training",
+    "model": "per_layer_latent",
+    "loops": 14,
+    "backend": "torch",
+    "policy": "ac",
+    "samples": 9,
+    "repeats": 3
+  },
+  "started_utc": "2026-10-08T22:13:19Z",
+  "config": {
+    "kind": "layerwise",
+    "width": 768,
+    "heads": 12,
+    "layers": 12,
+    "loops": 14,
+    "rank": 64,
+    "vocab": 50304,
+    "max_seq": 1025,
+    "untied": false,
+    "gelu": "none",
+    "mlp_width": 3072,
+    "family": "per_layer_latent",
+    "window": 65,
+    "prelude": 2,
+    "coda": 2,
+    "noise_std": 0.1
+  },
+  "parameter_count": 150602496,
+  "effective_depth": 168,
+  "unique_layers": 12,
+  "stacked_parameter_target": 1267139328,
+  "sequence_length": 1024,
+  "batch_size": 4,
+  "checkpoint_policy": "ac",
+  "attention_applications": 168,
+  "mlp_applications": 168,
+  "parameter_bytes": 602409984,
+  "training_eager": {
+    "gpu_samples_ms": [
+      611.91064453125,
+      517.3001098632812,
+      509.7574462890625,
+      521.8693237304688,
+      603.3899536132812,
+      507.38995361328125,
+      524.6996459960938,
+      530.2487182617188,
+      607.2770385742188
+    ],
+    "wall_samples_ms": [
+      611.9983499957016,
+      517.3358229949372,
+      509.7976520046359,
+      521.9083240008331,
+      603.4253429970704,
+      507.42368400096893,
+      524.7332119979546,
+      530.2816539988271,
+      607.3151579985279
+    ],
+    "gpu_median_ms": 524.6996459960938,
+    "wall_median_ms": 524.7332119979546,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 6592862208,
+        "peak_reserved_bytes": 6889144320,
+        "allocated_after_bytes": 2443562496
+      },
+      {
+        "peak_allocated_bytes": 6592862720,
+        "peak_reserved_bytes": 6889144320,
+        "allocated_after_bytes": 2443563008
+      },
+      {
+        "peak_allocated_bytes": 6592863232,
+        "peak_reserved_bytes": 6889144320,
+        "allocated_after_bytes": 2443563520
+      },
+      {
+        "peak_allocated_bytes": 6592863744,
+        "peak_reserved_bytes": 6889144320,
+        "allocated_after_bytes": 2443564032
+      },
+      {
+        "peak_allocated_bytes": 6592864256,
+        "peak_reserved_bytes": 6889144320,
+        "allocated_after_bytes": 2443564544
+      },
+      {
+        "peak_allocated_bytes": 6592864768,
+        "peak_reserved_bytes": 6889144320,
+        "allocated_after_bytes": 2443565056
+      },
+      {
+        "peak_allocated_bytes": 6592865280,
+        "peak_reserved_bytes": 6889144320,
+        "allocated_after_bytes": 2443565568
+      },
+      {
+        "peak_allocated_bytes": 6592865792,
+        "peak_reserved_bytes": 6889144320,
+        "allocated_after_bytes": 2443566080
+      },
+      {
+        "peak_allocated_bytes": 6592866304,
+        "peak_reserved_bytes": 6889144320,
+        "allocated_after_bytes": 2443566592
+      }
+    ],
+    "peak_allocated_bytes": 6592866304
+  },
+  "losses_eager": [
+    10.972537994384766,
+    11.039134979248047,
+    10.310331344604492,
+    9.753725051879883,
+    9.36782455444336,
+    9.02573013305664,
+    8.757745742797852,
+    8.573714256286621,
+    8.455204963684082,
+    8.381790161132812,
+    8.338788986206055,
+    8.31591796875
+  ],
+  "all_parameter_gradients_finite": true,
+  "training_graph": {
+    "gpu_samples_ms": [
+      377.6356608072917,
+      377.3804931640625,
+      378.0481770833333,
+      378.1549886067708,
+      378.74755859375,
+      378.7605387369792,
+      379.0533854166667,
+      379.2725423177083,
+      379.4220377604167
+    ],
+    "gpu_median_ms": 378.74755859375,
+    "baseline_allocated_bytes": 2458772480,
+    "capture_peak_allocated_bytes": 6591101952,
+    "capture_peak_reserved_bytes": 12333350912,
+    "replay_peak_allocated_bytes": 2457331200,
+    "replay_peak_reserved_bytes": 8623489024,
+    "repeats_per_sample": 3
+  },
+  "graph_step_counter": {
+    "min": 42,
+    "max": 42,
+    "expected": 42
+  },
+  "graph_last_loss": 8.262771606445312,
+  "training_protocol": "Full-token loss/backward, clip=1, AdamW FP32 state; policy=ac",
+  "checkpoint_region": "each Transformer block; attention and FFN updates separately for attention_only; GRT recurrence gates remain outside block AC",
+  "implementation": {
+    "torch_window_attention": "compiled FlexAttention",
+    "tensor_window_attention": "native window/shared-local kernels",
+    "tensor_shared_decode": "two-bank single-softmax kernel without KV concatenation",
+    "grt_training_rng": "Torch CUDA normal RNG on both backends, included in timing; gate/state arithmetic uses the selected backend",
+    "grt_inference_noise": 0.0,
+    "cache_profile": "one supplied token after a fixed prefix; rewind before replay"
+  },
+  "duration_seconds": 22.43813620199944,
+  "provenance": {
+    "llt_commit": "4cf1e353f3b35aecc35dd72b3adf2824b10ce83c",
+    "sources": {
+      "model/research_baselines.py": "0026c4c15c3063018ebe37e53166327c271bda3926f6fef5cdfed005d8b412c8",
+      "experiments/l40s/research_sweep.py": "594b72339980d9ced131e5e24a93b5d8c977cc413ea370bb1eb357af0100f106",
+      "model/reference.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+      "model/tensor_backend.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+      "inference/prepared.py": "c8802c225db98dc55b267602024bb0629dc4340a5c65cfaa2e52208d8a913cdf",
+      "experiments/l40s/loop_sweep.py": "4b4ba280c6954a8407555b4c0661b5ffe96e7e5743d67cd4b8c93203289ae945",
+      "experiments/l40s/timing.py": "f1b99d91a5f5d47e9915d011bec1085156a1ecdef2ca6e05e4ee4c95a9ba5d7d",
+      "experiments/l40s/runtime.py": "c4d922bfa41a4954b5c1bb2ffc362e438e95d18df20dbf1525c3f1e3e77e5ed2"
+    },
+    "tensor_sources": {
+      "packages/tensor-torch/src/tensor_torch/recurrent.py": "b6e4ebe26b263dd3cb620fc8aec14237f270423f6fd683e2fefc22329e13f76d",
+      "packages/tensor-torch/src/tensor_torch/templates/llt_window.py": "f952f721a8fb9f86bbf1745e9c91776173977b905994acb1a90a4c4704f42dac",
+      "packages/tensor-torch/src/tensor_torch/templates/recurrent_ops.py": "b614d76ce876e80366cf568877d25bf1af4138d52649cc5a2a33537bd3a3300e",
+      "packages/tensor-torch/src/tensor_torch/templates/shared_decode.py": "f952663d46e36160d4743cc486b6960e326f4acc1ba204a96eb085cd44d5769b"
+    },
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "tensor_commit": "a41ab7d0bdb03d808f8f58d15ceee517601f588a",
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "capability": [
+      8,
+      9
+    ],
+    "native_cpp_executor": true,
+    "nvrtc": "/home/sagemaker-user/tensor/build/nvrtc-12.9",
+    "driver": "595.91.07",
+    "runtime_binary_sha256": {
+      "packages/tensor-torch/src/tensor_torch/_launch.abi3.so": "7421706b1868dc723d7b6061723b928f48f7423f35de8a45e31ef10f512cbf44",
+      "packages/tensor-torch/src/tensor_torch/_executor_2_14.cpython-312-x86_64-linux-gnu.so": "0716696345eaceb596b2b6611f322762a8ad071c0517c29e1dd72f3780314b67"
+    }
+  }
+}

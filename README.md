@@ -19,8 +19,11 @@ It does not yet establish trained language-model quality. Numerical kernels use
 
 The sweep covers batch 4, sequence 1024, T=1..16, and LLT ranks 32/64/128 against
 Naive Loop, independent stacks, and fixed-depth models that match each stack's
-parameter count. It contains 672 performance records (664 passed, 8 OOM), plus
-backend and checkpoint correctness checks.
+parameter count. Five added profiles cover U-YOCO, LPT, GRT, a per-layer latent
+control, and an attention-only loop control. The joined study contains **1152
+performance records (1144 passed, 8 OOM)**: the original 672 plus 480 new cases.
+The [architecture contract](docs/RESEARCH_BASELINES.md) identifies source fidelity,
+precision, and work-count differences. Backend and checkpoint checks are separate.
 
 At rank 64 and T=16, captured Tensor training takes **518.51 ms / 4.79 GiB with
 block AC**, compared with **411.77 ms / 25.11 GiB without checkpoints**. The current
@@ -48,6 +51,7 @@ figures on CPU with Python and Matplotlib:
 ```bash
 python -m experiments.l40s.loop_sweep_summary
 python -m experiments.l40s.latent_checkpoint_summary
+python -m experiments.l40s.research_summary
 python -m experiments.l40s.latent_checkpoint_report
 python -m experiments.l40s.loop_sweep_manifest
 python -m experiments.l40s.latent_checkpoint_manifest

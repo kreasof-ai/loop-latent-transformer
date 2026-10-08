@@ -2,7 +2,10 @@
 
 These are random-weight **kernel and memory profiles**, with no quality evaluation.
 They use the main study's B4/S1024, width 768, 12 heads, vocabulary 50,304,
-independent token/output weights, FP32 masters and BF16 projections. T sweeps 1..16.
+independent token/output weights, FP32 masters and BF16 projections. Residuals are FP32 in the original controls
+and four added families. GRT's recurrence projection emits BF16 core residuals;
+its prelude/coda and retention blend use FP32 residuals. This follows the
+projection/blend execution in the reference topology and is recorded in the CSV. T sweeps 1..16.
 All model adaptations are explicit; these rows are not reproductions of trained
 paper checkpoints or published quality numbers.
 
@@ -12,9 +15,13 @@ paper checkpoints or published quality numbers.
 |---|---:|---:|---:|---|
 | U-YOCO / SWA | 6 self + 6 cross | 6T + 6 | 6T + 6 | One global full-width bank; local windows per self-layer application |
 | LPT cache layout | 12 | 12T | 12T | First-loop full KV per layer, later-loop local KV |
-| GRT / full KV | 2 prelude + 8 core + 2 coda | 4 + 8T | 4 + 8T | Full per-application KV; no averaged-cache substitution |
+| GRT / full KV (BF16 core) | 2 prelude + 8 core + 2 coda | 4 + 8T | 4 + 8T | Full per-application KV; no averaged-cache substitution |
 | Per-layer latent loop (MLA-style) | 12 | 12T | 12T | Rank-64 latent per layer application |
 | Attention-only loop / FFN once | 12 | 12T | 12 | Full per-attention-application KV |
+
+FFN counts refer to the Transformer feed-forward updates. GRT additionally runs
+one gate MLP and one recurrence projection per loop; both are timed and recorded
+separately in the joined CSV.
 
 The same T therefore represents different work allocations. Parameter counts,
 applied attention/FFN counts, cache bytes, prepared weights, latency and peak memory
@@ -26,7 +33,8 @@ controls remain available in the main report.
 
 **U-YOCO:** [Universal YOCO, 2604.01220v1](https://arxiv.org/html/2604.01220v1).
 The 6-layer self-decoder alone loops, using causal SWA with 512 slots including
-the current token, RoPE, weighted RMSNorm, and SwiGLU hidden width 3W. Its final
+the current token, RoPE base 10,000, weighted RMSNorm with epsilon 1e-5,
+and SwiGLU hidden width 3W. Its final
 output forms one full-width global K/V bank. The 6-layer cross-decoder runs once,
 uses NoPE, and shares that bank. Self-decoder windows retain separate histories
 for every layer/loop application; this storage is counted. It is not constant in T.
@@ -35,6 +43,10 @@ its fixed nanoGPT-scale geometry. Token/output weights are independent. The fina
 cross-decoder can evaluate only the last prompt position because it reads a fixed
 memory and has no cross-position writes; both prompt and serving-startup profiles
 use this valid last-position optimization. Training computes every token's logits.
+The preserved LLT prompt path computes all query positions at every application.
+Its fixed embedding-derived latent also permits last-query-only prompt execution;
+that serving optimization is absent from the original measurements. Prompt latency
+therefore reflects current execution choices as well as architectural work.
 
 **LPT:** [Shared Memory in Looped Transformers, 2610.02383v1](https://arxiv.org/html/2610.02383v1).
 The first recursion builds full context K/V independently for each physical layer.
@@ -98,6 +110,8 @@ exact none/AC gradients within each backend, and supplied-token cache/full-forwa
 logits. Full-geometry T=16 controls repeat uncheckpointed backward before checking
 AC, enabling deterministic algorithms only for correctness. GRT qualification
 uses fixed, noise-free eval execution; training timings retain stochastic noise.
+A separate seeded CPU check verifies noisy GRT training outputs, every parameter
+gradient, and RNG consumption across none/AC.
 
 Persistent states in this profile support one supplied token after a fixed prefix,
 then logical rewind for repeated timing, matching the existing measured operation.

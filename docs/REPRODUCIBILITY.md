@@ -11,7 +11,7 @@ CUDA 12.9 NVRTC, and Tensor's native Torch executor. Exact runtime, driver, sour
 and artifact identities are retained in individual JSON records and the original
 [baseline](../experiments/l40s/results/loop-baseline/run-manifest.json) and
 [extension](../experiments/l40s/results/loop-sweep/run-manifest.json) manifests.
-The extension pins Tensor commit `7fc6b8cf9c7a2e58a55d9f8ba7e7dc1a990d87eb`;
+The original rank/checkpoint extension pins Tensor commit `7fc6b8cf9c7a2e58a55d9f8ba7e7dc1a990d87eb`;
 the baseline has its own earlier Tensor revision and the same runtime binary hashes.
 
 Follow the native executor installation instructions in
@@ -28,12 +28,13 @@ From the repository root, leave `LLT_RESULTS_ROOT` unset:
 ```bash
 python -m experiments.l40s.loop_sweep_summary
 python -m experiments.l40s.latent_checkpoint_summary
+python -m experiments.l40s.research_summary
 python -m experiments.l40s.latent_checkpoint_report
 python -m experiments.l40s.loop_sweep_manifest
 python -m experiments.l40s.latent_checkpoint_manifest
 ```
 
-The first two commands strictly audit the raw records, source snapshots, and
+The three summary commands strictly audit the raw records, source snapshots, and
 compiled artifact hashes before generating CSVs/tables/figures in `*/views/`.
 The report command rebuilds the single canonical LOOP_SWEEP.md. Manifest commands
 record current view-generator source hashes while preserving original manifests.
@@ -111,3 +112,13 @@ commands and layout. The extension's numerical source commit is
 `36e40d7be01ed3be942689efa109f858fbe4a1f2`; the baseline pins its earlier source
 revision. Current package/report changes do not relabel either measured source
 family as current HEAD. A fresh run records its own source hashes.
+
+## Additional architecture families
+
+The [source/adaptation contract](RESEARCH_BASELINES.md) covers U-YOCO, LPT, GRT,
+a per-layer latent control and an attention-only loop control. Reproduce their
+480-case grid separately using `run_research_sweep.sh` with a fresh `LLT_RESULTS_ROOT`.
+It uses the same B4/S1024, T=1..16, training none/AC and three inference operations.
+The audit joins the new records with the original 672; their raw payloads and
+measurement manifests remain separate. The added-family manifest pins its model,
+worker and Tensor sources independently of the original rank/checkpoint study.

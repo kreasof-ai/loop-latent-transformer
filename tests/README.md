@@ -10,3 +10,7 @@ behavior affected by code movement without rerunning the GPU performance study.
 
 Strict GPU artifact and case-grid auditing lives in the experiment summary tools.
 See [reproducibility](../docs/REPRODUCIBILITY.md).
+
+Added-family CPU tests compare none/AC gradients for every parameter, cached/full-
+forward supplied-token logits, rewind behavior, architecture-specific work counts, and seeded stochastic GRT
+checkpoint gradients/RNG consumption.

@@ -1,0 +1,1430 @@
+{
+  "status": "passed",
+  "arguments": {
+    "phase": "training",
+    "model": "per_layer_latent",
+    "loops": 10,
+    "backend": "tensor",
+    "policy": "ac",
+    "samples": 9,
+    "repeats": 3
+  },
+  "started_utc": "2026-10-08T21:31:50Z",
+  "config": {
+    "kind": "layerwise",
+    "width": 768,
+    "heads": 12,
+    "layers": 12,
+    "loops": 10,
+    "rank": 64,
+    "vocab": 50304,
+    "max_seq": 1025,
+    "untied": false,
+    "gelu": "none",
+    "mlp_width": 3072,
+    "family": "per_layer_latent",
+    "window": 65,
+    "prelude": 2,
+    "coda": 2,
+    "noise_std": 0.1
+  },
+  "parameter_count": 150602496,
+  "effective_depth": 120,
+  "unique_layers": 12,
+  "stacked_parameter_target": 927400704,
+  "sequence_length": 1024,
+  "batch_size": 4,
+  "checkpoint_policy": "ac",
+  "attention_applications": 120,
+  "mlp_applications": 120,
+  "parameter_bytes": 602409984,
+  "training_eager": {
+    "gpu_samples_ms": [
+      615.38916015625,
+      696.5862426757812,
+      611.8757934570312,
+      605.8536987304688,
+      605.6918334960938,
+      601.3040771484375,
+      699.694091796875,
+      613.4395141601562,
+      614.359130859375
+    ],
+    "wall_samples_ms": [
+      615.4339139975491,
+      696.6188009973848,
+      611.906022997573,
+      605.8842240017839,
+      605.7224800024414,
+      601.3345399987884,
+      699.7265329991933,
+      613.4735480009113,
+      614.3940500041936
+    ],
+    "gpu_median_ms": 613.4395141601562,
+    "wall_median_ms": 613.4735480009113,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 4246252032,
+        "peak_reserved_bytes": 4473225216,
+        "allocated_after_bytes": 2424564224
+      },
+      {
+        "peak_allocated_bytes": 4246252544,
+        "peak_reserved_bytes": 4473225216,
+        "allocated_after_bytes": 2424564736
+      },
+      {
+        "peak_allocated_bytes": 4246253056,
+        "peak_reserved_bytes": 4473225216,
+        "allocated_after_bytes": 2424565248
+      },
+      {
+        "peak_allocated_bytes": 4246253568,
+        "peak_reserved_bytes": 4473225216,
+        "allocated_after_bytes": 2424565760
+      },
+      {
+        "peak_allocated_bytes": 4246254080,
+        "peak_reserved_bytes": 4473225216,
+        "allocated_after_bytes": 2424566272
+      },
+      {
+        "peak_allocated_bytes": 4246254592,
+        "peak_reserved_bytes": 4473225216,
+        "allocated_after_bytes": 2424566784
+      },
+      {
+        "peak_allocated_bytes": 4246255104,
+        "peak_reserved_bytes": 4473225216,
+        "allocated_after_bytes": 2424567296
+      },
+      {
+        "peak_allocated_bytes": 4246255616,
+        "peak_reserved_bytes": 4473225216,
+        "allocated_after_bytes": 2424567808
+      },
+      {
+        "peak_allocated_bytes": 4246256128,
+        "peak_reserved_bytes": 4473225216,
+        "allocated_after_bytes": 2424568320
+      }
+    ],
+    "peak_allocated_bytes": 4246256128
+  },
+  "losses_eager": [
+    10.973196029663086,
+    11.045398712158203,
+    10.31509017944336,
+    9.751506805419922,
+    9.36981201171875,
+    9.029731750488281,
+    8.761171340942383,
+    8.575929641723633,
+    8.456589698791504,
+    8.382890701293945,
+    8.33969497680664,
+    8.316412925720215
+  ],
+  "all_parameter_gradients_finite": true,
+  "training_graph": {
+    "gpu_samples_ms": [
+      344.1377360026042,
+      343.9940185546875,
+      344.0189615885417,
+      343.5595296223958,
+      343.7124430338542,
+      343.8114013671875,
+      343.593994140625,
+      343.7069498697917,
+      343.7840576171875
+    ],
+    "gpu_median_ms": 343.7840576171875,
+    "baseline_allocated_bytes": 2427319296,
+    "capture_peak_allocated_bytes": 4236955136,
+    "capture_peak_reserved_bytes": 7103053824,
+    "replay_peak_allocated_bytes": 2428106240,
+    "replay_peak_reserved_bytes": 5966397440,
+    "repeats_per_sample": 3
+  },
+  "graph_step_counter": {
+    "min": 42,
+    "max": 42,
+    "expected": 42
+  },
+  "graph_last_loss": 8.260764122009277,
+  "training_protocol": "Full-token loss/backward, clip=1, AdamW FP32 state; policy=ac",
+  "coverage": {
+    "artifacts": [
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 4096,
+          "c": 768,
+          "v": 50304,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/d6c0c6dcc44b8b27b379404332f06759e1207dde3c7118f979ab4a5f5f7099f5.tbin",
+        "sha256": "c461026f755ebfd665350fcd0a60fa1f94b38e0fc10ea5cbd519901719a4a430",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 1024,
+          "c": 768,
+          "v": 1025,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/a44ede6216dc3c4d661fffc09b69e307a6978c7b3dce938e4e970304fcf2fa40.tbin",
+        "sha256": "06cce922377c37a6ad5c58cb24d0d95dde7099acfbc99a2558d43cf7cc4c9f50",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 3145728,
+          "dtype": "float32",
+          "other_dtype": "float32",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/43f186a44e920eb79074733fb1ff0c8259c684962cfbf835a6256e0a9867812c.tbin",
+        "sha256": "637dcbd0aa0ddd19ea48b30746fd2316dc07602f5530725199bcdfcb319bd077",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 49152,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/97a1784751a90dbda3a76ed49e8d60c7637a55e795a6a865ed4e295b77d42532.tbin",
+        "sha256": "5bdaa40ee0ee12dfb4c412aa918cb17561349b70c12163a45b7a464c2fb58780",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 589824,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/3e8c97c532b8c587815c31bc06ac34ae453fca33ed1de4ddc98bee94997a7fea.tbin",
+        "sha256": "53a878511bec563d846c7c8e49ea3f6d4860b2519c7285574040d9fe3c3d23e3",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 12,
+          "m": 64,
+          "k": 64,
+          "n": 768,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/062562a79125ea493b6f124d1c6dbc0965d747b01606bd9bb1a7c7f9915c352a.tbin",
+        "sha256": "a0cfb17a72c6048528cabeca174f131b53170dca5b3e85c32c9217e955ddb5ba",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 12,
+          "m": 768,
+          "k": 64,
+          "n": 64,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/f776220d9db26bc20764ebfe244e34437d81bb7047bd385c498e9b372c2d378e.tbin",
+        "sha256": "e310331b29a6c240a50ae19f6a860aad55c6340df21326711b5de37c4986e530",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms",
+          "r": 4096,
+          "c": 768,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/10796247dec4e4ae997b9d5393e6cf9f369f8f1cd0eb8ab3e5091eb047f31707.tbin",
+        "sha256": "324c1c08b64793563f16fd81215633f133528a0506d09746e35ea878b0788740",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 3145728,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/5e605f869ff8ed04c1e876641ab1e5cf76f56c3f778176bb6836897c88f361a3.tbin",
+        "sha256": "4f7f4e43bd60fa2be1ea03c4e2a1507adb9b94f5124834de8f3de95b2b39867b",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 768,
+          "c": 768,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/8b3459acb8120dd17142720624e4f8771b8c5f5d333d7f5b4a52baf21dcf9675.tbin",
+        "sha256": "455ef71be660e063b8654ff6c82228e3c8225bc9121a8797b1bcb4d6ee878fff",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 768,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/3da428d8b4651abdfc3b49f3362f9a54c85eb3c663523bbfde2475aec4f5a248.tbin",
+        "sha256": "5737dcc76564fb1337933f24f39bbd40680d7bf98d16c2bedd3805d1fb197a7f",
+        "cache_hit": true
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          4,
+          12,
+          1,
+          1024,
+          1024,
+          64,
+          64,
+          "bfloat16",
+          true,
+          0,
+          0.125
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/eb739b2527f20b1be961f38595f28bddf91e82b262b1ce8f5aa89d379ab42629.tbin",
+        "sha256": "d72ab9ba2dbf23b2367bd52a465ee309d5a3a098e23712e409d1ccfee1f8d87a",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 3145728,
+          "dtype": "float32",
+          "other_dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/fd3eb05a047161bcac00e29172a4b2120f0019c5bb5f6f56f3fa841f86257c97.tbin",
+        "sha256": "4e3ce69373aaed3270eed502f9b7b3c324a09b1d6ff9777b03389a8bda12f09e",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 2359296,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/7c4932e3da496e4bc886dacd8fe0592263e0166c81c9c7d77e50440722980946.tbin",
+        "sha256": "72d8eb7d21e6092f330c93a25c168e6902b5aeaba2bab5c58067a5c6dc4e99e1",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 768,
+          "c": 3072,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/f4f6bb3cf294f7f5b01891889ae33021888277c8037ffe8221c53a42e23c9700.tbin",
+        "sha256": "3ee1b509a30b3257128986303a3a00bf3fb95fa201ad169cbf46e7f9d8927b85",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gelu",
+          "n": 12582912,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/c51861f1bd8e100b014916f0b05178c02af355405ed416804554bcaa153995ff.tbin",
+        "sha256": "21043cf36f800a6b8b95f1e751166076818014878c570342a72cee29723196fa",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 3072,
+          "c": 768,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/50e9592463711fce73458cfc78fd888908f593124df474335ea84c7ba49302ac.tbin",
+        "sha256": "66b99d0e4ed260fe6224fe05b87fb80e0540ad8f9f3064cfd302183790636643",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 38633472,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/87eab3c07ae84ff5e42da9dd934fc511e9c207305333b96d9a3331201a9e387f.tbin",
+        "sha256": "f5da36d940ba21e0ca22752bd05e0c98165839d19e46631696e840a4df2a5822",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 768,
+          "c": 50304,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 128,
+            "bn": 128,
+            "bk": 32,
+            "threads": 128,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/4d6c4a2ae56c629128928a0abf71a59af241d84dd696a91c6ebc176b2358743d.tbin",
+        "sha256": "dc32829a79c69a08b06ed111f4c843d9122f6ce29447bbdcac059b29eec15ddf",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "ce_parts",
+          "r": 4096,
+          "v": 50304,
+          "dtype": "bfloat16",
+          "ignore_index": -100
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/3845cdec760e43bd3f714ddf1feafbbff642acc3d276b9b0d40141fc5ca3129f.tbin",
+        "sha256": "3d1faaabb512f69d723c7e44fb6baa4f52b5b89dd6fff66db1638a89281af0bc",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "ce_finish",
+          "r": 4096,
+          "v": 50304,
+          "dtype": "bfloat16",
+          "ignore_index": -100
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/ef9462261e3fce0ed6c505966e613480020d10a0fa04ea648798ad005b82e858.tbin",
+        "sha256": "1237726be7b74846eb472bd7678b428551737ab15a04be85509770ad611df20f",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "ce_reduce",
+          "r": 4096,
+          "v": 50304,
+          "dtype": "bfloat16",
+          "ignore_index": -100
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/f8dbd24ace5ab4b871f9d2367244e0a8ef07a3c08e185d0334ccb601e264c759.tbin",
+        "sha256": "8d71e51d3905f301b27a54d6e851a679dec8909d1243cb38659191abf5ce41bf",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "ce_seed",
+          "r": 4096,
+          "v": 50304,
+          "dtype": "bfloat16",
+          "ignore_index": -100
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/e755e1c59fc6ad1aaec187ae2ecc60cbb06217fa9576d3fe812fcb9eac29b3d8.tbin",
+        "sha256": "39678f0222e5b5d8b1849836ca2a267739a3d02307b3d2baea7ff1adafc7718e",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "ce_dx",
+          "r": 4096,
+          "v": 50304,
+          "dtype": "bfloat16",
+          "ignore_index": -100
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/90368d3f2dbac7d58596ce3eef66b2511b9a818b4336931e7a20ef746c1cdcb6.tbin",
+        "sha256": "60522938806f3a2872253392660c895e71e75268f636680fd78bc0daee6006cd",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 50304,
+          "c": 768,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/28f40593ab6ebc9a07d75de50cdb0ed7e1b5aa4700c0777e1ddda762f91a681a.tbin",
+        "sha256": "876629ec6d4943c9ff03194207d359d20f225acb8a0f837da850ea1d3c41e784",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 50304,
+          "k": 4096,
+          "c": 768,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 128,
+            "bn": 64,
+            "bk": 32,
+            "threads": 128,
+            "stages": 2
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/eb836ecc7990636651f56481adc1d99e55e838bba83b64a3b8b1bab8d70881fa.tbin",
+        "sha256": "4cc845377e884deb85f10ce3b0e3e75dcf1201c317775897b37f20383adca06a",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 3145728,
+          "dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/7f2cef6980c86767a152e2ec3bc246d08a05cfab9225de50899e36b0802eee9b.tbin",
+        "sha256": "48be3e848bbf0d663b34888f2c8a6a64fecee173c8b136e08a09e1eec91a20d5",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 38633472,
+          "dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/9535db0e9d3c567e0586087147b44494d9ca2288d95394a8f54cfa310e128336.tbin",
+        "sha256": "c9224da2905ddb8d2326ff0629566624acd10f398dde2149b1ec8e766605672c",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms_dx",
+          "r": 4096,
+          "c": 768,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/dd77e1a721118e720b9fb11363e0547fa25affbc7fba5a70fcb8451ce01da2dd.tbin",
+        "sha256": "5bf278b0d2033f3087e9cbac006a4fa36cf5dff907865023fbd1d76c2938f906",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 768,
+          "c": 3072,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/d8cc8ce1e06476ffe37c473cec4ece44b9807fa4ebc4bc4d50cbe22019ce9b5b.tbin",
+        "sha256": "718ce07959fb6322a3aaf8bad43689f28ca6c279f4969ce4a46f03e58e496584",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 768,
+          "k": 4096,
+          "c": 3072,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 128,
+            "bn": 64,
+            "bk": 32,
+            "threads": 128,
+            "stages": 2
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/3c592b54593e241bae3d39c7ba32e22ea7018dd0c49011daf195326042852412.tbin",
+        "sha256": "6fa82c82f913775e32b98a2761161c7b804ebdd60e819a0a69cf5c67607cf831",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 2359296,
+          "dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/816ec6a789d9fe4528b3801c5291877a1ea9761f66e9a04f756a51559941d14e.tbin",
+        "sha256": "19e2be5638fa37c7f1134dc1f0ef2d7ac9eabefac095241a694fe4a2fe75ce24",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gelu_dx",
+          "n": 12582912,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/df3911cf815b1e21014195e883e4c8c7271c7aeaefc7e684c39f421a460a894b.tbin",
+        "sha256": "74eba3776c5500390c76e226e9cdf5004fa62673c765217b83629308c4e18f15",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 3072,
+          "c": 768,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/30e67f7c4b5b340ff3cf80743078123cbe0d97686965982d08dff5ba41fb71b4.tbin",
+        "sha256": "563995754e52e25bbcf12afe606f13dd33c222aa592e3451cd735e692a0e476e",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 3072,
+          "k": 4096,
+          "c": 768,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 128,
+            "bn": 64,
+            "bk": 32,
+            "threads": 128,
+            "stages": 2
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/5982422df782a4f28cdf010d4bb766120e03eee45577b5aeb27e544fccb8dc02.tbin",
+        "sha256": "61f4ac49bd686973c0eb52aa7b5129a61a369bb11db1afe500e7528c3defe6f1",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 768,
+          "c": 768,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/46b96040704f3f5c7fd06dadae4c00b40ce4cbd76f87ad935dee328a5c3fa9d7.tbin",
+        "sha256": "c381af838c443f41ce32066d187f1fb171a6f8c18b9d18bc895ae79f93f598f2",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 768,
+          "k": 4096,
+          "c": 768,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 128,
+            "bn": 64,
+            "bk": 32,
+            "threads": 128,
+            "stages": 2
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/256c4b6f0ee4c2516af3430b6c77e56763a9a4c26e03073902a98e692721e99f.tbin",
+        "sha256": "4033dd7167a953623c0868ee5cc1de6fb3a45836701637cc7864847750124df8",
+        "cache_hit": true
+      },
+      {
+        "factory": "attention_delta",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          4,
+          12,
+          1024,
+          64,
+          "bfloat16"
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/165fa5e3332fd7c68f9efe323d15ba29876689482fae7c9cda40e6516ba8131e.tbin",
+        "sha256": "3b66c65847d086c45dbd0a389ab00dd3c5003cd458b813518aa21fb3992e1d9d",
+        "cache_hit": true
+      },
+      {
+        "factory": "attention_dq",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          4,
+          12,
+          1,
+          1024,
+          1024,
+          64,
+          64,
+          "bfloat16",
+          true,
+          0,
+          0.125
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/fd4df349de4101538527642a79db85ce7c61e26ec135a3321abae5eafe1e6cd9.tbin",
+        "sha256": "e3d6577a2b6f3c04e5d9df4082ae606a07614b1974985da57c859370f8f5f120",
+        "cache_hit": true
+      },
+      {
+        "factory": "attention_dkv",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          4,
+          12,
+          1,
+          1024,
+          1024,
+          64,
+          64,
+          "bfloat16",
+          true,
+          0,
+          0.125,
+          true
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/283a149fdc59c53032ba1a479eb6377c389281bb13f23e539f64582364f39407.tbin",
+        "sha256": "b364f19cb1c4923c6cbe7cee58bac24db08be5234258d0576edb16752c44e7ee",
+        "cache_hit": true
+      },
+      {
+        "factory": "attention_sum_heads",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          4,
+          12,
+          1,
+          1024,
+          64,
+          64,
+          "bfloat16"
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/469c946d9d0f211e01094d27a92a98c7807dc4420998d8c22dbd37f54a817bb7.tbin",
+        "sha256": "ef2456375281bf680ee18e095edb83b23cfd47d77f68abf5bb6373cff81eb467",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 64,
+          "c": 768,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/5d00bec879e4e332faffb0bd7a458ae57a6eba733d108cc76f08582112617fb1.tbin",
+        "sha256": "9c708009087345106f3de257f736b527d2b0a05c9ed0b57826e2bc5215c0f368",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 64,
+          "k": 4096,
+          "c": 768,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 128,
+            "bn": 64,
+            "bk": 32,
+            "threads": 128,
+            "stages": 2
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/82147e7db378bf877994f79b2def72c2daf83fd921c35f699b3287fa08033f0b.tbin",
+        "sha256": "8070e6835d940c4641806787eb242370ae2035d2c7611092f2d687d5994f2da0",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 49152,
+          "dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/1a35b13d03a305ff40d4f857e2029fa0ec47f10909f4b50cd3c70ed32c43be42.tbin",
+        "sha256": "68e0292f5ac38ecd39ee83fc4de0d1255bfcd2f1608a933b78e4e259248f26ab",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 12,
+          "m": 768,
+          "k": 64,
+          "n": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/398c7f5e31e4cdfa164b234c4fdc4e903829d017dcac15e0196a0bc66252e8a3.tbin",
+        "sha256": "ca967cda1cad3bf0766ad0d894bcf042be01d1dd66dea4cb356e54f4f9600e33",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 12,
+          "m": 64,
+          "k": 768,
+          "n": 64,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/0e026d38561948407004e2461d066dd59108008083338e86ced72eac07afc56f.tbin",
+        "sha256": "39bae793f7784318064e48bb9983c93d158d8ac91b8bfa23af5f73ab77c38edb",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 589824,
+          "dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/4d0b5c88e5b6fd5c1b7da2910884fd37b4756998db7ac5e29a04ed637732011e.tbin",
+        "sha256": "5b6a49528c06e244934cf9b3bd4e92058b68e2bef3acb5b2a7c47146a0758fd3",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 12,
+          "m": 64,
+          "k": 768,
+          "n": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/feaaf09489504ecf50ee67c28b106fe878f08385c52a84dbe6a8c0ed6d7664e2.tbin",
+        "sha256": "9b77b5285c716c7b42a13570dcdc6143deae774e08310e360f8c7dcbc62857d4",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 12,
+          "m": 64,
+          "k": 64,
+          "n": 768,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/f65c936cc1130562c1d1a8029cf457e984a03c1b8a62286ce4c6e3e0882badf8.tbin",
+        "sha256": "6b31a8449d3f2353eaae2c43441aa329a8d3723f4ead932863bd31c7af05239a",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "zero",
+          "n": 787200,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/6cc54a882d2e664c5130570d2a499dc3cf07862d6687756b93aa71e11277f8ee.tbin",
+        "sha256": "310118ec94fd07b44d37f2d6627742b081b256df55006612e794e25c08bfcd65",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding_scatter",
+          "r": 1024,
+          "c": 768,
+          "v": 1025,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/af2505d1ef159f5109b5f86c1895819d7fa41ec92a364696040d1e4b302874c6.tbin",
+        "sha256": "6df379ad6c2cb68c3ca97ef6078956548d140f391799f150ae26abd4396c5bd8",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "zero",
+          "n": 38633472,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/b5d0468c81961abbffec413f2316b44b27887b9aa48d4b0f038520321ffba5c6.tbin",
+        "sha256": "57c0fa8a51fa0dd46ff8626fa49b6ae1a3f410ffb2c7ef5d3e08d2919987893c",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding_scatter",
+          "r": 4096,
+          "c": 768,
+          "v": 50304,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/49872816c0e1d5da2e335a973804c22466746c959eb275786808b158971a85c3.tbin",
+        "sha256": "a7685840a56cfffb19677907535008e70fd28031fdce07721c2a1499546a7645",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "sumsq",
+          "n": 38633472,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/f0220bf34f3581ada1e06824c871c423ed06049b675983a62075d3c9af5a6480.tbin",
+        "sha256": "09532f5d6d3c88babbbf2df181d66fd2c01c4f9bc34958498468e5297cfdf28d",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "sumsq",
+          "n": 787200,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/265534e446d0aebec79cad45c428100bb61ffcb6d80b4f538e7b5e999c36be7e.tbin",
+        "sha256": "d27deee61e6d79e556398fffa54b9a27ee657811d2d618fa14e3a8cd8c7e0c0d",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "sumsq",
+          "n": 49152,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/f9a71ca21c619f0a0919aecdc6c7aee6069f5ed121ff4a8e3b13bd63f678024f.tbin",
+        "sha256": "4490db3c9957a9731d1ea6141714dffbf0d383e1bcae8201845469fb6d704137",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "sumsq",
+          "n": 589824,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/12dad6cc740a2d1c62440782de7e77a4300ed8c16d14d57b7063300b4e7d122d.tbin",
+        "sha256": "c6c5c0c02b9be473565e40297575c6ece590ef64f05c6bdcb69d3c38ed5c4c97",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "sumsq",
+          "n": 2359296,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/fddfd8da9c24f848893288e1a108e49c6414fe89cba13d394d3fdcffd540ab95.tbin",
+        "sha256": "3ef064f497d54f2d62f72cde7431f02552511a71d9fa2965f7f814273fb36a8c",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "sum",
+          "n": 147073,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/c9a43eaf98fca5bcb0761a6b2f313d2ed784288104453bd572e11996b0572a0c.tbin",
+        "sha256": "d61d33d11af44b75710babefecfb309300699c14242afcee7951b2d5431c5ffa",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "clip",
+          "n": 144,
+          "limit": 1.0,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/fca3dd3129627fb1ce7240c0feb096dfa2c107609ab4c7eef399cc1317203a68.tbin",
+        "sha256": "70b3bda46726e0d320c879349d28e7c415b70ece0c184bdee28267d79b6244c0",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "zero",
+          "n": 1,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/20fa03b1f3bcec94511104fbce17a6851d90b0eed95d89bcd860654f22140aa7.tbin",
+        "sha256": "0316f299569eafc31c7a3766d79daf2c93dabae347c1ea56f31e0a986e4a08ac",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "adam_step"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/ffd72c7b935bc30d67968c07d72744ee99fce59e8f3010cf3a54baf7cf1f2713.tbin",
+        "sha256": "314844b5674f2ca977cc853552ce6b4f9596c5c795e54e46221d2912200fb2bb",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "adamw",
+          "n": 38633472
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/54475d5def3cf2570c5a681e6c2c7cd503021307a4f73d34ba04be38951f0ae6.tbin",
+        "sha256": "5f6fd490fbf8701b6bd3f098f7c2534fd80e1bd8673c76a5a26bf6fb2f34b800",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "adamw",
+          "n": 787200
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/dbc705b3d98df9f8fe94f26d1ab163d2cd4891e6673bce962fc7ce47b6f908d5.tbin",
+        "sha256": "cd9d644daf17eb0ac7fcd2750de4f8a372ab4a654f4bd3140be5060b19bfb0b7",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "zero",
+          "n": 49152,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/e39731ebaafe3794d43aabcd8194da1884759b310e96f6e6eb1e868b632cdc2c.tbin",
+        "sha256": "36470c531b0413085536f0221d5d566c52fee5a4a0d8839d97067d25d5ba534c",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "adamw",
+          "n": 49152
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/3c4a76709685a59224fa1387682e45325e84c333a8e9b6a2fc18397180ec4091.tbin",
+        "sha256": "a7de109df3f043708b559abd3bfe5a778bc4d5617ca6fff03ddf66c0d4a92f6d",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "zero",
+          "n": 589824,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/22e3ef77ffbddf82bb712680f096c87f429fa6df0a04c9ce0eb9ea98879a9f92.tbin",
+        "sha256": "15b2b8a19b3b2c89b1eb9f66c15c74051cd96da4023b85f6d4495f2d363f342d",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "adamw",
+          "n": 589824
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/fb1d91b4e43b5ae1b8fda1ec73b4da1e0a7b0a036f323a5744a0a0f9f5b30a81.tbin",
+        "sha256": "294682f7ef21914b64456501ecd8e23a808d81ed6fe8a7a1b2c3a256c2a6c4f4",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "zero",
+          "n": 2359296,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/fc92b710993d0f51012c5f59292795f7274415e7051b9410f8ce6431fd51e244.tbin",
+        "sha256": "742cafa0a28affdd93e475fad20cc5a766f9ad607fc372c914bf253fbf2108eb",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "adamw",
+          "n": 2359296
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-research-l40s-2026-10-08/research-baselines/artifacts/7c3daf959f4e492f77a0b21ce1b4c8830827a37327f49466008d5c085fd54d07.tbin",
+        "sha256": "d78ddfb5a9ab0593f6c1bc7ac49d1cb079facafde7357ba472f08c1c7e32e271",
+        "cache_hit": true
+      }
+    ],
+    "calls": {
+      "make_kernel:embedding": 32,
+      "make_kernel:add": 5776,
+      "make_kernel:cast": 48480,
+      "make_kernel": 1152,
+      "make_kernel:rms": 7696,
+      "make_kernel:gemm": 38448,
+      "attention_forward": 3840,
+      "make_kernel:gelu": 3840,
+      "make_kernel:ce_parts": 16,
+      "make_kernel:ce_finish": 16,
+      "make_kernel:ce_reduce": 16,
+      "make_kernel:ce_seed": 16,
+      "make_kernel:ce_dx": 16,
+      "make_kernel:rms_dx": 3856,
+      "make_kernel:gelu_dx": 1920,
+      "attention_delta": 1920,
+      "attention_dq": 1920,
+      "attention_dkv": 1920,
+      "attention_sum_heads": 1920,
+      "make_kernel:zero": 293,
+      "make_kernel:embedding_scatter": 32,
+      "make_kernel:sumsq": 1392,
+      "make_kernel:sum": 16,
+      "make_kernel:clip": 16,
+      "make_kernel:adam_step": 1392,
+      "make_kernel:adamw": 1392
+    },
+    "fallbacks": [],
+    "layout_copies": 0,
+    "compute_dtype": "torch.bfloat16",
+    "gemm_profile": "optimized",
+    "cache_inference_weights": false,
+    "inference_weight_cast_hits": 0
+  },
+  "checkpoint_region": "each Transformer block; attention and FFN updates separately for attention_only; GRT recurrence gates remain outside block AC",
+  "implementation": {
+    "torch_window_attention": "compiled FlexAttention",
+    "tensor_window_attention": "native window/shared-local kernels",
+    "tensor_shared_decode": "two-bank single-softmax kernel without KV concatenation",
+    "grt_training_rng": "Torch CUDA normal RNG on both backends, included in timing; gate/state arithmetic uses the selected backend",
+    "grt_inference_noise": 0.0,
+    "cache_profile": "one supplied token after a fixed prefix; rewind before replay"
+  },
+  "duration_seconds": 22.810805746004917,
+  "provenance": {
+    "llt_commit": "4cf1e353f3b35aecc35dd72b3adf2824b10ce83c",
+    "sources": {
+      "model/research_baselines.py": "0026c4c15c3063018ebe37e53166327c271bda3926f6fef5cdfed005d8b412c8",
+      "experiments/l40s/research_sweep.py": "594b72339980d9ced131e5e24a93b5d8c977cc413ea370bb1eb357af0100f106",
+      "model/reference.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+      "model/tensor_backend.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+      "inference/prepared.py": "c8802c225db98dc55b267602024bb0629dc4340a5c65cfaa2e52208d8a913cdf",
+      "experiments/l40s/loop_sweep.py": "4b4ba280c6954a8407555b4c0661b5ffe96e7e5743d67cd4b8c93203289ae945",
+      "experiments/l40s/timing.py": "f1b99d91a5f5d47e9915d011bec1085156a1ecdef2ca6e05e4ee4c95a9ba5d7d",
+      "experiments/l40s/runtime.py": "c4d922bfa41a4954b5c1bb2ffc362e438e95d18df20dbf1525c3f1e3e77e5ed2"
+    },
+    "tensor_sources": {
+      "packages/tensor-torch/src/tensor_torch/recurrent.py": "b6e4ebe26b263dd3cb620fc8aec14237f270423f6fd683e2fefc22329e13f76d",
+      "packages/tensor-torch/src/tensor_torch/templates/llt_window.py": "f952f721a8fb9f86bbf1745e9c91776173977b905994acb1a90a4c4704f42dac",
+      "packages/tensor-torch/src/tensor_torch/templates/recurrent_ops.py": "b614d76ce876e80366cf568877d25bf1af4138d52649cc5a2a33537bd3a3300e",
+      "packages/tensor-torch/src/tensor_torch/templates/shared_decode.py": "f952663d46e36160d4743cc486b6960e326f4acc1ba204a96eb085cd44d5769b"
+    },
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "tensor_commit": "a41ab7d0bdb03d808f8f58d15ceee517601f588a",
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "capability": [
+      8,
+      9
+    ],
+    "native_cpp_executor": true,
+    "nvrtc": "/home/sagemaker-user/tensor/build/nvrtc-12.9",
+    "driver": "595.91.07",
+    "runtime_binary_sha256": {
+      "packages/tensor-torch/src/tensor_torch/_launch.abi3.so": "7421706b1868dc723d7b6061723b928f48f7423f35de8a45e31ef10f512cbf44",
+      "packages/tensor-torch/src/tensor_torch/_executor_2_14.cpython-312-x86_64-linux-gnu.so": "0716696345eaceb596b2b6611f322762a8ad071c0517c29e1dd72f3780314b67"
+    }
+  }
+}

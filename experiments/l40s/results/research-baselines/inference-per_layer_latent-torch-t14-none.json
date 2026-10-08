@@ -1,0 +1,373 @@
+{
+  "status": "passed",
+  "arguments": {
+    "phase": "inference",
+    "model": "per_layer_latent",
+    "loops": 14,
+    "backend": "torch",
+    "policy": "none",
+    "samples": 9,
+    "repeats": 3
+  },
+  "started_utc": "2026-10-08T22:13:44Z",
+  "config": {
+    "kind": "layerwise",
+    "width": 768,
+    "heads": 12,
+    "layers": 12,
+    "loops": 14,
+    "rank": 64,
+    "vocab": 50304,
+    "max_seq": 1025,
+    "untied": false,
+    "gelu": "none",
+    "mlp_width": 3072,
+    "family": "per_layer_latent",
+    "window": 65,
+    "prelude": 2,
+    "coda": 2,
+    "noise_std": 0.1
+  },
+  "parameter_count": 150602496,
+  "effective_depth": 168,
+  "unique_layers": 12,
+  "stacked_parameter_target": 1267139328,
+  "sequence_length": 1024,
+  "batch_size": 4,
+  "checkpoint_policy": "none",
+  "attention_applications": 168,
+  "mlp_applications": 168,
+  "parameter_bytes": 602409984,
+  "prompt_eager": {
+    "gpu_samples_ms": [
+      89.15558624267578,
+      91.60499572753906,
+      89.30303955078125,
+      89.3306884765625,
+      89.51500701904297,
+      89.275390625,
+      89.51302337646484,
+      89.44927978515625,
+      89.40953826904297
+    ],
+    "wall_samples_ms": [
+      89.21267300320324,
+      91.64416100247763,
+      89.33516599790892,
+      89.36172500398243,
+      89.54637099668616,
+      89.3034050022834,
+      89.5415100021637,
+      89.47689799970249,
+      89.44188800523989
+    ],
+    "gpu_median_ms": 89.40953826904297,
+    "wall_median_ms": 89.44188800523989,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 968690688,
+        "peak_reserved_bytes": 1040187392,
+        "allocated_after_bytes": 804731904
+      },
+      {
+        "peak_allocated_bytes": 968690688,
+        "peak_reserved_bytes": 1040187392,
+        "allocated_after_bytes": 804731904
+      },
+      {
+        "peak_allocated_bytes": 968690688,
+        "peak_reserved_bytes": 1040187392,
+        "allocated_after_bytes": 804731904
+      },
+      {
+        "peak_allocated_bytes": 968690688,
+        "peak_reserved_bytes": 1040187392,
+        "allocated_after_bytes": 804731904
+      },
+      {
+        "peak_allocated_bytes": 968690688,
+        "peak_reserved_bytes": 1040187392,
+        "allocated_after_bytes": 804731904
+      },
+      {
+        "peak_allocated_bytes": 968690688,
+        "peak_reserved_bytes": 1040187392,
+        "allocated_after_bytes": 804731904
+      },
+      {
+        "peak_allocated_bytes": 968690688,
+        "peak_reserved_bytes": 1040187392,
+        "allocated_after_bytes": 804731904
+      },
+      {
+        "peak_allocated_bytes": 968690688,
+        "peak_reserved_bytes": 1040187392,
+        "allocated_after_bytes": 804731904
+      },
+      {
+        "peak_allocated_bytes": 968690688,
+        "peak_reserved_bytes": 1040187392,
+        "allocated_after_bytes": 804731904
+      }
+    ],
+    "peak_allocated_bytes": 968690688
+  },
+  "prompt_graph": {
+    "gpu_samples_ms": [
+      83.42255147298177,
+      83.39456176757812,
+      83.45838928222656,
+      83.42050170898438,
+      83.43961588541667,
+      83.5416768391927,
+      83.49115498860677,
+      83.5952657063802,
+      83.59901936848958
+    ],
+    "gpu_median_ms": 83.45838928222656,
+    "baseline_allocated_bytes": 812849152,
+    "capture_peak_allocated_bytes": 962795520,
+    "capture_peak_reserved_bytes": 1239416832,
+    "replay_peak_allocated_bytes": 813251584,
+    "replay_peak_reserved_bytes": 1142947840,
+    "repeats_per_sample": 3
+  },
+  "startup_eager": {
+    "gpu_samples_ms": [
+      89.97990417480469,
+      89.82835388183594,
+      91.03961944580078,
+      89.75462341308594,
+      89.9768295288086,
+      90.09458923339844,
+      89.93791961669922,
+      90.0433578491211,
+      89.88569641113281
+    ],
+    "wall_samples_ms": [
+      90.02020100160735,
+      89.86015699338168,
+      91.07134800433414,
+      89.77996500470908,
+      90.0067010006751,
+      90.12555299705127,
+      89.9683610041393,
+      90.07182299683336,
+      89.91421799873933
+    ],
+    "gpu_median_ms": 89.9768295288086,
+    "wall_median_ms": 90.0067010006751,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 1056902144,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 937852928
+      },
+      {
+        "peak_allocated_bytes": 1056902144,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 937852928
+      },
+      {
+        "peak_allocated_bytes": 1056902144,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 937852928
+      },
+      {
+        "peak_allocated_bytes": 1056902144,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 937852928
+      },
+      {
+        "peak_allocated_bytes": 1056902144,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 937852928
+      },
+      {
+        "peak_allocated_bytes": 1056902144,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 937852928
+      },
+      {
+        "peak_allocated_bytes": 1056902144,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 937852928
+      },
+      {
+        "peak_allocated_bytes": 1056902144,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 937852928
+      },
+      {
+        "peak_allocated_bytes": 1056902144,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 937852928
+      }
+    ],
+    "peak_allocated_bytes": 1056902144
+  },
+  "startup_graph": {
+    "gpu_samples_ms": [
+      83.96697489420573,
+      84.11408996582031,
+      84.12228393554688,
+      84.12569681803386,
+      84.08132425944011,
+      84.07926432291667,
+      84.18167622884114,
+      84.0441182454427,
+      84.05435689290364
+    ],
+    "gpu_median_ms": 84.08132425944011,
+    "baseline_allocated_bytes": 813504512,
+    "capture_peak_allocated_bytes": 1051006976,
+    "capture_peak_reserved_bytes": 1631584256,
+    "replay_peak_allocated_bytes": 931957760,
+    "replay_peak_reserved_bytes": 1346371584,
+    "repeats_per_sample": 3
+  },
+  "cache_bytes": 88166400,
+  "fold_bytes": 28311552,
+  "decode_eager": {
+    "gpu_samples_ms": [
+      72.2278060913086,
+      73.24569702148438,
+      72.5615005493164,
+      73.02758026123047,
+      73.35116577148438,
+      74.35062408447266,
+      73.21907043457031,
+      75.59065246582031,
+      77.91410827636719
+    ],
+    "wall_samples_ms": [
+      72.26368499686942,
+      73.26756900147302,
+      72.58409099449636,
+      73.05492399609648,
+      73.37280199863017,
+      74.37388600374106,
+      73.23936899774708,
+      75.61264700052561,
+      77.93530299386475
+    ],
+    "gpu_median_ms": 73.24569702148438,
+    "wall_median_ms": 73.26756900147302,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 938286592,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 938255872
+      },
+      {
+        "peak_allocated_bytes": 938286592,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 938255872
+      },
+      {
+        "peak_allocated_bytes": 938286592,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 938255872
+      },
+      {
+        "peak_allocated_bytes": 938286592,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 938255872
+      },
+      {
+        "peak_allocated_bytes": 938286592,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 938255872
+      },
+      {
+        "peak_allocated_bytes": 938286592,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 938255872
+      },
+      {
+        "peak_allocated_bytes": 938286592,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 938255872
+      },
+      {
+        "peak_allocated_bytes": 938286592,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 938255872
+      },
+      {
+        "peak_allocated_bytes": 938286592,
+        "peak_reserved_bytes": 1228931072,
+        "allocated_after_bytes": 938255872
+      }
+    ],
+    "peak_allocated_bytes": 938286592
+  },
+  "decode_graph": {
+    "gpu_samples_ms": [
+      14.104234059651693,
+      13.705215454101562,
+      13.703797658284506,
+      13.70419184366862,
+      13.702784220377604,
+      13.703509012858072,
+      13.703477223714193,
+      13.70624033610026,
+      13.704533894856771
+    ],
+    "gpu_median_ms": 13.70419184366862,
+    "baseline_allocated_bytes": 946373120,
+    "capture_peak_allocated_bytes": 946806272,
+    "capture_peak_reserved_bytes": 1251999744,
+    "replay_peak_allocated_bytes": 946775552,
+    "replay_peak_reserved_bytes": 1082130432,
+    "repeats_per_sample": 3
+  },
+  "prepared_weight_bytes": 191692800,
+  "inference_protocol": "Prepared BF16 linear weights, FP32 master/embedding/residual; prompt=last logits without KV stores; startup includes KV allocation/copy and LLT fold rebuild; decode=one supplied token with 1024-token history; captured rewind included.",
+  "checkpoint_region": "each Transformer block; attention and FFN updates separately for attention_only; GRT recurrence gates remain outside block AC",
+  "training_protocol": "Full-token loss/backward, clip=1, AdamW FP32 state; policy=none",
+  "implementation": {
+    "torch_window_attention": "compiled FlexAttention",
+    "tensor_window_attention": "native window/shared-local kernels",
+    "tensor_shared_decode": "two-bank single-softmax kernel without KV concatenation",
+    "grt_training_rng": "Torch CUDA normal RNG on both backends, included in timing; gate/state arithmetic uses the selected backend",
+    "grt_inference_noise": 0.0,
+    "cache_profile": "one supplied token after a fixed prefix; rewind before replay"
+  },
+  "duration_seconds": 11.308683647002908,
+  "provenance": {
+    "llt_commit": "4cf1e353f3b35aecc35dd72b3adf2824b10ce83c",
+    "sources": {
+      "model/research_baselines.py": "0026c4c15c3063018ebe37e53166327c271bda3926f6fef5cdfed005d8b412c8",
+      "experiments/l40s/research_sweep.py": "594b72339980d9ced131e5e24a93b5d8c977cc413ea370bb1eb357af0100f106",
+      "model/reference.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+      "model/tensor_backend.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+      "inference/prepared.py": "c8802c225db98dc55b267602024bb0629dc4340a5c65cfaa2e52208d8a913cdf",
+      "experiments/l40s/loop_sweep.py": "4b4ba280c6954a8407555b4c0661b5ffe96e7e5743d67cd4b8c93203289ae945",
+      "experiments/l40s/timing.py": "f1b99d91a5f5d47e9915d011bec1085156a1ecdef2ca6e05e4ee4c95a9ba5d7d",
+      "experiments/l40s/runtime.py": "c4d922bfa41a4954b5c1bb2ffc362e438e95d18df20dbf1525c3f1e3e77e5ed2"
+    },
+    "tensor_sources": {
+      "packages/tensor-torch/src/tensor_torch/recurrent.py": "b6e4ebe26b263dd3cb620fc8aec14237f270423f6fd683e2fefc22329e13f76d",
+      "packages/tensor-torch/src/tensor_torch/templates/llt_window.py": "f952f721a8fb9f86bbf1745e9c91776173977b905994acb1a90a4c4704f42dac",
+      "packages/tensor-torch/src/tensor_torch/templates/recurrent_ops.py": "b614d76ce876e80366cf568877d25bf1af4138d52649cc5a2a33537bd3a3300e",
+      "packages/tensor-torch/src/tensor_torch/templates/shared_decode.py": "f952663d46e36160d4743cc486b6960e326f4acc1ba204a96eb085cd44d5769b"
+    },
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "tensor_commit": "a41ab7d0bdb03d808f8f58d15ceee517601f588a",
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "capability": [
+      8,
+      9
+    ],
+    "native_cpp_executor": true,
+    "nvrtc": "/home/sagemaker-user/tensor/build/nvrtc-12.9",
+    "driver": "595.91.07",
+    "runtime_binary_sha256": {
+      "packages/tensor-torch/src/tensor_torch/_launch.abi3.so": "7421706b1868dc723d7b6061723b928f48f7423f35de8a45e31ef10f512cbf44",
+      "packages/tensor-torch/src/tensor_torch/_executor_2_14.cpython-312-x86_64-linux-gnu.so": "0716696345eaceb596b2b6611f322762a8ad071c0517c29e1dd72f3780314b67"
+    }
+  }
+}

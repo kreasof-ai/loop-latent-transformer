@@ -4,12 +4,15 @@
 |---|---|
 | [loop-baseline/](loop-baseline/) | Original 256 performance cases, eight backend checks, and supplementary capture retries |
 | [loop-sweep/](loop-sweep/) | 416 additional rank/checkpoint cases, 12 small and 12 full-size qualifications, and numerical diagnostics |
+| [research-baselines/](research-baselines/README.md) | 480 additional architecture profiles, ten small and ten full-size qualifications |
 | `*/sources/<sha256>/` | Exact source snapshots attached to the measured runs |
 | `*/views/` | Current CPU-generated audits, tables, figures, CSVs, and view-generator manifests |
 
 The report is [LOOP_SWEEP.md](../LOOP_SWEEP.md). The combined
 [CSV](loop-sweep/views/combined.csv) and [audit](loop-sweep/views/audit.json)
-include all 672 primary records. Original summaries and figures remain beside
+include the original 672 primary records. The [joined architecture CSV](research-baselines/views/all-architectures.csv)
+adds 480 measured profiles for a total of 1152, with its own [audit](research-baselines/views/audit.json)
+and [measurement manifest](research-baselines/run-manifest.json). Original summaries and figures remain beside
 the measured JSON files for historical provenance; current navigation uses `views/`.
 
 ## Preservation and path relocation

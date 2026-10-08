@@ -72,6 +72,37 @@ class ResearchBaselinesTests(unittest.TestCase):
                 m.mlp_applications, 2 if family == "attention_only" else expected
             )
 
+    def test_grt_stochastic_training_checkpoint(self):
+        c = replace(
+            make_config("grt", 3, small=True),
+            width=32,
+            heads=2,
+            vocab=31,
+            max_seq=17,
+            mlp_width=128,
+        )
+        model = ResearchTransformer(c).double().train()
+        tokens = torch.randint(c.vocab, (2, 9))
+        results = []
+        for policy in ("none", "ac"):
+            model.zero_grad(set_to_none=True)
+            torch.manual_seed(23)
+            output = model(tokens, policy=policy)
+            output.square().mean().backward()
+            results.append(
+                (
+                    output.detach(),
+                    {n: p.grad.clone() for n, p in model.named_parameters()},
+                    torch.get_rng_state(),
+                )
+            )
+        torch.testing.assert_close(results[0][0], results[1][0], atol=0, rtol=0)
+        torch.testing.assert_close(results[0][2], results[1][2], atol=0, rtol=0)
+        for name in results[0][1]:
+            torch.testing.assert_close(
+                results[0][1][name], results[1][1][name], atol=1e-10, rtol=1e-8
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

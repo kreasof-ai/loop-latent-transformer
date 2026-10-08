@@ -8,6 +8,7 @@ Tensor adapter. The reference can run on CPU with Torch alone.
 |---|---|
 | [reference.py](reference.py) | Configuration, Torch reference, projection folding, and a simple decode reference |
 | [tensor_backend.py](tensor_backend.py) | `BackendTransformer`, explicit backend operations, training loss, prefill, and cache-aware decode |
+| [research_baselines.py](research_baselines.py) | Added recurrent/cache-sharing families with explicit source adaptations |
 | [checkpointing.py](checkpointing.py) | `CheckpointTransformer`, block AC, and exploratory latent-region LAC |
 
 Minimal reference forward:

@@ -59,3 +59,10 @@ checkpoint correctness without substituting controlled timings for measured ones
 The relevant implementation is [checkpointing.py](../model/checkpointing.py).
 The current results qualify this branch checkpoint, without demonstrating the
 intended broader memory benefit or trained quality.
+
+## Added architecture controls
+
+The [added-family study](RESEARCH_BASELINES.md) profiles training none/AC only.
+Its per-layer latent control also exposes a native low-rank attention boundary,
+so that type of checkpointing is not inherently exclusive to LLT. No LAC result
+is measured for the added families, and no full-residual compression is implied.

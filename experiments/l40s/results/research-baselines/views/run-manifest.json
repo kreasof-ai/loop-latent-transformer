@@ -1,0 +1,44 @@
+{
+  "kind": "regenerated architecture-family view",
+  "view_generator_commit": "4cf1e353f3b35aecc35dd72b3adf2824b10ce83c",
+  "view_generator_worktree_dirty": true,
+  "view_generator_sources": {
+    "experiments/l40s/research_summary.py": "7f9ae6aa99427fb12644cc6d06e9512d1a8608efa09d38237cdfd1501c75fef3",
+    "experiments/l40s/research_report.py": "6e6e49ce7f71f838861240039dd61bdc610eb3522905cbb210a412a4bb8ccb65",
+    "experiments/l40s/latent_checkpoint_report.py": "560f5681f113e1e7b8429dd69d54b46df16b2c4d906d5db67d945a07e695bffd",
+    "experiments/l40s/runtime.py": "c4d922bfa41a4954b5c1bb2ffc362e438e95d18df20dbf1525c3f1e3e77e5ed2"
+  },
+  "status": "passed",
+  "case_count": 480,
+  "joined_case_count": 1152,
+  "tensor_repository": "https://github.com/kreasof-ai/tensor",
+  "numerical_source_commit": "4cf1e353f3b35aecc35dd72b3adf2824b10ce83c",
+  "tensor_commit": "a41ab7d0bdb03d808f8f58d15ceee517601f588a",
+  "runtime_binary_sha256": {
+    "packages/tensor-torch/src/tensor_torch/_executor_2_14.cpython-312-x86_64-linux-gnu.so": "0716696345eaceb596b2b6611f322762a8ad071c0517c29e1dd72f3780314b67",
+    "packages/tensor-torch/src/tensor_torch/_launch.abi3.so": "7421706b1868dc723d7b6061723b928f48f7423f35de8a45e31ef10f512cbf44"
+  },
+  "sources": {
+    "experiments/l40s/loop_sweep.py": "4b4ba280c6954a8407555b4c0661b5ffe96e7e5743d67cd4b8c93203289ae945",
+    "experiments/l40s/research_sweep.py": "594b72339980d9ced131e5e24a93b5d8c977cc413ea370bb1eb357af0100f106",
+    "experiments/l40s/runtime.py": "c4d922bfa41a4954b5c1bb2ffc362e438e95d18df20dbf1525c3f1e3e77e5ed2",
+    "experiments/l40s/timing.py": "f1b99d91a5f5d47e9915d011bec1085156a1ecdef2ca6e05e4ee4c95a9ba5d7d",
+    "inference/prepared.py": "c8802c225db98dc55b267602024bb0629dc4340a5c65cfaa2e52208d8a913cdf",
+    "model/reference.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+    "model/research_baselines.py": "0026c4c15c3063018ebe37e53166327c271bda3926f6fef5cdfed005d8b412c8",
+    "model/tensor_backend.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4"
+  },
+  "tensor_sources": {
+    "packages/tensor-torch/src/tensor_torch/recurrent.py": "b6e4ebe26b263dd3cb620fc8aec14237f270423f6fd683e2fefc22329e13f76d",
+    "packages/tensor-torch/src/tensor_torch/templates/llt_window.py": "f952f721a8fb9f86bbf1745e9c91776173977b905994acb1a90a4c4704f42dac",
+    "packages/tensor-torch/src/tensor_torch/templates/recurrent_ops.py": "b614d76ce876e80366cf568877d25bf1af4138d52649cc5a2a33537bd3a3300e",
+    "packages/tensor-torch/src/tensor_torch/templates/shared_decode.py": "f952663d46e36160d4743cc486b6960e326f4acc1ba204a96eb085cd44d5769b"
+  },
+  "audit_sha256": "8e068a2853fbb711431c1305bf351ff7ef20b04f20c11c6cf41fd984a78288a4",
+  "measurement_manifest_sha256": "b831bbee97f4e7171872a4faa2eb6bb2a7a91dd8b7b8e5aba1727a718c717fc0",
+  "original_combined_sha256": "76b013202f95193395000ec40fbfaef38ff0c25839a6d396a6c1ad77e960f699",
+  "original_measurement_manifest_sha256": {
+    "loop-baseline": "eb27d964b19f131e9cf2f51c508f29d34f562105e0d6ee8e045fec1d9d2a12b1",
+    "loop-sweep": "db637ee6bf10a78fe30c4282b74890a517c775901d06c690d3394d51789c5a78"
+  }
+}
