@@ -1,0 +1,119 @@
+{
+  "status": "passed",
+  "kind": "regenerated view; no new GPU measurements",
+  "case_count": 256,
+  "view_generator_commit": "d4fb963011c16528b7780867b2c21069d84a46c5",
+  "view_generator_worktree_dirty": true,
+  "view_generator_sources": {
+    "model/__init__.py": "a78f9cad3b89308d43c169c9b67a12a1b76f95bdb39be201650fd3038ce4bf15",
+    "model/checkpointing.py": "29bc46e582bbd501122b22727e99b768f03a8b24acc29de1d7598b54244d8f88",
+    "model/reference.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+    "model/tensor_backend.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+    "inference/__init__.py": "dfc8503a989445392b7f36eb99dc1e147fc5889e14bb816a53ef95f1f8dfeff8",
+    "inference/prepared.py": "c8802c225db98dc55b267602024bb0629dc4340a5c65cfaa2e52208d8a913cdf",
+    "experiments/l40s/__init__.py": "06a97d59e59f06f0bed0555296c91aedf7d6231c810f5eb5d80a486f6269dce0",
+    "experiments/l40s/checkpoint_numerics_diagnostic.py": "3c1a85c091bf5869da63f1371b052e88481f7e423b5594992471094bb436c32d",
+    "experiments/l40s/full_latent_qualification.py": "14fb9eeefc9bc78ee78b6a3cbea31444965255039f4991da7e68d2334f06bff5",
+    "experiments/l40s/latent_checkpoint_manifest.py": "98866a5ef708068261603d79f499ac532cef5908a13bc5ddf3f6858112acbcad",
+    "experiments/l40s/latent_checkpoint_report.py": "f4460fabf2b7b869cb395efabb2293726f9c8c09334f2c2654fdb25b574f56a2",
+    "experiments/l40s/latent_checkpoint_summary.py": "288c66eec0609be1d61d0edf18035911ca737027396cdc38b36815899c686638",
+    "experiments/l40s/latent_checkpoint_sweep.py": "4adefa81197c7f8470df0e17f2ff006f003290ac6d3d6357452446960168d8e6",
+    "experiments/l40s/loop_sweep.py": "4b4ba280c6954a8407555b4c0661b5ffe96e7e5743d67cd4b8c93203289ae945",
+    "experiments/l40s/loop_sweep_manifest.py": "e444cb5c605900e306a7114b27f29d0bd4db8aa2916c4896d9b9cc350972f9c9",
+    "experiments/l40s/loop_sweep_record.py": "90ed38591ae6a8a4dbd77bcdc3c20ac270b7e25aac0b3130a1c38180916cb7bc",
+    "experiments/l40s/loop_sweep_recovery.py": "a49a799d76818437211b05ca220bfe3a2cdb66f6ce48989ace01b7f7855ebdec",
+    "experiments/l40s/loop_sweep_summary.py": "e0113ebcc568723e63ef4b02657af405fd304deba76247604b940b8c988565a4",
+    "experiments/l40s/manifest.py": "6dc5bf6c2c94dbb496b9b623b8c4d21506d1c67ed67303fa9eb3ed0fbbabe1b7",
+    "experiments/l40s/run.sh": "3b3c15906a55bb2d26427ca17858db6fd3ea26cf5181329e365c9208489c80f2",
+    "experiments/l40s/run_latent_checkpoint_sweep.sh": "b272bf05f12aa484cf1cc3fd644254967c1d6f66d1073a2834ed1e23dd3863ae",
+    "experiments/l40s/run_loop_sweep.sh": "8c918f25b9d9e97e476f94b4b9a087fd0b75856cba2e8e953c59ad9341b02937",
+    "experiments/l40s/run_loop_sweep_recovery.sh": "ed25f4844135093fab2bfc4ab411fffc1dbc31adc8de2ca4f6f9a0b05136dbbe",
+    "experiments/l40s/runtime.py": "c4d922bfa41a4954b5c1bb2ffc362e438e95d18df20dbf1525c3f1e3e77e5ed2",
+    "experiments/l40s/timing.py": "f1b99d91a5f5d47e9915d011bec1085156a1ecdef2ca6e05e4ee4c95a9ba5d7d"
+  },
+  "audit_sha256": "0e6f086df4a6e64543d8bed4dbe01521ec2b6e8e5083c9394ab5f335f7739216",
+  "measured_sources": {
+    "numerical_sources": {
+      "experiments/l40s/loop_sweep.py": "930d47ffb8708ba13ad83f14a461ed1c67e9df1df3e12f4455aca69ac188dd30",
+      "experiments/l40s/model.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+      "experiments/l40s/nanogpt_scale.py": "cfacf0fc9d9d84ab49adfaef58fd538e7e76a48dd79448c84a89d05f6c463813",
+      "experiments/l40s/prepared_inference.py": "64ff5add22486377e0ce39a2cb561ee5de0db3842744280295611d41b2de80e4",
+      "experiments/l40s/tensor_model.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4"
+    }
+  },
+  "original_measurement_manifests": {
+    "experiments/l40s/results/loop-baseline/run-manifest.json": {
+      "sha256": "eb27d964b19f131e9cf2f51c508f29d34f562105e0d6ee8e045fec1d9d2a12b1",
+      "manifest": {
+        "status": "passed",
+        "tensor_repository": "https://github.com/kreasof-ai/tensor",
+        "llt_numerical_source_commit": "d1966451b8e73320cd795ff96dde31b99d0a61cc",
+        "tensor_commit": "a86159cea38d801ae18f740b0e62dea08a77c565",
+        "runtime_binary_sha256": {
+          "_executor_2_14.cpython-312-x86_64-linux-gnu.so": "0716696345eaceb596b2b6611f322762a8ad071c0517c29e1dd72f3780314b67",
+          "_launch.abi3.so": "7421706b1868dc723d7b6061723b928f48f7423f35de8a45e31ef10f512cbf44"
+        },
+        "sources": {
+          "experiments/l40s/loop_sweep.py": "930d47ffb8708ba13ad83f14a461ed1c67e9df1df3e12f4455aca69ac188dd30",
+          "experiments/l40s/loop_sweep_summary.py": "f28617788f5384c9cac63243774e31d305111c4ac2dc2c5a5b5eba6641576b5c",
+          "experiments/l40s/loop_sweep_manifest.py": "a669d636987ee2e03f25b6a7dd9934538386a9552034e173bbe8dbf5c1bae11c",
+          "experiments/l40s/loop_sweep_report.py": "6cc61d2502e62a6ac654b06cddfa48f473a81d8d74fee7ad1ff003e976e0a50b",
+          "experiments/l40s/loop_sweep_record.py": "b4087f95fd71022756fd79197d14c486af4a2411759d1c8bc6e2bb3d892e8ff5",
+          "experiments/l40s/loop_sweep_recovery.py": "b2bf31428f55628dc7c61268e4c63189a0f5ebf86cdf4026445b68191ca3da3e",
+          "experiments/l40s/run_loop_sweep.sh": "78f7c3283d57e5ba86dca739007e99546d818d3d006a0267e554a4fc3042f661",
+          "experiments/l40s/run_loop_sweep_recovery.sh": "1b590c8d50aebac75140fc3bf68ab48f789b95981d3bc735a33e89155ba04d49",
+          "experiments/l40s/LOOP_SWEEP.md": "0c3fcafd61ff1b19dde2566f1b67f55e148f1d2a411f8ef1707ddd11b0303521",
+          "experiments/l40s/model.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+          "experiments/l40s/tensor_model.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+          "experiments/l40s/prepared_inference.py": "64ff5add22486377e0ce39a2cb561ee5de0db3842744280295611d41b2de80e4",
+          "experiments/l40s/nanogpt_scale.py": "cfacf0fc9d9d84ab49adfaef58fd538e7e76a48dd79448c84a89d05f6c463813"
+        },
+        "audit_sha256": "0e6f086df4a6e64543d8bed4dbe01521ec2b6e8e5083c9394ab5f335f7739216",
+        "case_count": 256,
+        "correctness_count": 8
+      }
+    },
+    "experiments/l40s/results/loop-sweep/run-manifest.json": {
+      "sha256": "db637ee6bf10a78fe30c4282b74890a517c775901d06c690d3394d51789c5a78",
+      "manifest": {
+        "status": "passed",
+        "case_count": 672,
+        "new_case_count": 416,
+        "reused_case_count": 256,
+        "qualification_count": 12,
+        "full_qualification_count": 12,
+        "numerical_source_commit": "36e40d7be01ed3be942689efa109f858fbe4a1f2",
+        "tensor_repository": "https://github.com/kreasof-ai/tensor",
+        "tensor_commit": "7fc6b8cf9c7a2e58a55d9f8ba7e7dc1a990d87eb",
+        "runtime_binary_sha256": {
+          "_executor_2_14.cpython-312-x86_64-linux-gnu.so": "0716696345eaceb596b2b6611f322762a8ad071c0517c29e1dd72f3780314b67",
+          "_launch.abi3.so": "7421706b1868dc723d7b6061723b928f48f7423f35de8a45e31ef10f512cbf44"
+        },
+        "sources": {
+          "experiments/l40s/latent_checkpoint_model.py": "4faf147a1f06729b353fbf1a97cc089aa8be72eedddf091f6725e95681593986",
+          "experiments/l40s/latent_checkpoint_sweep.py": "54591f2d918a69e02a24d6250da0653a6b3d74a9c751f8dbe9c70f4354b1ac00",
+          "experiments/l40s/latent_checkpoint_summary.py": "a40366715f381344e2b900e582b3e60d82fb3ab59a3fa87194f6f93d692bafc6",
+          "experiments/l40s/latent_checkpoint_manifest.py": "e4fe369f030930d7b21db8e421919ee629fb39f582abf9e838c41521e375e7cc",
+          "experiments/l40s/latent_checkpoint_report.py": "def73a600e16395cdefa5e47fdbd6c6aa4aa101dc9a9c0e273788f9c654089bd",
+          "experiments/l40s/run_latent_checkpoint_sweep.sh": "368ad6532f5d02a9f5c237b005ff702e39f20319f5a8933d4ebfce99c7cae8dc",
+          "experiments/l40s/full_latent_qualification.py": "6b029810b1e5a2de044f28e843aa67bf236b620c4998d774070afd6fb273042f",
+          "experiments/l40s/checkpoint_numerics_diagnostic.py": "c81d87ad4028b50ff38e24815b6d4d648e4b5bfff574f3c3b3953c4362758ecf",
+          "experiments/l40s/LOOP_SWEEP.md": "08d8882bdc486c53aae481f4985373176b7b7047bd4e57eb0e5a0332cfdf9b01"
+        },
+        "audit_sha256": "ccc2831e30be3f26e3e64118b1eb095a1d32322b2c457392d047d58cd3b49456",
+        "baseline_manifest_sha256": "eb27d964b19f131e9cf2f51c508f29d34f562105e0d6ee8e045fec1d9d2a12b1",
+        "ac_region": "one full Transformer block",
+        "lac_region": "existing LLT latent attention and folded output projection; explicit inputs Q_r, C, output weight",
+        "checkpoint_exact": true,
+        "lac_applicable_models": [
+          "llt"
+        ],
+        "qualification_controls": "Repeat uncheckpointed backward; deterministic Torch algorithms and CUBLAS_WORKSPACE_CONFIG=:4096:8 only for correctness; unchanged Tensor kernels and primary performance settings.",
+        "notes": "Primary old no-checkpoint records reused intact; original allocator-setup retries remain separate; all residual/query/MLP state outside LAC counts toward measured memory."
+      }
+    }
+  },
+  "published_relocation_sha256": "eeb7ced47aed25225b315c856eb7d3c608a9688d46bce6d05efa51325098c300",
+  "tensor_repository": "https://github.com/kreasof-ai/tensor",
+  "notes": "Source hashes under measured_sources describe frozen measurement snapshots. View generator sources describe the current layout and report tools. Original measurement manifests remain unchanged."
+}

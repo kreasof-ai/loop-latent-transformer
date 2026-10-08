@@ -1,122 +1,77 @@
 # L40S loop, rank, and checkpoint sweep
 
-The requested grid is batch 4, context 1024, and loop count T=1..16. Numerical
-kernels use [Tensor](https://github.com/kreasof-ai/tensor), with a matched PyTorch
-control using Flash SDPA and fused AdamW. Each case runs in its own fresh process;
-GPU jobs are sequential. The original 256-case study below uses no activation checkpointing or streamed loss. The completed [rank/AC/LAC comparison](#exact-rank-ac-and-native-boundary-lac-results) follows it.
+This is the project's **main measured experiment**: loop counts T=1..16,
+batch 4, sequence length 1024, and LLT KV ranks 32, 64, and 128 on one NVIDIA L40S.
+It compares [Tensor](https://github.com/kreasof-ai/tensor) numerical kernels with
+matched PyTorch controls using Flash SDPA and fused AdamW. Inputs are synthetic;
+this study measures execution cost and numerical consistency, without a trained
+language-model quality evaluation.
 
-All models have residual width 768, 12 heads (head dimension 64), learned absolute
-position embeddings of capacity 1025, a 50,304-token vocabulary, independent input
-embedding/output weights, exact GELU, and unweighted RMSNorm with epsilon 1e-5.
-LLT uses a shared latent of rank 64. Master weights, residuals, embeddings, AdamW
-states, and loss reductions are FP32; projection and attention arithmetic is BF16.
-Serving prepares BF16 linear-weight copies on both backends while retaining FP32
-master parameters. Those copies count toward peak memory.
+The current **LAC is an exploratory, exact attention-region checkpoint policy**.
+It is narrower than block AC and is not a completed strategy for checkpointing
+an entire loop through its latent state. See [checkpoint boundaries](../../docs/CHECKPOINTING.md)
+and the [architecture](../../docs/ARCHITECTURE.md).
+
+## Model and measurement protocol
+
+Every model uses residual width 768, 12 heads (head dimension 64), independent
+input embedding/output weights, vocabulary 50,304, learned absolute positions
+with capacity 1025, exact GELU, and unweighted RMSNorm with epsilon 1e-5.
+Master weights, embeddings, residuals, AdamW states, and loss reductions are FP32;
+projection and attention arithmetic is BF16. Serving prepares BF16 linear-weight
+copies while retaining FP32 masters; these copies count toward peak memory.
 
 | Architecture | Unique blocks | Applied blocks | MLP hidden width |
 |---|---:|---:|---:|
-| LLT | 12 | 12T | 3072 |
+| LLT, ranks 32/64/128 | 12 | 12T | 3072 |
 | Naive Loop | 12 | 12T | 3072 |
 | Independent stack | 12T | 12T | 3072 |
 | Fixed depth, matched parameters | 12 | 12 | 768(6T−2) |
 
-The fixed-depth control is a conventional Transformer with independent blocks.
-Its active MLP weights match the stack's total parameter count exactly at each T.
-This keeps residual width, heads, vocabulary, and embeddings identical. It changes
-the attention-to-MLP compute balance: equal parameter counts do not imply equal
-attention work or equal activation memory. It never pads the model with unused
-parameters. At T=1, the three conventional models are equivalent architectures,
-but are measured in independent processes.
+The fixed-depth control matches the stack's parameter count exactly at each T
+using active MLP weights. Residual width, heads, vocabulary, and embeddings stay
+fixed. This changes its attention-to-MLP compute balance; parameter matching does
+not match attention work or activation memory. At T=1 the three conventional
+controls have equivalent architectures and are measured independently.
 
-Training measures complete forward, full-token output projection/cross entropy,
-backward, global gradient clipping (norm 1), and AdamW updates (learning rate
-0.0006, betas 0.9/0.95, weight decay 0.1). Inputs and targets are seeded synthetic
-CUDA token IDs. This is a performance study, not a trained-quality evaluation.
+Training measures forward, full-token output projection/cross entropy, backward,
+global gradient clipping (norm 1), and AdamW updates (learning rate 0.0006,
+betas 0.9/0.95, weight decay 0.1). Input and target CUDA token IDs use seed 9505.
+A step processes 4096 tokens. AC checkpoints full Transformer blocks with
+non-reentrant recomputation. LAC checkpoints only LLT's latent attention and
+folded output projection, with Q_r, C, and the folded output weight as explicit
+inputs. LAC uses the existing model rank and adds no compression codec or parameters.
+Query formation, full-width residuals, and MLP activations remain outside LAC.
+Conventional controls have no matching native latent boundary, so LAC is N/A.
 
-Inference reports three separate operations:
+Inference has no backward checkpoints and reports three operations:
 
-- Prompt: causal 1024-token forward and last-position logits, without persistent KV
-  allocation.
-- Serving startup: the same prompt, plus KV allocation/copy and LLT fold rebuild.
-- Cached decode: one supplied token after a 1024-token history, with a 1025-slot KV
-  capacity. This measures the model computation, without sampling or beam search.
+- **Prompt:** causal 1024-token forward and last-position logits, without persistent KV allocation.
+- **Serving startup:** prompt plus KV allocation/copy and LLT fold rebuild.
+- **Cached decode:** one supplied token after a 1024-token history, using 1025 cache slots.
 
-All latencies are per batch of four. A training step consumes 4096 tokens; a
-cached-decode call produces one token per sequence (four tokens total).
+Latency is per batch of four. Cached decode computes four supplied tokens; it
+includes no token sampling or beam search. Historical cache copies and prepared
+weights are outside cached-token timing and included in live memory.
 
-There are three warmups and nine timing samples for each operation. Eager results
-include CUDA-event and synchronized wall time. CUDA graphs remove Python launch
-cost; each sample times three replays and divides by three. Captured decode
-includes a logical cache rewind to make every replay use the same history.
-Training validates finite losses and every parameter's gradient, then verifies
-GPU optimizer counters advance through all 42 actual updates; graph capture itself
-records kernels without performing an update. Compilation and warmup are excluded.
+Cases run sequentially in fresh processes. Compilation and warmup are excluded.
+There are three warmups and nine timing samples per operation. Eager results
+retain CUDA-event latency and synchronized wall time. Each graph sample times
+three replays and divides by three. Decode rewinds the logical cache before
+replay, keeping the same history. Successful training cases validate finite loss
+and every parameter gradient, and check all 42 actual optimizer updates.
 
-Eager memory is PyTorch's maximum allocated memory during a measured call. Graph
-memory is the maximum allocated during **capture**, including capture temporaries
-and the private graph pool. Replay peaks and allocator reservations are also
-retained in the raw JSON. These include model weights and live model state, not
-just incremental activation bytes; they exclude driver/context allocations and
-allocator reservations from the allocated metric. Models that exceed the GPU
-budget are recorded as OOM at the exact failed operation. No smaller geometry is
-substituted. A later operation skipped after OOM has no timing value.
+Eager memory is peak allocated memory during a call. Graph memory is peak
+allocated memory during **capture**, including temporaries and the graph pool.
+Both include weights and live model state; allocated memory excludes allocator
+reservations and driver/context memory. Replay peaks and reservations remain in
+raw records. OOM is recorded at the failed operation with unchanged geometry;
+operations skipped after an earlier OOM have no latency. Supplementary retries
+that release eager gradients before capture remain separate from primary cases.
 
-The full grid has 256 performance cases (4 architectures × 16 loop counts × 2
-backends × 2 phases), plus eight small correctness cases covering loop counts 4
-and 16. Qualification uses width 128, two heads, two base layers, batch 2, and sequence
-32. It compares Tensor against matched PyTorch outputs and every parameter
-gradient, checks cache/full-forward equivalence, and verifies that stack and
-fixed-depth parameter counts agree. Full-size training additionally checks every
-parameter gradient for finiteness. Raw JSON pins source snapshots,
-Tensor revision, runtime versions, and compiled artifact identities.
+## Results
 
-Run using the existing Tensor environment with its native Torch executor and
-CUDA 12.9 NVRTC installation:
-
-```bash
-LLT_RESUME=1 experiments/l40s/run_loop_sweep.sh
-LLT_RESUME=1 experiments/l40s/run_loop_sweep_recovery.sh
-python experiments/l40s/loop_sweep_summary.py
-python experiments/l40s/loop_sweep_manifest.py
-python experiments/l40s/loop_sweep_report.py
-```
-
-Set `LLT_PYTHON`, `TENSOR_CHECKOUT`, and `TENSOR_NVRTC_HOME` for another installation.
-The summary requires Matplotlib; it can run in a separate CPU Python environment.
-Do not run another GPU benchmark concurrently. `LLT_RESUME=1` skips completed JSON
-files, including recorded OOM cases. Remove a specific result file to rerun it.
-Results and figures are written to `benchmarks/results/l40s-loop-sweep/`.
-
-Capture failures can surface as chained allocation/graph-instantiation exceptions.
-The CPU recorder requires explicit CUDA OOM evidence, retains the unmodified
-exception JSON under `observed-capture-oom/`, and annotates its classification.
-Other exceptions still stop the sweep.
-
-A supplementary capture retry releases the eager gradients and allocator caches
-after graph warmup, before capture. It preserves all numerical kernels, optimizer
-settings, input geometry, and 42-update validation. These retries are stored in
-`capture-recovery/` and do not replace the primary measurements. They distinguish
-setup/pool reservations from a model that cannot complete an eager training step.
-
-## Exact rank, AC, and native-boundary LAC results
-
-**672 primary performance records:** 416 new cases and 256 unchanged original cases. **664 passed; 8 recorded OOM.** There are 12 small qualification cases and 12 full-size T=16 qualification cases, with 954 independently hashed sm89 CUDA artifacts.
-
-All runs use B4/S1024, width 768, 12 heads, 12 base blocks, vocabulary 50,304, and T=1..16. LLT KV ranks are 32, 64, and 128. Conventional model geometry, the exact stack/fixed-depth parameter match, precision, seeded tokens, optimizer, timing samples, and primary graph-capture setup follow the original protocol above.
-
-**AC** checkpoints one full Transformer block with non-reentrant recomputation. **LAC** checkpoints only LLT’s existing latent attention and folded output projection, using the original projected queries Q_r, shared KV latent C, and folded output weight as explicit inputs. It adds no codec or trainable parameters and preserves all gradient paths. LAC uses the model’s existing rank; there is no separate checkpoint-compression rank. Naive Loop and both conventional stacked controls have no such latent boundary and show **LAC: N/A**.
-
-The policies cover different regions: AC recomputes a whole block; LAC recomputes the latent attention/output branch. Query formation, residual and MLP paths remain outside LAC and contribute to peak memory. The shared latent alone does not reconstruct those states or establish constant total training memory. This is exact checkpointing of the unchanged forward model.
-
-Inference stores no backward activations, so AC/LAC do not create separate inference configurations. Rank-32/rank-128 LLT inference is newly measured; rank-64 and baseline inference is reused. The original 256 records are preserved, and supplementary capture-setup retries are not substituted for primary OOMs. A skipped graph after eager OOM is labelled separately. Compilation/warmup are excluded; every successful full training profile checks finite loss/gradients and all 42 optimizer updates.
-
-### Exactness and cache qualification
-
-The small checks cover every variant at T=4 and T=16 with width 128, two base blocks, batch 2, and sequence 32. Both backends compare AC and applicable LAC gradients against uncheckpointed gradients, and Tensor against Torch within BF16 tolerances. Full-size checks use width 768, 12 base blocks, B4/S1024 at T=16, unchanged initial weights, no optimizer between policies, and CPU reference gradients to bound GPU residency. Each full-size check repeats uncheckpointed backward before comparing policies. Torch correctness checks enable deterministic algorithms and CUBLAS_WORKSPACE_CONFIG=:4096:8; Tensor checks use the unchanged kernels. These correctness controls do not replace or alter the primary performance settings. All parameter relative L2 errors must be below 1e-5; forward losses must agree exactly. Every check also compares supplied-token cached decode after a prefix with matching full-forward logits (maximum error <0.05; relative L2 <0.03). These qualify numerical behavior and do not establish trained language-model quality.
-
-Default Torch BF16 backward is not a bitwise reference at full size. In the rank-32 diagnostic, two unchanged uncheckpointed runs differ by about 0.6% in the worst parameter, with comparable AC/LAC differences. Disabling the autocast cache does not remove this variation. Deterministic execution gives zero error for repeated uncheckpointed backward, AC and LAC. This is floating-point execution variability, without an approximate checkpoint codec. The [diagnostics](../../benchmarks/results/l40s-latent-checkpoint-sweep/diagnostics/) retain both the original failed strict check and the repeat/control results.
-
-Observed worst within-backend checkpoint gradient relative L2: **1.44652e-09**. Full details: [exact-gradient CSV](../../benchmarks/results/l40s-latent-checkpoint-sweep/exact-gradient-checks.csv).
+**672 performance records: 664 passed and 8 recorded OOM.** The combined study reuses all 256 original records and adds 416 rank/checkpoint cases. Every new performance case passed.
 
 ### T=16 training endpoint
 
@@ -124,7 +79,7 @@ Cells are **CUDA graph ms / capture peak allocated GiB**, per batch of four.
 
 **Tensor**
 
-| Architecture | None | AC | LAC |
+| Architecture | None | AC | LAC (exploratory) |
 |---|---:|---:|---:|
 | LLT rank 32 | 359.60 / 22.85 | 448.67 / 4.78 | 377.38 / 21.12 |
 | LLT rank 64 | 411.77 / 25.11 | 518.51 / 4.79 | 432.84 / 21.70 |
@@ -135,7 +90,7 @@ Cells are **CUDA graph ms / capture peak allocated GiB**, per batch of four.
 
 **Torch**
 
-| Architecture | None | AC | LAC |
+| Architecture | None | AC | LAC (exploratory) |
 |---|---:|---:|---:|
 | LLT rank 32 | 308.60 / 21.76 | 367.12 / 6.40 | 316.28 / 20.60 |
 | LLT rank 64 | 350.49 / 23.47 | 411.93 / 6.42 | 354.35 / 21.19 |
@@ -144,28 +99,58 @@ Cells are **CUDA graph ms / capture peak allocated GiB**, per batch of four.
 | Independent stack | — (eager OOM) | 584.96 / 23.06 | N/A |
 | Fixed depth / matched params | OOM | 422.95 / 22.98 | N/A |
 
-### Data, figures, and reproduction
+At rank 64 and T=16, Tensor AC uses 4.79 GiB versus 21.70 GiB for
+LAC and 25.11 GiB without checkpoints. These policies recompute different regions:
+AC discards full-block intermediates; LAC retains the residual/query/MLP paths.
+This result motivates further checkpoint design rather than a claim that the
+current LAC achieves constant total training memory.
 
-- [Complete combined CSV](../../benchmarks/results/l40s-latent-checkpoint-sweep/combined.csv), including eager GPU/wall latency, serving startup, capture peak allocation, origin, parameters, cache bytes, and raw-record paths. Raw records also retain replay allocation.
-- [Audit](../../benchmarks/results/l40s-latent-checkpoint-sweep/audit.json) and [manifest](../../benchmarks/results/l40s-latent-checkpoint-sweep/run-manifest.json).
-- Numerical kernels use [Tensor](https://github.com/kreasof-ai/tensor); successful Tensor cases have zero implicit numerical fallback. GPU jobs run sequentially in fresh processes.
+![Training GPU latency](results/loop-sweep/views/training_graph-gpu_ms.png)
 
-```bash
-LLT_RESUME=1 experiments/l40s/run_latent_checkpoint_sweep.sh
-python experiments/l40s/latent_checkpoint_summary.py
-python experiments/l40s/latent_checkpoint_report.py
-python experiments/l40s/latent_checkpoint_manifest.py
-```
+![Training peak allocated memory](results/loop-sweep/views/training_graph-peak_gib.png)
 
-![Training GPU latency](../../benchmarks/results/l40s-latent-checkpoint-sweep/training_graph-gpu_ms.png)
+![Cached inference](results/loop-sweep/views/decode_graph.png)
 
-![Training peak allocated memory](../../benchmarks/results/l40s-latent-checkpoint-sweep/training_graph-peak_gib.png)
+## Numerical qualification
 
-![Cached inference](../../benchmarks/results/l40s-latent-checkpoint-sweep/decode_graph.png)
+The audit verifies 12 small and 12 full-size T=16 checkpoint qualifications, plus eight original backend correctness cases. It verifies 954 unique hashed sm89 CUDA artifacts and zero implicit Tensor numerical fallback.
 
-PNG/PDF exports for eager training, prompt inference, serving startup and cached decode are beside the captured training figures. Raw samples, runtime versions, compiled artifact hashes and source snapshots remain available.
+Small checks cover every variant at T=4 and T=16, width 128, two
+base blocks, batch 2, and sequence 32. Full-size checks use the measured geometry
+at T=16 with unchanged initial weights, no optimizer between policies, and
+reference gradients streamed to CPU. AC and applicable LAC gradients are compared
+with uncheckpointed gradients; full checks first repeat uncheckpointed backward.
+Within-backend parameter relative L2 must be below 1e-5 and forward losses must
+agree exactly. Cached decode is compared with full-forward supplied-token logits
+(maximum error <0.05; relative L2 <0.03). These checks establish numerical behavior
+for this implementation, without evaluating trained quality.
 
-### Combined tables for every loop count
+Default Torch BF16 backward is not a bitwise full-size reference. Two unchanged
+uncheckpointed rank-32 runs differed by about 0.6% in the worst parameter, with
+comparable AC/LAC variation. Disabling the autocast cache did not remove it.
+Torch correctness checks therefore use deterministic algorithms and
+CUBLAS_WORKSPACE_CONFIG=:4096:8; repeated uncheckpointed backward, AC, and LAC then
+agree exactly. Tensor qualification retains the original kernels. These controls
+are limited to correctness checks; primary performance settings are unchanged.
+The [diagnostics](results/loop-sweep/diagnostics/) preserve the original strict
+failure and repeat/control results.
+
+Observed worst within-backend checkpoint gradient relative L2: **1.44652e-09**. See the [gradient checks CSV](results/loop-sweep/views/exact-gradient-checks.csv).
+
+## Records and reproduction
+
+- [Combined CSV](results/loop-sweep/views/combined.csv): all eager/graph metrics, parameters, caches, origins, and raw-record paths.
+- [Combined audit](results/loop-sweep/views/audit.json) and [view manifest](results/loop-sweep/views/run-manifest.json).
+- Immutable measurement manifests: [baseline](results/loop-baseline/run-manifest.json) and [extension](results/loop-sweep/run-manifest.json).
+- [Result layout and relocation map](results/README.md); [reproduction guide](../../docs/REPRODUCIBILITY.md).
+- [Supplementary capture retries](results/loop-baseline/views/capture-recovery.csv), separate from primary OOMs.
+
+The plots also have PDF exports. Eager training, prompt, and serving-startup plots
+are beside the plotted graph results. Original payloads and source snapshots
+remain byte-preserved; regenerated views describe the current file locations.
+Earlier exploratory studies are indexed in the [archive](../../archive/README.md).
+
+## Combined tables for every loop count
 
 Cells are **CUDA graph ms / capture peak allocated GiB**, per batch of four. S=1024. All checkpoint policies are exact. LAC is N/A without an existing latent boundary. AC checkpoints full blocks; LAC checkpoints the latent attention/output region.
 
