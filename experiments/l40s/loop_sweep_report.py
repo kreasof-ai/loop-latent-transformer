@@ -90,6 +90,18 @@ def main():
         text += [f"- {LABELS[r['model']]} / {r['backend']} / T={r['loops']} / `{r['failed_stage']}`." for r in oom]
         text += ['','A recorded OOM does not substitute a smaller batch, shorter sequence, or checkpointed model. '
                  'Operations completed before an OOM remain in the CSV; later skipped operations have no timing value.']
+    if summary.get('capture_recovery'):
+        text += ['', '## Controlled capture retries','',
+                 'These additional measurements release eager gradients, collect garbage, and empty cached allocations after '
+                 'graph warmup and before capture. Batch, sequence, model parameters, numerical kernels, optimizer, '
+                 'and the 42-update counter check stay identical. They do not replace the original grid. '
+                 'A capture OOM is therefore distinguished from an eager-training OOM and from avoidable setup storage.','',
+                 '| Architecture | Backend | T | Retry graph ms / peak GiB | Released gradients (GiB) |',
+                 '|---|---|---:|---:|---:|']
+        for r in summary['capture_recovery']:
+            value=f"{r['graph_ms']:.2f} / {r['capture_peak_gib']:.2f}" if 'graph_ms' in r else 'OOM'
+            released=f"{r['released_gradient_gib']:.2f}" if 'released_gradient_gib' in r else '—'
+            text.append(f"| {LABELS[r['model']]} | {r['backend']} | {r['loops']} | {value} | {released} |")
     text += ['', '## Figures and complete data','',
              '![Training CUDA graph latency and memory](results/l40s-loop-sweep/training-graph.png)','',
              '![Cached inference latency and memory](results/l40s-loop-sweep/decode-graph.png)','',
@@ -112,6 +124,7 @@ def main():
              'are retained separately in JSON. Driver/context allocations and allocator reservations are outside the plotted allocated metric.','',
              'See the [complete reproduction protocol](../experiments/l40s/LOOP_SWEEP.md). Run:', '', '```bash',
              'LLT_RESUME=1 experiments/l40s/run_loop_sweep.sh',
+             'LLT_RESUME=1 experiments/l40s/run_loop_sweep_recovery.sh',
              'python experiments/l40s/loop_sweep_summary.py',
              'python experiments/l40s/loop_sweep_manifest.py',
              'python experiments/l40s/loop_sweep_report.py','```','',

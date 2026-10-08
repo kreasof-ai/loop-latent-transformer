@@ -83,17 +83,65 @@ def main():
     assert set(rows)==expected, f'Missing cases: {sorted(expected-set(rows))}'
     assert len(checks)==8
     assert len(numerical_profiles)==1, 'numerical sources changed during the sweep'
+    recovery=[]
+    recovery_inputs={}
+    for p in sorted((OUT/'capture-recovery').glob('training-*.json')):
+        d=json.loads(p.read_text());a=d['arguments']
+        assert d['status'] in ('passed','out_of_memory'),(p,d['status'])
+        key=('training',a['model'],a['backend'],a['loops'])
+        assert rows[key]['status']=='out_of_memory' and rows[key]['failed_stage']=='training_graph'
+        assert tuple(sorted(d['provenance']['sources'].items())) in numerical_profiles
+        source=OUT/'capture-recovery'/d['capture_setup']['source_snapshot']
+        assert hashlib.sha256(source.read_bytes()).hexdigest()==d['capture_setup']['source_sha256']
+        for ar in d.get('coverage',{}).get('artifacts',[]):
+            assert ar['target']=='sm_89'
+            identity=(ar['path'],ar['sha256'])
+            if identity not in verified_artifact_files:
+                assert hashlib.sha256(Path(ar['path']).read_bytes()).hexdigest()==ar['sha256']
+                verified_artifact_files.add(identity)
+            artifacts[ar['sha256']]=ar
+        assert not d.get('coverage',{}).get('fallbacks',[])
+        r=dict(model=a['model'],backend=a['backend'],loops=a['loops'],status=d['status'])
+        if 'training_graph' in d:
+            g=d['training_graph'];counts=d['graph_step_counter']
+            assert counts['min']==counts['max']==counts['expected']==42
+            assert g['released_gradient_bytes']>=d['parameter_bytes']
+            assert d['all_parameter_gradients_finite']
+            r.update(graph_ms=g['gpu_median_ms'],capture_peak_gib=g['capture_peak_allocated_bytes']/2**30,
+                     capture_reserved_gib=g['capture_peak_reserved_bytes']/2**30,
+                     released_gradient_gib=g['released_gradient_bytes']/2**30)
+        recovery.append(r)
+        recovery_inputs[str(p.relative_to(OUT))]=hashlib.sha256(p.read_bytes()).hexdigest()
+    required_recovery={(r['model'],r['backend'],r['loops']) for r in rows.values()
+                       if r['status']=='out_of_memory' and r['failed_stage']=='training_graph'}
+    assert {(r['model'],r['backend'],r['loops']) for r in recovery}==required_recovery
     ordered=[rows[k] for k in sorted(rows)]
-    audit=dict(status='passed',case_count=len(rows),correctness_checks=checks,inputs=inputs,
+    observations={}
+    observed=list((OUT/'observed-capture-oom').glob('*.json'))+list((OUT/'capture-recovery/observed-capture-oom').glob('*.json'))
+    for p in sorted(observed):
+        original=json.loads(p.read_text())
+        classified=json.loads((p.parent.parent/p.name).read_text())
+        assert original['status']=='error' and classified['status']=='out_of_memory'
+        assert classified['classification']['original_sha256']==hashlib.sha256(p.read_bytes()).hexdigest()
+        assert ('torch.OutOfMemoryError: CUDA out of memory' in original['traceback']
+                or 'CUDA_ERROR_OUT_OF_MEMORY' in original['traceback'])
+        observations[str(p.relative_to(OUT))]=hashlib.sha256(p.read_bytes()).hexdigest()
+    audit=dict(status='passed',case_count=len(rows),correctness_checks=checks,inputs=inputs,observations=observations,recovery_inputs=recovery_inputs,
                numerical_sources=dict(next(iter(numerical_profiles))),
                tensor_artifact_count=len(artifacts),artifacts=artifacts)
     (OUT/'audit.json').write_text(json.dumps(audit,indent=2)+'\n')
-    (OUT/'summary.json').write_text(json.dumps(dict(status='passed',rows=ordered),indent=2)+'\n')
+    (OUT/'summary.json').write_text(json.dumps(dict(status='passed',rows=ordered,capture_recovery=recovery),indent=2)+'\n')
     fields=list(dict.fromkeys(k for r in ordered for k in r))
     with (OUT/'summary.csv').open('w',newline='') as f:
         writer=csv.DictWriter(f,fieldnames=fields)
         writer.writeheader()
         writer.writerows(ordered)
+    if recovery:
+        fields=list(dict.fromkeys(k for r in recovery for k in r))
+        with (OUT/'capture-recovery/summary.csv').open('w',newline='') as f:
+            writer=csv.DictWriter(f,fieldnames=fields)
+            writer.writeheader()
+            writer.writerows(recovery)
     for phase,stem,label in [('training','training','Full training step'),('inference','prompt','Prompt / last logits'),('inference','startup','Serving startup / KV allocation'),('inference','decode','One cached token / 1024-token history')]:
         for mode in ('graph','eager'):
             fig,axes=plt.subplots(2,2,figsize=(12,7.5),sharex=True)

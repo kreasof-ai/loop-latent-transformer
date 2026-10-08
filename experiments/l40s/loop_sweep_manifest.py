@@ -24,7 +24,7 @@ def main():
     previous=json.loads((ROOT/'benchmarks/results/l40s-nanogpt/run-manifest.json').read_text())
     assert binaries==previous['runtime_binary_sha256'], 'runtime changed from the qualified native executor'
     sources={}
-    for name in ('loop_sweep.py','loop_sweep_summary.py','loop_sweep_manifest.py','loop_sweep_report.py','run_loop_sweep.sh','LOOP_SWEEP.md','model.py','tensor_model.py','prepared_inference.py','nanogpt_scale.py'):
+    for name in ('loop_sweep.py','loop_sweep_summary.py','loop_sweep_manifest.py','loop_sweep_report.py','loop_sweep_record.py','loop_sweep_recovery.py','run_loop_sweep.sh','run_loop_sweep_recovery.sh','LOOP_SWEEP.md','model.py','tensor_model.py','prepared_inference.py','nanogpt_scale.py'):
         p=ROOT/'experiments/l40s'/name
         sha=hashlib.sha256(p.read_bytes()).hexdigest()
         sources[str(p.relative_to(ROOT))]=sha

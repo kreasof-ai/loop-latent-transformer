@@ -9,8 +9,11 @@ llt_run() {
  local llt_phase="$1" llt_model="$2" llt_backend="$3" llt_loops="$4" llt_stem
  printf -v llt_stem '%s-%s-%s-t%02d' "$llt_phase" "$llt_model" "$llt_backend" "$llt_loops"
  if [[ "${LLT_RESUME:-0}" == 1 && -f "$llt_out/$llt_stem.json" ]]; then return; fi
- "$llt_python" experiments/l40s/loop_sweep.py "$llt_phase" --model "$llt_model" --backend "$llt_backend" --loops "$llt_loops" > "$llt_out/$llt_stem.log" 2>&1
- tail -n 1 "$llt_out/$llt_stem.log"
+ if ! "$llt_python" experiments/l40s/loop_sweep.py "$llt_phase" --model "$llt_model" --backend "$llt_backend" --loops "$llt_loops" > "$llt_out/$llt_stem.log" 2>&1; then
+  "${LLT_CPU_PYTHON:-python}" experiments/l40s/loop_sweep_record.py "$llt_out/$llt_stem.json"
+ else
+  tail -n 1 "$llt_out/$llt_stem.log"
+ fi
 }
 # Qualification first; all cases execute sequentially in isolated CUDA processes.
 for llt_model in llt naive_loop stacked fixed_depth; do

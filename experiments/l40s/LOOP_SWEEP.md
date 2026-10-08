@@ -75,6 +75,7 @@ CUDA 12.9 NVRTC installation:
 
 ```bash
 LLT_RESUME=1 experiments/l40s/run_loop_sweep.sh
+LLT_RESUME=1 experiments/l40s/run_loop_sweep_recovery.sh
 python experiments/l40s/loop_sweep_summary.py
 python experiments/l40s/loop_sweep_manifest.py
 python experiments/l40s/loop_sweep_report.py
@@ -85,3 +86,14 @@ The summary requires Matplotlib; it can run in a separate CPU Python environment
 Do not run another GPU benchmark concurrently. `LLT_RESUME=1` skips completed JSON
 files, including recorded OOM cases. Remove a specific result file to rerun it.
 Results and figures are written to `benchmarks/results/l40s-loop-sweep/`.
+
+Capture failures can surface as chained allocation/graph-instantiation exceptions.
+The CPU recorder requires explicit CUDA OOM evidence, retains the unmodified
+exception JSON under `observed-capture-oom/`, and annotates its classification.
+Other exceptions still stop the sweep.
+
+A supplementary capture retry releases the eager gradients and allocator caches
+after graph warmup, before capture. It preserves all numerical kernels, optimizer
+settings, input geometry, and 42-update validation. These retries are stored in
+`capture-recovery/` and do not replace the primary measurements. They distinguish
+setup/pool reservations from a model that cannot complete an eager training step.
