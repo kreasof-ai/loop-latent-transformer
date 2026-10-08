@@ -1,0 +1,142 @@
+{
+  "status": "passed",
+  "arguments": {
+    "phase": "training",
+    "model": "naive",
+    "backend": "torch",
+    "batch": 1,
+    "loops": 1,
+    "policy": "none",
+    "samples": 9,
+    "torch_optimizer": "fused"
+  },
+  "parameter_count": 162991104,
+  "parameter_bytes": 651964416,
+  "training": {
+    "gpu_samples_ms": [
+      32.97075271606445,
+      33.18681716918945,
+      32.694271087646484,
+      33.342464447021484,
+      36.15641784667969,
+      33.0885124206543,
+      33.093505859375,
+      33.16313552856445,
+      34.36851119995117
+    ],
+    "wall_samples_ms": [
+      33.02301300209365,
+      33.21618799964199,
+      32.72296700015431,
+      33.37286199894152,
+      36.18687699781731,
+      33.11840600144933,
+      33.12256600111141,
+      33.19117800128879,
+      34.395866001432296
+    ],
+    "gpu_median_ms": 33.16313552856445,
+    "wall_median_ms": 33.19117800128879,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 3286944768,
+        "peak_reserved_bytes": 3498049536,
+        "allocated_after_bytes": 2651933184
+      },
+      {
+        "peak_allocated_bytes": 3286945280,
+        "peak_reserved_bytes": 3498049536,
+        "allocated_after_bytes": 2651933696
+      },
+      {
+        "peak_allocated_bytes": 3286945792,
+        "peak_reserved_bytes": 3498049536,
+        "allocated_after_bytes": 2651934208
+      },
+      {
+        "peak_allocated_bytes": 3286946304,
+        "peak_reserved_bytes": 3498049536,
+        "allocated_after_bytes": 2651934720
+      },
+      {
+        "peak_allocated_bytes": 3286946816,
+        "peak_reserved_bytes": 3498049536,
+        "allocated_after_bytes": 2651935232
+      },
+      {
+        "peak_allocated_bytes": 3286947328,
+        "peak_reserved_bytes": 3498049536,
+        "allocated_after_bytes": 2651935744
+      },
+      {
+        "peak_allocated_bytes": 3286947840,
+        "peak_reserved_bytes": 3498049536,
+        "allocated_after_bytes": 2651936256
+      },
+      {
+        "peak_allocated_bytes": 3286948352,
+        "peak_reserved_bytes": 3498049536,
+        "allocated_after_bytes": 2651936768
+      },
+      {
+        "peak_allocated_bytes": 3286948864,
+        "peak_reserved_bytes": 3498049536,
+        "allocated_after_bytes": 2651937280
+      }
+    ],
+    "peak_allocated_bytes": 3286948864
+  },
+  "losses": [
+    10.976434707641602,
+    10.265260696411133,
+    9.507933616638184,
+    8.962560653686523,
+    9.421966552734375,
+    9.443952560424805,
+    7.948398590087891,
+    8.970378875732422,
+    7.484661102294922,
+    7.010354995727539,
+    12.934501647949219,
+    7.059017181396484
+  ],
+  "tokens_per_second": 30851.571461556407,
+  "provenance": {
+    "llt_commit": "c370895a1d03cd882c624b71991e39fda8e4feef",
+    "tensor_commit": "9d03a692b26e44f23348547263a97b7f18155c7f",
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "nanogpt_repository": "https://github.com/karpathy/nanoGPT",
+    "nanogpt_commit": "3adf61e154c3fe3fca428ad6bc3818b27a3b8291",
+    "sources": {
+      "experiments/l40s/common.py": "20bde69a47e64031f414b3920f663d218397ec56486e2c95ce54ad5d1c0d7862",
+      "experiments/l40s/model.py": "9a8dbc99556f8ff83d2c767a3f124acfcfbfdfde8bcc7a2ceda5869f7ed33956",
+      "experiments/l40s/kernels.py": "31cd9ca07bf0ed39fb1e65df7b8af750b752090b6ecf0dcd3f293c1985db5e2e",
+      "experiments/l40s/check.py": "c3e520baed38b0bbf107e5cc30b5ce588c68266b9e97c280352232e8ee3f2ab9",
+      "experiments/l40s/systems.py": "f93d0e1634cb7d8f5661ff3b9e9996457dec972133bc9e90d987325cd9705108",
+      "experiments/l40s/quality.py": "9f20df958273fa034d511c5152d0d692d83c0e7704f0dec020d5c8c1cedd60b8",
+      "experiments/l40s/decode_sweep.py": "7904d79d2f5cc3fe70c9181ad5529bc347c66c6093b15eec4c1e2034563bc449",
+      "experiments/l40s/prefill.py": "9eba7e6b7065c32b0d45beee5e31a64275f4f775ab04c1da73a09863ecc9e23a",
+      "experiments/l40s/summarize.py": "73b847e227049408ab9aba16c6351046992b595bd88ba5c076499f23a3ae045f",
+      "experiments/l40s/repeat.py": "6c4da8bf4c693300483edf13da2dd3162feaed01f008aefe43f5e7920af0f410",
+      "experiments/l40s/audit.py": "8a84788e5d90c079d861a81f0a47dec8435113cca1094d7903540ce26ebdc915",
+      "experiments/l40s/tensor_model.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+      "experiments/l40s/native_study.py": "90003f07a1b850ce0c550daa9ab01d4b70a1b5b30da39f75054e49ec1c23ca30",
+      "experiments/l40s/native_summary.py": "3852c504dcfd9952ddde6baaaf505468fbe17dc783d57048fcab2ae5777b42ea",
+      "experiments/l40s/nanogpt_adapter.py": "01ea2bb550aa7fe0980b24a97731b728de81c16ade96eb592dc0a51b29190027",
+      "experiments/l40s/nanogpt_scale.py": "5851855270dbf14f30ff891e7e2edb67e722336eb7a6cfe4c8759c927d0df14d",
+      "experiments/l40s/nanogpt_scale_summary.py": "b454407f87a9436301e83797e849e02f0f9189720add3d4f93f57ec9d39369bd",
+      "experiments/l40s/prepared_inference.py": "64ff5add22486377e0ce39a2cb561ee5de0db3842744280295611d41b2de80e4",
+      "experiments/l40s/third_party/nanogpt/model.py": "7c01703240dbec5d554527dc666e35b3df8391d0b117fddc07afcf325a21d11c",
+      "experiments/l40s/third_party/nanogpt/LICENSE": "a59ec5cdb1c1e447e5266a014b3e7ded511f8d6e5a08931e931c87490ff821fe"
+    },
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "capability": [
+      8,
+      9
+    ],
+    "nvrtc": "/home/sagemaker-user/tensor/build/nvrtc-12.9",
+    "driver": "595.91.07"
+  }
+}

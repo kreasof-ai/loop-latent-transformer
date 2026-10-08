@@ -25,7 +25,31 @@ Constant total training memory and constant total communication have **not**
 been demonstrated: exact loop checkpoints retain full residual boundary states,
 and compute still grows with T.
 
-## Qualified Tensor model study — 2026-10-08
+## Optimized Tensor and actual nanoGPT — 2026-10-08
+
+The [nanoGPT-scale L40S report](benchmarks/L40S_NANOGPT.md) follows the
+[Tensor kernel optimization](https://github.com/kreasof-ai/tensor/blob/main/docs/research/llt-optimization.md).
+It includes actual nanoGPT, LLT and a naive loop control at width 768, 12 layers,
+context 1024 and vocabulary 50,304: 66 performance methods, five full-size
+correctness checks and 238 audited CUDA artifacts.
+
+With prepared weights, batch-1 LLT four-token graph decode takes **2.165 ms
+with Tensor versus 3.210 ms with Torch**. Actual nanoGPT whole-step graph
+training takes **20.698 versus 20.882 ms**, with **2.154 versus 2.471 GiB**
+capture peak allocation. At batch 4, graph training remains within 1% and
+Tensor saves 23.2% capture peak allocation. Eager Tensor training and several
+full-prefix inference geometries remain slower than the fused Torch control.
+
+LLT's latent cache remains constant across tied passes; total training memory
+still grows without checkpointing. The report counts serving startup, prepared
+weight copies, exact checkpoints, fused/scalar optimizer controls and graph
+capture separately. Models have different parameter counts, and no trained
+quality claim follows from these seeded resource profiles. See the
+[reproduction protocol](experiments/l40s/NANOGPT_SCALE.md).
+Tensor development records remain in the
+[Tensor repository](https://github.com/kreasof-ai/tensor).
+
+## Earlier qualified Tensor model study — 2026-10-08
 
 The [Tensor dependency gate](https://github.com/kreasof-ai/tensor/blob/main/docs/research/llt-readiness.md)
 has passed, and the new [full-model L40S report](benchmarks/L40S_NATIVE.md) is complete:

@@ -13,6 +13,14 @@ adds numerical model/backward/optimizer kernels and real persistent generation,
 with 152 training methods, 84 inference methods and 706 audited CUDA artifacts.
 Trained quality and constant total training memory remain unvalidated.
 
+The subsequent [nanoGPT-scale report](../benchmarks/L40S_NANOGPT.md) adds the
+optimized Tensor implementation (`385124e` projections, `9d03a69` serving cache),
+actual pinned nanoGPT, 66 performance methods, full-size gradient checks,
+serving startup, explicit prepared weights, fused Torch AdamW controls, and
+complete nanoGPT training CUDA graphs. This resolves the requested kernel-first
+and nanoGPT-scale profiling phase; trained quality and distributed evidence
+remain separate research work.
+
 ## LLT requirements after Tensor readiness
 
 ### L01 — Freeze the model and prove the implemented algebra
