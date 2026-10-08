@@ -97,3 +97,24 @@ after graph warmup, before capture. It preserves all numerical kernels, optimize
 settings, input geometry, and 42-update validation. These retries are stored in
 `capture-recovery/` and do not replace the primary measurements. They distinguish
 setup/pool reservations from a model that cannot complete an eager training step.
+
+## Next rank and checkpoint comparison
+
+The next comparison retains B4/S1024 and T=1..16 and adds LLT KV ranks 32, 64,
+and 128. Standard exact activation checkpointing (AC) applies to every model.
+LAC means exact checkpointing at an existing low-rank latent boundary, with all
+other required branch inputs preserved. In the four-model comparison, only LLT
+has a suitable existing latent; the conventional baselines must show LAC as not
+applicable rather than gain a newly introduced compression module.
+
+| Architecture | AC | Native-boundary LAC |
+|---|---|---|
+| LLT, KV rank 32/64/128 | Applicable | Applicable; implementation and qualification pending |
+| Naive Loop | Applicable | Not applicable |
+| Independent stack | Applicable | Not applicable |
+| Fixed depth, matched parameters | Applicable | Not applicable |
+
+The discarded PCA residual-compression experiment is not this LAC design. Its
+code and generated results were removed and must not be merged into the measured
+tables. The original 256-case sweep and supplementary capture retries above
+remain the recorded measurements. No new rank/AC/LAC sweep is claimed complete.

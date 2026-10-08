@@ -334,24 +334,30 @@ short, low-rank trajectory. This is the empirical finding of LLA:
 
 ## 5. Latent Activation Checkpointing (LAC)
 
-Define a low-rank codec:
+LAC means **checkpointing at low-rank latent boundaries already present in the
+forward architecture**. It retains the original latent and any other inputs
+needed by the checkpointed computation, then recomputes that computation during
+backward with exact gradients for the same model:
 
-    Z_t = Down(x_t)          # stored checkpoint, dim r
-    x_t' = Up(Z_t)           # reconstructed during backward
+    Z = existing_latent_encoder(x)       # ordinary forward computation
+    y = checkpoint(region, Z, *other_required_inputs, use_reentrant=False)
 
-Two regimes:
+It does not introduce a new codec to compress full residual states after the
+forward pass, or approximate their reconstruction during backward.
 
-- **Exact:** the forward pass uses Z_t directly. Backward is exact for
-  the modified model. This is "low-rank activations," not checkpointing.
-- **Approximate:** the forward pass uses full-rank x_t, but backward
-  reconstructs x_t' ≈ x_t from Z_t. Gradients can be biased. A residual
-  or outlier path can improve reconstruction, but exactness requires
-  recovering the necessary full states exactly or recomputing them.
+LLT has a shared low-rank KV latent C. Its attention also depends on projected
+queries and folded weights; an exact checkpoint must preserve all of those
+gradient paths. C alone does not reconstruct the evolving full-width residual,
+query, or MLP states. Those paths require their own retained state or recomputation.
+Checkpointing a latent branch does not establish constant total training memory.
 
-The proposed loop-axis LAC would store one latent per token and reconstruct
-per-loop activations on the fly. A KV latent alone does not recover the
-full residual/query/MLP states of the measured model. Exact backward needs
-additional checkpoints, replay or a different forward architecture.
+LAC is not exclusive to LLT in general: another architecture with a suitable
+existing latent boundary can use it. **Among this project's four controls, only
+LLT has that boundary.** Naive Loop, the independent stack, and the fixed-depth
+parameter-matched model use conventional full-width attention and residuals;
+LAC is not applicable to them without changing their architectures. Standard
+activation checkpointing applies to all four. Native-boundary LAC remains to be
+implemented and qualified; the recorded exact loop checkpoints are ordinary AC.
 
 # Training Strategy
 
@@ -385,13 +391,13 @@ See [CPU checkpoint findings](benchmarks/README.md#cpu-checkpoint-findings).
 
 ## Remaining Training Target
 
-Loop-axis LAC aims to replace full residual checkpoints with compact state
-while retaining exact or acceptably accurate training. Reconstructing K/V
-alone is insufficient for the measured full-residual model. A redesigned
-forward graph, reversible state or additional retained information would
-need to establish the memory/quality tradeoff. MELT-style chunking remains
-an untested route toward this target; it does not by itself parallelize
-dependent residual loops.
+The next LAC study must identify exact checkpoint regions beginning at existing
+latent boundaries, list every required input, and compare outputs and all
+parameter gradients with uncheckpointed execution. It must separately measure
+the residual/query/MLP state that remains outside those regions. Eliminating
+full residual checkpoints would require further architectural or recomputation
+work; reconstructing K/V alone does not establish that result. MELT-style chunking
+remains untested and does not by itself parallelize dependent residual loops.
 
 ## Current Implementation Guidance
 
@@ -653,7 +659,7 @@ The proposal aims to combine:
 1. Loop-axis latent compression (LLA),
 2. Cross-layer cache sharing (YOCO / U-YOCO),
 3. Loop-decoupled training (MELT),
-4. Low-rank activation checkpointing (CompAct / LAC),
+4. Exact activation checkpointing at existing latent boundaries (LAC),
 5. Latent-only communication (LAGA / TPLA).
 
 The full five-part composition around a shared latent C_t remains a research
@@ -663,13 +669,14 @@ or a literature-wide novelty claim.
 
 # Open Questions
 
-## 1. Is the loop-axis latent exact or approximate?
+## 1. Which computations can be checkpointed at the existing latent?
 
-If the forward pass uses C_t directly, training is exact for the
-modified model. If the forward pass uses full-rank activations and
-only backward reconstructs from C_t, gradients are biased.
+LAC must recompute the same forward computation from its original latent and
+other required inputs. The shared KV latent does not encode the full residual
+stream, so the checkpoint boundary must account for query and residual branches.
 
-**Question:** which regime preserves downstream quality at T = 16+?
+**Question:** which exact boundaries reduce total peak memory at T = 16+,
+and what recomputation cost do they introduce?
 
 ## 2. How does LAC interact with chunk-wise training?
 

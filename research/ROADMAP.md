@@ -47,8 +47,13 @@ remain separate research work.
   Independent all-parameter gradient comparisons pass in FP64 and BF16.
 - [ ] Explore
   reversible blocks, residual-state storage, or extra recomputation if needed.
-- [ ] If using lossy activation compression, quantify reconstruction error,
-  gradient bias, convergence, quality, peak memory, and recomputation time.
+- [ ] Define LAC regions at existing low-rank latent boundaries. List all
+  required branch inputs and verify exact outputs and all parameter gradients
+  without adding a residual codec or approximate backward reconstruction.
+- [ ] Profile LLT with KV ranks 32, 64, and 128 under native-boundary LAC and
+  ordinary AC. Use AC for the conventional controls and mark LAC not applicable
+  where the architecture has no suitable existing latent boundary. Measure all
+  retained residual/query/MLP state as well as the latent and recomputation cost.
 - [x] Test matched checkpoint policies. Do not attribute ordinary checkpoint
   savings to latent compression or claim constant total training memory from
   a cache whose size is independent of loop count.
