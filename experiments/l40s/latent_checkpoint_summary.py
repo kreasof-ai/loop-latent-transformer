@@ -24,7 +24,7 @@ def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def main():
     assert json.loads((BASE/'audit.json').read_text())['status']=='passed'
-    records={};inputs={};artifacts={};artifact_files=set();profiles=set();extension_profiles=set();checks=[];full_checks=[]
+    records={};inputs={};artifacts={};artifact_files=set();profiles=set();extension_profiles=set();qualification_profiles=set();checks=[];full_checks=[]
     def verify(path,d,extension):
         directory=path.parent
         inputs[str(path.relative_to(ROOT))]=sha(path)
@@ -54,6 +54,16 @@ def main():
             verify(path,d,extension)
             if a['phase'] in ('qualification','full_qualification'):
                 assert d['status']=='passed'
+                if a['phase']=='full_qualification':
+                    source=d['qualification_driver_source']
+                    assert sha(OUT/'sources'/source['sha256']/Path(source['path']).name)==source['sha256']
+                    qualification_profiles.add((source['path'],source['sha256']))
+                    controls=d['qualification_controls']
+                    assert controls['torch_deterministic_algorithms']==(a['backend']=='torch')
+                    if a['backend']=='torch':assert controls['cublas_workspace_config']==':4096:8'
+                    assert not controls['primary_performance_settings_changed']
+                    repeat=controls['repeat_uncheckpointed_checks'][a['backend']]
+                    assert repeat['gradient_error']['maximum_parameter_relative_l2']<1e-5
                 for key,result in d['policy_checks'].items():
                     if key.endswith('_cache'):
                         assert result['max_abs_error']<.05 and result['relative_l2']<.03
@@ -106,6 +116,15 @@ def main():
         (m,r,t) for m,r in VARIANTS for t in (4,16)}
     assert {(d['arguments']['model'],d['arguments']['rank'],d['arguments']['backend'],d['arguments']['loops']) for _,d in full_checks}=={
         (m,r,b,16) for m,r in VARIANTS for b in ('tensor','torch')}
+    assert len(qualification_profiles)==1
+    diagnostic=OUT/'diagnostics'
+    original_source=json.loads((diagnostic/'default-diagnostic-source.json').read_text())
+    assert sha(OUT/'sources'/original_source['sha256']/Path(original_source['path']).name)==original_source['sha256']
+    controlled=json.loads((diagnostic/'deterministic-checkpoint.json').read_text())
+    assert controlled['deterministic']
+    assert sha(OUT/'sources'/controlled['source_sha256']/'checkpoint_numerics_diagnostic.py')==controlled['source_sha256']
+    assert all(r['gradient']['maximum_parameter_relative_l2']<1e-5 for r in controlled['rows'])
+    for path in diagnostic.glob('*.json'):inputs[str(path.relative_to(ROOT))]=sha(path)
     rows=[records[key] for key in sorted(records)]
     fields=list(dict.fromkeys(k for row in rows for k in row))
     with (OUT/'combined.csv').open('w',newline='') as file:
@@ -131,6 +150,7 @@ def main():
         passed=sum(r['status']=='passed' for r in rows),out_of_memory=sum(r['status']=='out_of_memory' for r in rows),
         qualification_count=len(checks),full_qualification_count=len(full_checks),unique_artifact_count=len(artifacts),
         numerical_sources=dict(next(iter(profiles))),extension_sources=dict(next(iter(extension_profiles))),
+        qualification_driver_source=dict(zip(('path','sha256'),next(iter(qualification_profiles)))),
         input_sha256=inputs,artifacts=list(artifacts.values()))
     assert audit['case_count']==672 and audit['new_case_count']==416 and audit['reused_case_count']==256
     (OUT/'audit.json').write_text(json.dumps(audit,indent=2)+'\n')
