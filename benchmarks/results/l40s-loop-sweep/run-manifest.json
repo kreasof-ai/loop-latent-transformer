@@ -1,7 +1,7 @@
 {
   "status": "passed",
   "tensor_repository": "https://github.com/kreasof-ai/tensor",
-  "llt_numerical_source_commit": "2155cade946370595d78e37b17bf8a8a303c159c",
+  "llt_numerical_source_commit": "d1966451b8e73320cd795ff96dde31b99d0a61cc",
   "tensor_commit": "a86159cea38d801ae18f740b0e62dea08a77c565",
   "runtime_binary_sha256": {
     "_executor_2_14.cpython-312-x86_64-linux-gnu.so": "0716696345eaceb596b2b6611f322762a8ad071c0517c29e1dd72f3780314b67",
@@ -9,7 +9,7 @@
   },
   "sources": {
     "experiments/l40s/loop_sweep.py": "930d47ffb8708ba13ad83f14a461ed1c67e9df1df3e12f4455aca69ac188dd30",
-    "experiments/l40s/loop_sweep_summary.py": "9a23e2bc566fdf055fdcb11eda212b313ee6e761b3fd6bea2d7cfba07597be33",
+    "experiments/l40s/loop_sweep_summary.py": "f28617788f5384c9cac63243774e31d305111c4ac2dc2c5a5b5eba6641576b5c",
     "experiments/l40s/loop_sweep_manifest.py": "a669d636987ee2e03f25b6a7dd9934538386a9552034e173bbe8dbf5c1bae11c",
     "experiments/l40s/loop_sweep_report.py": "6cc61d2502e62a6ac654b06cddfa48f473a81d8d74fee7ad1ff003e976e0a50b",
     "experiments/l40s/loop_sweep_record.py": "b4087f95fd71022756fd79197d14c486af4a2411759d1c8bc6e2bb3d892e8ff5",
