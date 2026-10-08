@@ -1,101 +1,102 @@
 # Architecture
 
-The implemented LLT shares one input-derived KV latent across all blocks and
-loops. It repeats L parameterized blocks T times, carrying a full-width residual
-state between applications. This reduces cached KV storage without reducing the
-residual width or making the residual stream reconstructible from the KV latent.
+The current LLT uses **one contextual rank-R latent per physical layer**, built
+on the first loop and reused on later loops. There are L cache banks, independent
+of T. Blocks and projections are tied across loops. The full-width residual
+continues to evolve through all LT block applications.
+
+This replaces the historical globally shared embedding-derived latent. Its
+measurements remain in the [historical report](../archive/reports/L40S_GLOBAL_LATENT_SWEEP.md).
+The separate per-layer latent control refreshes memory at every layer/loop
+application and therefore keeps LT banks; it is a different architecture.
 
 ## Computation
 
-For batch B, sequence S, width W, heads H, head dimension D=W/H, and latent rank R,
-let X₀ be token embeddings plus learned absolute position embeddings. LLT forms
-one causal memory source:
+Let X be the evolving residual, width W, heads H, head dimension D=W/H, layers L,
+loops T, and latent rank R. X starts from token plus absolute position embeddings.
+Each physical layer i has its own down projection A_i and K/V expansion weights.
+Using Torch linear-weight conventions:
 
 ```text
-C = RMSNorm(X₀) W_downᵀ                    [B, S, R]
+F_Q[i,h] = U_K[i,h]^T W_Q[i,h]                 [R,W]
+F_O[i,:,h,:] = W_O[i,:,h,:] U_V[i,h]           [W,R]
+
+for loop t = 0 .. T-1:
+    for layer i = 0 .. L-1:
+        Z = RMSNorm(X)
+        if t == 0:
+            C_i = Z A_i^T                    [B,S,R]
+        Q_r = Z F_Q[i]^T                     [B,H,S,R]
+        A = softmax(causal(Q_r C_i^T / sqrt(D))) C_i
+        X = X + flatten_heads(A) F_O[i]^T
+        X = X + W_2[i] GELU(W_1[i] RMSNorm(X))
 ```
 
-At block i, queries come from the evolving residual X. Each head has latent
-expansion weights U_K and U_V of shape [D,R]. With the usual Torch linear-weight
-convention, folding gives:
+The first layer's C_0 comes from embeddings. Deeper C_i include preceding
+first-loop computations. Later loops reuse these first-loop representations;
+they do not update historical memory with later-loop states. This makes the
+cache constant in T while preserving contextual first-loop memory per layer.
+It does not establish trained quality or equivalence with a conventional model.
+
+Folding is equivalent to expanding K_h=C_i U_K[i,h]^T and
+V_h=C_i U_V[i,h]^T. Attention scaling remains 1/sqrt(D), not 1/sqrt(R).
+Folds and C_i remain differentiable; later-loop gradients flow back into the
+first-loop memory construction. No latent is detached.
+
+## Causal serving
+
+Prefill constructs all L memories during the first pass. Each bank stores a
+single latent tensor physically shared by K and V. On a new token, the first
+loop constructs and appends its C_i at each layer, using that token's evolving
+first-loop state. Later loops read the same banks without appending again.
+This is causally consistent with full-sequence execution. Historical bank
+contents and allocated addresses remain stable across decode steps.
+
+## Parameters and cache scaling
+
+The current study uses B4/S1024, W768, H12, L12, V50304, position capacity P1025,
+MLP width F3072, exact GELU and unweighted RMSNorm (epsilon 1e-5). Masters,
+embeddings, residuals, optimizer state and loss are FP32; projections and
+attention are BF16. Serving retains BF16 prepared projection copies in addition
+to FP32 masters; these count toward total peak memory.
+
+With E=2VW+PW, LLT has:
 
 ```text
-F_Q[h] = U_K[h]ᵀ W_Q[h]                  [R, W]
-F_O[:,h,:] = W_O[:,h,:] U_V[h]            [W, R]
-Q_r = RMSNorm(X) F_Qᵀ                    [B, H, S, R]
-A = softmax(causal(Q_r Cᵀ / sqrt(D))) C   [B, H, S, R]
-X' = X + flatten_heads(A) F_Oᵀ
-X_next = X' + W₂ GELU(W₁ RMSNorm(X'))
+Parameters = E + L(2WF + 2W^2 + 3WR)
+BF16 KV payload = 2BSRL bytes
 ```
 
-The attention scale stays **1/√D**, even when attention runs at latent rank R.
-This preserves equivalence with explicitly expanded K=C U_Kᵀ and V=C U_Vᵀ.
-Folds remain differentiable during training. Their reuse avoids full-width K/V
-materialization; the separate per-block expansion weights remain trainable.
+| Architecture | Cache banks | BF16 cache payload |
+|---|---:|---:|
+| Current LLT | L | 2BSRL |
+| Per-layer latent control | LT | 2BSRLT |
+| Naive Loop / independent stack | LT full K/V pairs | 4BSWLT |
+| Fixed depth / matched parameters | L full K/V pairs | 4BSWL |
+| Historical global input-latent prototype | 1 | 2BSR |
 
-C is fixed across all block applications for a given token sequence. Historical
-KV values do not acquire later loop states. Queries can change what each token
-reads, but this implementation does not exchange evolving full-width states
-through a refreshed KV memory. That distinction matters for future quality tests.
+Serving allocates 1025 slots. Tensor adds 8B bytes of counters per bank.
+At rank 64, current LLT has approximately 6 MiB of KV payload at every T;
+the refreshed per-layer control reaches approximately 96 MiB at T16.
+Payload is separate from weights, prepared copies, folds, temporaries and
+activation storage. Uncheckpointed training memory still grows with T.
 
-The measured model has no learned normalization scale or biases. It uses
-unweighted RMSNorm (epsilon 1e-5), exact GELU, independent token/output weights,
-and learned absolute positions. FP32 master weights, embeddings, and residuals
-are retained; projections and attention run in BF16. See the main report for
-optimizer and timing details.
+The fixed-depth control keeps L blocks and widens its MLP to W(6T-2), matching
+the independent stack's parameters. Equal parameter counts do not match compute.
 
-## Controls in the main experiment
+## Checkpointing and code
 
-| Variant | Blocks stored | Blocks applied | KV source |
-|---|---:|---:|---|
-| LLT | L | LT | One shared input-derived C |
-| Naive Loop | L | LT | Full-width K/V from each application's current residual |
-| Independent stack | LT | LT | Full-width K/V at each independent block |
-| Fixed depth / matched parameters | L | L | Conventional K/V; MLP widened to match the stack |
+The current LLT supports none and exact full-block AC. On the first loop,
+AC recomputes latent construction and the complete block, returning both the
+updated residual and C_i. On later loops its inputs include the retained C_i.
+LAC is excluded; low-rank KV does not suffice to reconstruct full residuals.
+See [checkpoint boundaries](CHECKPOINTING.md).
 
-The fixed-depth control has one pass through L blocks. Its MLP hidden width is
-F=W(6T−2), exactly matching the independent stack with F=4W while holding width,
-heads, vocabulary, and embeddings fixed. Equal parameters do not imply equal
-attention cost, expressiveness, or activation memory.
+- [contextual_llt.py](../model/contextual_llt.py): current architecture, AC, and cached decode.
+- [tensor_backend.py](../model/tensor_backend.py): common Torch/Tensor operators, losses, prefill allocation and historical model.
+- [reference.py](../model/reference.py): configuration and frozen historical global-latent algebra reference.
+- [research_baselines.py](../model/research_baselines.py): refreshed per-application latent control and other families.
+- [contextual_llt_sweep.py](../experiments/l40s/contextual_llt_sweep.py): current profiling/qualification harness.
 
-The code also retains an earlier `layerwise` latent control for historical
-comparisons. It is outside the main sweep and is not a faithful reproduction of
-YOCO or DeepSeek. Its earlier specification is in the archive.
-
-## Parameter and cache scaling
-
-Let V be vocabulary size, P position capacity, and E=2VW+PW the common embedding
-and output parameters. The measured bias-free models have:
-
-| Variant | Trainable parameters |
-|---|---|
-| LLT | E + L(2WF + 2W² + 2WR) + WR |
-| Naive Loop | E + L(2WF + 4W²) |
-| Independent stack | E + LT(2W·4W + 4W²) |
-| Fixed depth | E + L(2W·W(6T−2) + 4W²) |
-
-For BF16 cache payload at a historical length S:
-
-| Variant | Cache bytes |
-|---|---:|
-| LLT | 2BSR |
-| Naive Loop | 4BSWLT |
-| Independent stack | 4BSWLT |
-| Fixed depth | 4BSWL |
-
-Actual serving caches allocate a capacity of 1025 slots in this study. Tensor
-cache counters are small additional state; prepared projection weights and model
-parameters are also resident. The formulas describe KV payload, not total GPU
-memory. LLT's full residual and MLP activations still grow with applied depth in
-uncheckpointed training. The shared KV latent cannot recover those activations.
-
-## Code map
-
-- [reference.py](../model/reference.py): configuration, folding, full forward, and the small Torch reference.
-- [tensor_backend.py](../model/tensor_backend.py): explicit numerical backend, losses, KV allocation, and cached-token decode.
-- [checkpointing.py](../model/checkpointing.py): block AC and the current experimental LAC boundary.
-- [prepared.py](../inference/prepared.py): BF16 serving copies for the Torch control.
-- [loop_sweep.py](../experiments/l40s/loop_sweep.py): measured geometry and exact parameter matching.
-
-[Tensor](https://github.com/kreasof-ai/tensor) owns its CUDA kernels and runtime.
-This repository owns LLT's architecture and experiment orchestration.
+[Tensor](https://github.com/kreasof-ai/tensor) owns numerical kernels and runtime;
+this repository owns the architecture, orchestration, and results.

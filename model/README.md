@@ -6,26 +6,28 @@ Tensor adapter. The reference can run on CPU with Torch alone.
 
 | File | Responsibility |
 |---|---|
+| [contextual_llt.py](contextual_llt.py) | Current LLT: contextual first-loop memories per layer, loop sharing, full-block AC and causal decode |
 | [reference.py](reference.py) | Configuration, Torch reference, projection folding, and a simple decode reference |
 | [tensor_backend.py](tensor_backend.py) | `BackendTransformer`, explicit backend operations, training loss, prefill, and cache-aware decode |
 | [research_baselines.py](research_baselines.py) | Added recurrent/cache-sharing families with explicit source adaptations |
 | [checkpointing.py](checkpointing.py) | `CheckpointTransformer`, block AC, and exploratory latent-region LAC |
 
-Minimal reference forward:
+Current LLT forward (requires the Tensor Torch adapter, even with Torch numerical operations):
 
 ```python
 import torch
-from model import Config, Transformer
+from model import Config
+from model.contextual_llt import ContextualLLT
 
 config = Config(kind="llt", width=128, heads=4, layers=2, loops=4,
                 rank=32, vocab=65, max_seq=64, gelu="none")
-model = Transformer(config)
+model = ContextualLLT(config)
 logits = model(torch.randint(config.vocab, (2, 32)))
 ```
 
 `Config` retains the earlier small-fixture defaults, including tanh GELU.
 The main study explicitly selects exact GELU (`gelu="none"`) and its full measured
-geometry. It constructs `CheckpointTransformer` for policy comparisons.
+geometry. It constructs `ContextualLLT` for none/AC comparisons. `Transformer` and `CheckpointTransformer` retain the historical global-latent implementation for frozen-result checks; they do not define the current LLT.
 
 `BackendTransformer(config, ops=None)` uses Torch operations. Passing an
 `Operators` instance from [Tensor](https://github.com/kreasof-ai/tensor) selects
