@@ -1,26 +1,32 @@
 # LLT research roadmap
 
-Date: 2026-10-08. Development proceeds after the required kernel and training
-capabilities in [Tensor](https://github.com/kreasof-ai/tensor) pass the
-[Tensor readiness gate](https://github.com/kreasof-ai/tensor/blob/main/docs/plan/llt-readiness.md).
+Date: 2026-10-08. The required kernel and training capabilities in
+[Tensor](https://github.com/kreasof-ai/tensor) passed the
+[Tensor readiness gate](https://github.com/kreasof-ai/tensor/blob/main/docs/research/llt-readiness.md)
+at implementation revision `ab17948fe94dd7c7b857c8f067c465e901329b94`.
 Tensor development plans, defect reports, and acceptance evidence belong in that
 repository. This roadmap tracks LLT architecture, quality, and experiments.
 
-The current [L40S study](../benchmarks/L40S.md) establishes synthetic forward
-kernel and memory results. Trained quality and constant total training memory
-remain unvalidated.
+The original [L40S study](../benchmarks/L40S.md) establishes synthetic forward
+kernel and memory results. The [full-model Tensor study](../benchmarks/L40S_NATIVE.md)
+adds numerical model/backward/optimizer kernels and real persistent generation,
+with 152 training methods, 84 inference methods and 706 audited CUDA artifacts.
+Trained quality and constant total training memory remain unvalidated.
 
 ## LLT requirements after Tensor readiness
 
 ### L01 — Freeze the model and prove the implemented algebra
 
-- [ ] Specify global versus layerwise caches, tied block layout, latent ranks,
+- [x] Specify global versus layerwise caches, tied block layout, latent ranks,
   head geometry, projection sharing, normalization, loop conditioning, and
   position encoding. Specify whether the YOCO/U-YOCO self-decoder is actually
   implemented; the current simplified composition does not validate all variants.
-- [ ] Verify causal full-sequence, prefill, and cached-decode equivalence with
+  The [frozen model](MODEL.md) specifies the supported composition and limitations.
+- [x] Verify causal full-sequence, prefill, and cached-decode equivalence with
   trained weights. Separate cache/parameter complexity from compute and total
   training-memory complexity.
+  Verified on short trained-weight fixtures (32 updates), with larger random-weight
+  resource checks; this does not establish trained quality or long-context quality.
 - [ ] For iterative reasoning, compare a static initial-input cache with an
   uncompressed static-cache control and a mutable compressed workspace. Other
   positions currently cannot read newly inferred states through the fixed cache.
@@ -29,11 +35,13 @@ remain unvalidated.
 
 - [ ] Establish what state is necessary to recover residual, query, and MLP
   activations. A KV latent alone does not establish exact reconstruction.
-- [ ] Keep ordinary exact loop checkpointing as the validated baseline. Explore
+- [x] Keep ordinary exact loop checkpointing as the validated baseline.
+  Independent all-parameter gradient comparisons pass in FP64 and BF16.
+- [ ] Explore
   reversible blocks, residual-state storage, or extra recomputation if needed.
 - [ ] If using lossy activation compression, quantify reconstruction error,
   gradient bias, convergence, quality, peak memory, and recomputation time.
-- [ ] Test matched checkpoint policies. Do not attribute ordinary checkpoint
+- [x] Test matched checkpoint policies. Do not attribute ordinary checkpoint
   savings to latent compression or claim constant total training memory from
   a cache whose size is independent of loop count.
 
@@ -56,11 +64,13 @@ remain unvalidated.
 
 - [ ] Benchmark trained-model prefill, first-token latency, multi-token decode,
   throughput, and latency distributions; include folding/setup and cache updates.
-- [ ] Sweep batch, context, rank, layers, width, vocabulary, and loop count. Test
+- [x] Sweep batch, context, rank, layers, width, vocabulary, and loop count. Test
   positional correctness before interpreting long-context quality.
-- [ ] Account for residual checkpoints, gradients, optimizer/classifier floors,
+- [x] Account for residual checkpoints, gradients, optimizer/classifier floors,
   workspaces, and device overhead. Plot measured scaling rather than cache size alone.
-- [ ] Re-evaluate the current targets: at least 50% less peak memory versus naive,
+  The allocator accounting and exclusions are explicit; driver/context storage
+  remains outside measured peaks, so these are not whole-process VRAM results.
+- [x] Re-evaluate the current targets: at least 50% less peak memory versus naive,
   at most 20% extra median latency, and at most 25% more memory than non-loop LLT.
   State the baseline checkpoint policy and execution mode for every result.
 - [ ] Measure whole-grid reasoning solvers separately: they may discard per-loop
@@ -84,4 +94,3 @@ remain unvalidated.
 - [ ] Rewrite project claims around measured behavior and supported modes.
   Separate demonstrated constant KV-cache size from open total-memory and
   communication claims, and report unsuccessful regimes.
-

@@ -1,0 +1,3600 @@
+{
+  "status": "passed",
+  "summary_source_sha256": "3852c504dcfd9952ddde6baaaf505468fbe17dc783d57048fcab2ae5777b42ea",
+  "report_sha256": {
+    "correctness": "7c4d203bba8e80442402397f23311bbcd5e708624c0af9a9f1cfb24746ae249d",
+    "training": "11a98c994934e6b0998c895daf0ac613a8e4203d90f38fcc37c71b5f888d144e",
+    "inference": "34aff9b1f1530b9ac9742435974c04074d3cf36a32b9b2f570722602b96e12a3"
+  },
+  "criteria": {
+    "memory_ratio_max": 0.5,
+    "latency_ratio_max": 1.2,
+    "nonloop_memory_ratio_max": 1.25
+  },
+  "training": [
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.9828529733673842,
+      "wall_latency_ratio": 1.1129270693205577,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.9828529733673842,
+      "wall_latency_ratio": 1.045765468948839,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.9851103119836719,
+      "wall_latency_ratio": 1.071347909077366,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.9865695130101106,
+      "wall_latency_ratio": 0.9713839593764944,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.9514002322240371,
+      "wall_latency_ratio": 0.917255740847888,
+      "nonloop_memory_ratio": 1.1215548440979954,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.9828529733673842,
+      "wall_latency_ratio": 0.8468212085388758,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.9662234159015604,
+      "wall_latency_ratio": 0.771171801417456,
+      "nonloop_memory_ratio": 1.3061623157520867,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.9697598517205255,
+      "wall_latency_ratio": 0.7555624525915685,
+      "nonloop_memory_ratio": 1.0518092824053842,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.9170974036613886,
+      "wall_latency_ratio": 0.8368113559088728,
+      "nonloop_memory_ratio": 1.4283477171492205,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.9828529733673842,
+      "wall_latency_ratio": 0.8308070015735175,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.9472899636583298,
+      "wall_latency_ratio": 0.7236744560029662,
+      "nonloop_memory_ratio": 1.91848694725626,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.970670991441635,
+      "wall_latency_ratio": 0.7219872533191452,
+      "nonloop_memory_ratio": 1.0855038895201468,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.8863017183806303,
+      "wall_latency_ratio": 0.794507362163876,
+      "nonloop_memory_ratio": 1.9396691722345953,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.9828529733673842,
+      "wall_latency_ratio": 0.7980326108932736,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.9337374699875248,
+      "wall_latency_ratio": 0.6800879557744597,
+      "nonloop_memory_ratio": 2.9390279997632156,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.972073379474585,
+      "wall_latency_ratio": 0.7098780095936719,
+      "nonloop_memory_ratio": 1.1416615680447513,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.9905144107989785,
+      "wall_latency_ratio": 1.1385415979129123,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.9905144107989785,
+      "wall_latency_ratio": 1.0216858496993575,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 1.0199825055884926,
+      "wall_latency_ratio": 1.036758026673455,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 1.014896414943842,
+      "wall_latency_ratio": 0.9219255407274576,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.9806131112865506,
+      "wall_latency_ratio": 0.8425993585866368,
+      "nonloop_memory_ratio": 1.515458103130755,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.9905144107989785,
+      "wall_latency_ratio": 0.8165016900282936,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 1.0547365959644184,
+      "wall_latency_ratio": 0.7033499120540186,
+      "nonloop_memory_ratio": 2.0630610028014407,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 1.0113525342920786,
+      "wall_latency_ratio": 0.7055266984111259,
+      "nonloop_memory_ratio": 1.0994307319767196,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 1.0068975738781467,
+      "wall_latency_ratio": 1.1016554941934025,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 1.0058372856621671,
+      "wall_latency_ratio": 1.0502747483201782,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 1.089804645738167,
+      "wall_latency_ratio": 1.032285764611042,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 1.1284411580830835,
+      "wall_latency_ratio": 0.952538814810309,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 1.1080914006524363,
+      "wall_latency_ratio": 0.8588412520828431,
+      "nonloop_memory_ratio": 1.6846020584938348,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 1.0075132251003283,
+      "wall_latency_ratio": 0.8104458941997945,
+      "nonloop_memory_ratio": 1.0016662132752991,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 1.2700195835809698,
+      "wall_latency_ratio": 0.7028408287071093,
+      "nonloop_memory_ratio": 2.324997770445019,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 1.1005119387236704,
+      "wall_latency_ratio": 0.7230673997266305,
+      "nonloop_memory_ratio": 1.0759766930938963,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.8831208594380892,
+      "wall_latency_ratio": 1.1530711833723462,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.8922293201786831,
+      "wall_latency_ratio": 1.0077395037124321,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.9119659775591578,
+      "wall_latency_ratio": 1.0223449913477276,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.9138540877138229,
+      "wall_latency_ratio": 0.9769538111825047,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.7975346909136737,
+      "wall_latency_ratio": 0.8537140273312107,
+      "nonloop_memory_ratio": 2.3037252760587306,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.8784840844687332,
+      "wall_latency_ratio": 0.8559541364972836,
+      "nonloop_memory_ratio": 1.127051969618599,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.833032506938746,
+      "wall_latency_ratio": 0.7221653046617486,
+      "nonloop_memory_ratio": 2.841011141652154,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.8806523948569861,
+      "wall_latency_ratio": 0.729356757189788,
+      "nonloop_memory_ratio": 1.1836842005404629,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.7738710933774912,
+      "wall_latency_ratio": 0.8355216140729317,
+      "nonloop_memory_ratio": 3.763031532234299,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.8906385979519074,
+      "wall_latency_ratio": 0.8335334654905842,
+      "nonloop_memory_ratio": 1.2284025015900986,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.815376933199767,
+      "wall_latency_ratio": 0.6857529693021823,
+      "nonloop_memory_ratio": 4.886647852451793,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 4096,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.8932470184335416,
+      "wall_latency_ratio": 0.716424789457122,
+      "nonloop_memory_ratio": 1.2947691106756327,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 4097,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.9310079493668142,
+      "wall_latency_ratio": 1.0845060556737762,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 4097,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.969043269286555,
+      "wall_latency_ratio": 1.0217742648904924,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 4097,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.9660166716647528,
+      "wall_latency_ratio": 0.9812770253157671,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 4097,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.9624559172578042,
+      "wall_latency_ratio": 0.9419468713797013,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 4097,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.8725230028553981,
+      "wall_latency_ratio": 0.9017207356088233,
+      "nonloop_memory_ratio": 1.8129068181509527,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 4097,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.9613708040255903,
+      "wall_latency_ratio": 0.8520270412688246,
+      "nonloop_memory_ratio": 1.065424017455629,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 4097,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.9337100062924729,
+      "wall_latency_ratio": 0.8867116781600383,
+      "nonloop_memory_ratio": 2.243276121634906,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 4097,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.9525191376821265,
+      "wall_latency_ratio": 0.8652765579415981,
+      "nonloop_memory_ratio": 1.0989092812565169,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 4,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.9164628789857309,
+      "wall_latency_ratio": 1.13520524985615,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 4,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.9177682087117929,
+      "wall_latency_ratio": 1.0126987082875867,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 4,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.9595019267751388,
+      "wall_latency_ratio": 1.043338013871766,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 4,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.9684076061356981,
+      "wall_latency_ratio": 0.9515869345678115,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 4,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.889660818653037,
+      "wall_latency_ratio": 0.9135172500419206,
+      "nonloop_memory_ratio": 1.4873468823806255,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 4,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.915362717604106,
+      "wall_latency_ratio": 0.9103880590980608,
+      "nonloop_memory_ratio": 1.0719400388141604,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 4,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.9275874029347849,
+      "wall_latency_ratio": 0.7801698737990121,
+      "nonloop_memory_ratio": 1.6857382498533482,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 4,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.9238085968606771,
+      "wall_latency_ratio": 0.7650978866401288,
+      "nonloop_memory_ratio": 1.1039860847865797,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 50257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.987903544258699,
+      "wall_latency_ratio": 1.007326254767122,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 50257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.9974821985886242,
+      "wall_latency_ratio": 1.0028607428298444,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 50257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.9878350390077855,
+      "wall_latency_ratio": 1.0061093580943954,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 50257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.9956664621229729,
+      "wall_latency_ratio": 0.9483878980886105,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 50257,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.9492742238539872,
+      "wall_latency_ratio": 0.8845024893392981,
+      "nonloop_memory_ratio": 1.2324855412171656,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 50257,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.9970101883581335,
+      "wall_latency_ratio": 0.8508706834772692,
+      "nonloop_memory_ratio": 1.0137878349750868,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 50257,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.9690084046308348,
+      "wall_latency_ratio": 0.7176397391463596,
+      "nonloop_memory_ratio": 1.4097956475772897,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 1025,
+        "vocab": 50257,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.9947153516259878,
+      "wall_latency_ratio": 0.7263696481178546,
+      "nonloop_memory_ratio": 1.0196216895710455,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.8637368843957705,
+      "wall_latency_ratio": 1.023733467982047,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.8906919280427641,
+      "wall_latency_ratio": 0.9485978238153303,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.8691816568111471,
+      "wall_latency_ratio": 0.9919930227210241,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.9014847786327813,
+      "wall_latency_ratio": 0.8778844756526109,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "none",
+      "memory_ratio": 0.8527576434025946,
+      "wall_latency_ratio": 0.8322448661102542,
+      "nonloop_memory_ratio": 1.5941853595506104,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "policy": "loop",
+      "memory_ratio": 0.8775724696771162,
+      "wall_latency_ratio": 0.8233947486292006,
+      "nonloop_memory_ratio": 1.06875527459875,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "none",
+      "memory_ratio": 0.893139684436987,
+      "wall_latency_ratio": 0.6954141530249027,
+      "nonloop_memory_ratio": 1.7240526533429659,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 257,
+        "vocab": 4096,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "policy": "loop",
+      "memory_ratio": 0.9012009842362784,
+      "wall_latency_ratio": 0.7055718655975263,
+      "nonloop_memory_ratio": 1.087516696478575,
+      "qualifies": false
+    }
+  ],
+  "inference": [
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.9812810627525663,
+      "latency_ratio": 1.0986791065510932,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.9812810627525663,
+      "latency_ratio": 1.035211227191667,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.9789521965141168,
+      "latency_ratio": 0.929903973827959,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.9789521965141168,
+      "latency_ratio": 0.9367088225202045,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.9175700552260176,
+      "latency_ratio": 0.9729867769271162,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.9175700552260176,
+      "latency_ratio": 0.910112330156465,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.8623092236230923,
+      "latency_ratio": 0.8587836674471058,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.8623092236230923,
+      "latency_ratio": 0.8430034041549742,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.9154569484768385,
+      "latency_ratio": 0.8681831070276884,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.9154569484768385,
+      "latency_ratio": 0.8787878930413622,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.906341417382278,
+      "latency_ratio": 0.7988355913405841,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.906341417382278,
+      "latency_ratio": 0.8459302438714863,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.6969084977473978,
+      "latency_ratio": 0.8261949621508736,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.6969084977473978,
+      "latency_ratio": 0.8125774253433337,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.5652457590256633,
+      "latency_ratio": 0.7349086815172104,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.5652457590256633,
+      "latency_ratio": 0.7854495190665972,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.807167691896229,
+      "latency_ratio": 0.8035530811975702,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.807167691896229,
+      "latency_ratio": 0.8432835453504772,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.7892595940504561,
+      "latency_ratio": 0.7854911231119125,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.7892595940504561,
+      "latency_ratio": 0.8240382195017368,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.4705758942620371,
+      "latency_ratio": 0.7814347630225933,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.4705758942620371,
+      "latency_ratio": 0.7886886128959089,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.33466391964975534,
+      "latency_ratio": 0.6977247173243878,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 10,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.33466391964975534,
+      "latency_ratio": 0.7721163244713868,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.674241215332078,
+      "latency_ratio": 0.783508866620048,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.674241215332078,
+      "latency_ratio": 0.8308207514111702,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.6494353911691122,
+      "latency_ratio": 0.7634480040572613,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.6494353911691122,
+      "latency_ratio": 0.8200304534986609,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.3053154563397536,
+      "latency_ratio": 0.7759981078365904,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.3053154563397536,
+      "latency_ratio": 0.7815247093979619,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.1992181511574429,
+      "latency_ratio": 0.7030301694577765,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 128,
+        "heads": 4,
+        "layers": 2,
+        "batch": 1,
+        "sequence": 257,
+        "loops": 20,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.1992181511574429,
+      "latency_ratio": 0.7691652914861765,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.8132731541130811,
+      "latency_ratio": 1.0764191288446998,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.8220184981461109,
+      "latency_ratio": 0.8234619545247567,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.7270375161707633,
+      "latency_ratio": 0.855994080620446,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.7270375161707633,
+      "latency_ratio": 0.8295454757282767,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.7835002860749607,
+      "latency_ratio": 0.9425991971238954,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.7940985152015083,
+      "latency_ratio": 0.7894225981051811,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.6687413290567287,
+      "latency_ratio": 0.7986215331432829,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 1,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.6687413290567287,
+      "latency_ratio": 0.7437499689944991,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.577669493194389,
+      "latency_ratio": 0.849568392302398,
+      "nonloop_memory_ratio": 0.9978228753596143,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.5799856259882133,
+      "latency_ratio": 0.7528285427263982,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.48567754990198764,
+      "latency_ratio": 0.7849788825989871,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.48567754990198764,
+      "latency_ratio": 0.7662682758139611,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.5413562152017124,
+      "latency_ratio": 0.80419857966782,
+      "nonloop_memory_ratio": 0.9996754451038575,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.535550116031408,
+      "latency_ratio": 0.7663171343714124,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.404656464444975,
+      "latency_ratio": 0.7192366544667399,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 1025,
+        "loops": 4,
+        "rank": 32,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.404656464444975,
+      "latency_ratio": 0.7210591465569088,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.7804442042466508,
+      "latency_ratio": 1.1386652854333037,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.7804442042466508,
+      "latency_ratio": 0.9194758870237154,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.5869822793380467,
+      "latency_ratio": 0.8366498066857343,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.5869822793380467,
+      "latency_ratio": 0.8371868898850112,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.7670130987349776,
+      "latency_ratio": 0.9157387939938074,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.7670130987349776,
+      "latency_ratio": 0.8359509408781529,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.5369874409813694,
+      "latency_ratio": 0.7830275847890839,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.5369874409813694,
+      "latency_ratio": 0.8100662660203665,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.25639782431292746,
+      "latency_ratio": 0.9107666154321304,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.25639782431292746,
+      "latency_ratio": 0.8752653879417782,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.12116374386884364,
+      "latency_ratio": 0.7745020598777822,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.12116374386884364,
+      "latency_ratio": 0.6994948826033236,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.24204301960952646,
+      "latency_ratio": 0.8326780376273442,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.24204301960952646,
+      "latency_ratio": 0.826614412105056,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.10112705439023485,
+      "latency_ratio": 0.7026400627617346,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.10112705439023485,
+      "latency_ratio": 0.7512671661818056,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.8801563133334026,
+      "latency_ratio": 1.3503178025493725,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.8731374566518044,
+      "latency_ratio": 1.190909021757428,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.6558077158444332,
+      "latency_ratio": 0.8600169272944886,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.6558077158444332,
+      "latency_ratio": 0.9574468204880167,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.8728727882328288,
+      "latency_ratio": 1.1096262751076886,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.8653767678513001,
+      "latency_ratio": 1.0405461676125225,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.6136332124378799,
+      "latency_ratio": 0.7778852990641272,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.6136332124378799,
+      "latency_ratio": 0.9164857537522006,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.2891531160762149,
+      "latency_ratio": 1.1671555908518059,
+      "nonloop_memory_ratio": 0.9999921277818451,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.2868495062148526,
+      "latency_ratio": 1.1495968546115543,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.13537019318633828,
+      "latency_ratio": 0.7532118921234152,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.13537019318633828,
+      "latency_ratio": 0.8057411437764315,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.275432985181808,
+      "latency_ratio": 1.0378751029626134,
+      "nonloop_memory_ratio": 0.9999452472507803,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.27308490558376575,
+      "latency_ratio": 1.032459368553385,
+      "nonloop_memory_ratio": 1.0000084964654703,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.11837405569428201,
+      "latency_ratio": 0.7066124329006289,
+      "nonloop_memory_ratio": 1.024343544857768,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 128,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.11837405569428201,
+      "latency_ratio": 0.8582668590904596,
+      "nonloop_memory_ratio": 1.024343544857768,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.8761527134525053,
+      "latency_ratio": 1.0886686349476644,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.8744584408103979,
+      "latency_ratio": 0.9286987309589104,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.7879043631800464,
+      "latency_ratio": 0.8733642120453489,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.7879043631800464,
+      "latency_ratio": 0.8446069801523572,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.873207759347765,
+      "latency_ratio": 0.9290563733922468,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.854206857774374,
+      "latency_ratio": 0.8728782192654305,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.7014866128020283,
+      "latency_ratio": 0.8068464995118064,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.7014866128020283,
+      "latency_ratio": 0.8109752032746723,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.6107197830179503,
+      "latency_ratio": 0.863840188434132,
+      "nonloop_memory_ratio": 1.0021031678966443,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.6235638736384207,
+      "latency_ratio": 0.8454375817698381,
+      "nonloop_memory_ratio": 1.0180995475113122,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.48667558390780946,
+      "latency_ratio": 0.7736627002677569,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.492978786973409,
+      "latency_ratio": 0.7970369935526556,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.568961487685787,
+      "latency_ratio": 0.8091070332668222,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.5829927522620845,
+      "latency_ratio": 0.8455970575150652,
+      "nonloop_memory_ratio": 1.021517579499285,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.4302284489190102,
+      "latency_ratio": 0.7267587320019466,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 512,
+        "heads": 8,
+        "layers": 4,
+        "batch": 4,
+        "sequence": 257,
+        "loops": 4,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.4302284489190102,
+      "latency_ratio": 0.7822981934572557,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.6800189315273326,
+      "latency_ratio": 1.0414073353709121,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.680854904311716,
+      "latency_ratio": 0.9108312453716316,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.5910577479931294,
+      "latency_ratio": 0.8118010296325134,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.5885326911723056,
+      "latency_ratio": 0.7165612338572941,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.6768467296710412,
+      "latency_ratio": 0.8804409040988215,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.6782713058428835,
+      "latency_ratio": 0.84688563548263,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.5805337919244192,
+      "latency_ratio": 0.7487747318802113,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 1,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.5805337919244192,
+      "latency_ratio": 0.7647125227990719,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": false
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.17446074762767622,
+      "latency_ratio": 0.8896318171248841,
+      "nonloop_memory_ratio": 1.0008229751516156,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.17452967509664555,
+      "latency_ratio": 0.8880962144485356,
+      "nonloop_memory_ratio": 1.0008226498644717,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.12466228109492461,
+      "latency_ratio": 0.7526629660384428,
+      "nonloop_memory_ratio": 1.001220599524157,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "torch",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.12419642342716387,
+      "latency_ratio": 0.7040706668467361,
+      "nonloop_memory_ratio": 1.001225836417876,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "eager",
+      "memory_ratio": 0.17042502042731436,
+      "latency_ratio": 0.8445172089885873,
+      "nonloop_memory_ratio": 0.9987431031496647,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "prefill",
+      "mode": "graph",
+      "memory_ratio": 0.1709986458724159,
+      "latency_ratio": 0.8416921990921115,
+      "nonloop_memory_ratio": 1.0,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "eager",
+      "memory_ratio": 0.12022634548539882,
+      "latency_ratio": 0.7174996513626416,
+      "nonloop_memory_ratio": 1.0038417746906274,
+      "qualifies": true
+    },
+    {
+      "geometry": {
+        "width": 768,
+        "heads": 12,
+        "layers": 12,
+        "batch": 1,
+        "sequence": 4097,
+        "loops": 10,
+        "rank": 64,
+        "methods": null
+      },
+      "backend": "tensor",
+      "phase": "four_token_decode",
+      "mode": "graph",
+      "memory_ratio": 0.12022634548539882,
+      "latency_ratio": 0.7534448999191119,
+      "nonloop_memory_ratio": 1.0038417746906274,
+      "qualifies": true
+    }
+  ],
+  "counts": {
+    "training_comparisons": 76,
+    "training_qualifying": 0,
+    "inference_comparisons": 112,
+    "inference_qualifying": 40
+  },
+  "figures": {
+    "scaling.png": "2ac43707c2bdb49046203175db10c38a359f4cd682178768c893ab81f36fd333",
+    "scaling.pdf": "9ac09691a111d0bc361579b59295fd38b3c836fd1ee95a34109a7493edf38823"
+  }
+}

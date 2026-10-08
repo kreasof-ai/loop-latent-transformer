@@ -25,7 +25,30 @@ Constant total training memory and constant total communication have **not**
 been demonstrated: exact loop checkpoints retain full residual boundary states,
 and compute still grows with T.
 
-## L40S CUDA study — 2026-10-08
+## Qualified Tensor model study — 2026-10-08
+
+The [Tensor dependency gate](https://github.com/kreasof-ai/tensor/blob/main/docs/research/llt-readiness.md)
+has passed, and the new [full-model L40S report](benchmarks/L40S_NATIVE.md) is complete:
+152 training methods, 84 causal-forward/persistent-decode methods, independent
+algebra/all-parameter gradient checks, short trained-weight generation and
+706 audited CUDA artifacts. Tensor supplies numerical model operators,
+backward kernels, loss, clipping and AdamW; PyTorch controls layouts and autograd.
+
+Global LLT meets the combined resource criteria in **40/112 inference comparisons**
+and **0/76 training comparisons**. At width 768, 12 layers, a real 4097-token
+prefix and ten loops, Tensor LLT uses **196.7 MiB** graph decode allocation versus
+**1636.4 MiB** for Tensor naive, an **88.0%** saving. Four-token graph latency is
+**134.9 ms versus 179.1 ms**, but the same LLT with optimized Torch takes only
+**30.3 ms**. Full numerical Tensor execution has substantial latency regressions;
+the earlier attention-only speed results do not transfer to this backend.
+
+See the [frozen architecture](research/MODEL.md),
+[reproduction protocol](experiments/l40s/NATIVE.md) and
+[research roadmap](research/ROADMAP.md). Trained quality, constant total training
+memory and distributed scaling remain unvalidated. Tensor development records
+remain in the [Tensor repository](https://github.com/kreasof-ai/tensor).
+
+## Earlier attention-only L40S study — 2026-10-08
 
 The new [L40S report](benchmarks/L40S.md) prioritizes kernels and memory scaling:
 30 decoder geometries, ten causal-prefill geometries, 20 GPU-training geometries,
@@ -51,9 +74,8 @@ counted explicitly. Trained quality, RoPE and distributed scaling remain open.
 See [raw results, figures and reproduction](benchmarks/L40S.md) and the
 [Tensor feature gaps and compiler reproducer](https://github.com/kreasof-ai/tensor/blob/main/docs/research/llt-l40s-followups.md).
 
-Complete the [Tensor kernel and training readiness gate](https://github.com/kreasof-ai/tensor/blob/main/docs/plan/llt-readiness.md)
-before resuming the [LLT architecture, quality, and scaling roadmap](research/ROADMAP.md).
-Tensor development plans and logs are maintained in its repository.
+The subsequent Tensor dependency qualification and full-model study are linked
+above. Tensor development plans and logs are maintained in its repository.
 
 ## Earlier provisional evidence — 2026-10-06
 

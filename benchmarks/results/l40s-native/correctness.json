@@ -1,0 +1,2662 @@
+{
+  "status": "passed",
+  "phase": "correctness",
+  "environment": {
+    "timestamp_utc": "2026-10-08T09:31:33Z",
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "packages": {
+      "torch": "2.14.0",
+      "numpy": "2.5.3",
+      "tensor-workspace": "0.1.0",
+      "tensor-torch": "0.1.0",
+      "tilelang": "0.1.14",
+      "apache-tvm-ffi": "0.1.12"
+    },
+    "capability": [
+      8,
+      9
+    ],
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "tensor_implementation_commit": "ab17948fe94dd7c7b857c8f067c465e901329b94",
+    "tensor_checkout_commit": "8a407fd531d134fa11ed29af82599e6df3b97a96",
+    "llt_base_commit": "2a6d94f13bcc8ba6dee3f633dca1813f7a1e9bb4",
+    "driver": "595.91.07",
+    "sources": {
+      "model.py": "9a8dbc99556f8ff83d2c767a3f124acfcfbfdfde8bcc7a2ceda5869f7ed33956",
+      "tensor_model.py": "5415cfe09f23416d1c65d23ed9037af7417efe58327b9672115be594b6d64114",
+      "native_study.py": "90003f07a1b850ce0c550daa9ab01d4b70a1b5b30da39f75054e49ec1c23ca30",
+      "native_summary.py": "175e13afacf1183a51f9ec4a88e1f29a8d7d4f17ff59cbc4d74a025da8d2f1df",
+      "common.py": "20bde69a47e64031f414b3920f663d218397ec56486e2c95ce54ad5d1c0d7862",
+      "run_native.sh": "9cc324db265f41fc1260522dc6ce4a9124592aa8c6c104837e1e7e1a00e45505"
+    },
+    "nvrtc_bootstrap_sha256": "aaeb622f56a1676e18aa420879723856ee1b2c82c913077ff3a779f23bad1fa4"
+  },
+  "tolerances": {
+    "logit_atol": 0.025,
+    "logit_rtol": 0.025,
+    "gradient_relative_l2": 0.08,
+    "training_loss_absolute": 0.15,
+    "checkpoint_gradient_atol": 2e-06,
+    "checkpoint_gradient_rtol": 0.0002
+  },
+  "protocol": {
+    "samples": 9,
+    "precision": "FP32 master/residual; BF16 GEMM/attention",
+    "seeds": {
+      "correctness": 601,
+      "training_model": 602,
+      "training_data": 1602,
+      "inference_model": 603,
+      "inference_data": 1603
+    },
+    "positions": "learned absolute",
+    "norm": "unweighted RMSNorm epsilon 1e-5",
+    "gelu": "exact",
+    "architecture": "initial-input global latent; loop-tied blocks; batched differentiable folds",
+    "torch_attention": "forced Flash SDPA, shared latent expanded as views",
+    "tensor_control": "PyTorch layouts, autograd and exact loop checkpoints, tied-gradient sums",
+    "memory": "CUDA allocator peak; includes weights, optimizer, activations and visible workspaces; excludes driver/context",
+    "timing": "one GPU process; compilation and warmup excluded; all observations retained"
+  },
+  "cases": [
+    {
+      "kind": "naive",
+      "config": {
+        "kind": "naive",
+        "width": 64,
+        "heads": 2,
+        "layers": 2,
+        "loops": 3,
+        "rank": 32,
+        "vocab": 64,
+        "max_seq": 64,
+        "untied": false,
+        "gelu": "none"
+      },
+      "algebra_output_max_error": 0.0,
+      "algebra_gradient_max_error": 0.0,
+      "logit_max_error": 0.0,
+      "gradient_relative_l2": {
+        "token.weight": 0.0011885238345712423,
+        "position.weight": 0.0014694604324176908,
+        "blocks.0.q.weight": 0.0036787125281989574,
+        "blocks.0.o.weight": 0.0027417680248618126,
+        "blocks.0.w1.weight": 0.0028089031111449003,
+        "blocks.0.w2.weight": 0.0025838278234004974,
+        "blocks.0.k.weight": 0.003405385185033083,
+        "blocks.0.v.weight": 0.003255732823163271,
+        "blocks.1.q.weight": 0.003392645623534918,
+        "blocks.1.o.weight": 0.002630196511745453,
+        "blocks.1.w1.weight": 0.002632398856803775,
+        "blocks.1.w2.weight": 0.0024783725384622812,
+        "blocks.1.k.weight": 0.0035206566099077463,
+        "blocks.1.v.weight": 0.0029445081017911434,
+        "output.weight": 0.0
+      },
+      "checkpoint_gradient_max_error": 2.3283064365386963e-10,
+      "training_steps": 32,
+      "training_loss_absolute_drifts": [
+        0.0,
+        5.1975250244140625e-05,
+        0.0003132820129394531,
+        0.0001785755157470703,
+        0.0001957416534423828,
+        2.288818359375e-05,
+        0.00043845176696777344,
+        0.0004489421844482422,
+        0.00036978721618652344,
+        0.0002868175506591797,
+        0.00016260147094726562,
+        0.00019860267639160156,
+        0.0005431175231933594,
+        0.00019550323486328125,
+        4.00543212890625e-05,
+        0.00010609626770019531,
+        0.00015997886657714844,
+        0.0001251697540283203,
+        0.0003237724304199219,
+        0.0005042552947998047,
+        0.00039196014404296875,
+        9.202957153320312e-05,
+        0.0002332925796508789,
+        0.00017464160919189453,
+        8.952617645263672e-05,
+        0.0002682209014892578,
+        0.00015079975128173828,
+        0.0003851652145385742,
+        0.0019989013671875,
+        0.0006526708602905273,
+        0.0012415647506713867,
+        0.00024509429931640625
+      ],
+      "final_training_losses": {
+        "tensor": 1.418005108833313,
+        "torch": 1.4182502031326294
+      },
+      "trained_causal": "passed",
+      "trained_decode_max_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cache_count": 6,
+      "cache_bytes": 98400,
+      "stable_cache_storage": true,
+      "stale_weights_rejected": true
+    },
+    {
+      "kind": "llt",
+      "config": {
+        "kind": "llt",
+        "width": 64,
+        "heads": 2,
+        "layers": 2,
+        "loops": 3,
+        "rank": 32,
+        "vocab": 64,
+        "max_seq": 64,
+        "untied": false,
+        "gelu": "none"
+      },
+      "algebra_output_max_error": 0.0,
+      "algebra_gradient_max_error": 8.673617379884035e-19,
+      "logit_max_error": 0.001953125,
+      "gradient_relative_l2": {
+        "token.weight": 0.0016668287571519613,
+        "position.weight": 0.0021714968606829643,
+        "blocks.0.uk": 0.0046630012802779675,
+        "blocks.0.uv": 0.002582233166322112,
+        "blocks.0.q.weight": 0.0047283233143389225,
+        "blocks.0.o.weight": 0.0025592551100999117,
+        "blocks.0.w1.weight": 0.002618147525936365,
+        "blocks.0.w2.weight": 0.0024769671726971865,
+        "blocks.1.uk": 0.0042359111830592155,
+        "blocks.1.uv": 0.0026036580093204975,
+        "blocks.1.q.weight": 0.004144391510635614,
+        "blocks.1.o.weight": 0.0022602376993745565,
+        "blocks.1.w1.weight": 0.002550594974309206,
+        "blocks.1.w2.weight": 0.002421924378722906,
+        "down.0.weight": 0.004937798250466585,
+        "output.weight": 0.00046131713315844536
+      },
+      "checkpoint_gradient_max_error": 0.0,
+      "training_steps": 32,
+      "training_loss_absolute_drifts": [
+        0.0,
+        6.937980651855469e-05,
+        1.3828277587890625e-05,
+        0.0002541542053222656,
+        0.00019598007202148438,
+        0.0004703998565673828,
+        0.00010347366333007812,
+        2.47955322265625e-05,
+        0.0003657341003417969,
+        0.0001518726348876953,
+        0.00043511390686035156,
+        5.412101745605469e-05,
+        0.00032258033752441406,
+        0.00011277198791503906,
+        0.00019931793212890625,
+        0.00018978118896484375,
+        0.00034499168395996094,
+        3.2901763916015625e-05,
+        0.0001373291015625,
+        0.00026488304138183594,
+        0.000308990478515625,
+        9.429454803466797e-05,
+        0.001080632209777832,
+        0.0014878511428833008,
+        0.0013501644134521484,
+        0.00016021728515625,
+        0.0015197992324829102,
+        0.0009046792984008789,
+        0.00016891956329345703,
+        0.00028264522552490234,
+        0.0002619028091430664,
+        0.0016764402389526367
+      ],
+      "final_training_losses": {
+        "tensor": 1.4371001720428467,
+        "torch": 1.4387766122817993
+      },
+      "trained_causal": "passed",
+      "trained_decode_max_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cache_count": 1,
+      "cache_bytes": 4112,
+      "stable_cache_storage": true,
+      "stale_weights_rejected": true
+    },
+    {
+      "kind": "layerwise",
+      "config": {
+        "kind": "layerwise",
+        "width": 64,
+        "heads": 2,
+        "layers": 2,
+        "loops": 3,
+        "rank": 32,
+        "vocab": 64,
+        "max_seq": 64,
+        "untied": false,
+        "gelu": "none"
+      },
+      "algebra_output_max_error": 0.0,
+      "algebra_gradient_max_error": 1.734723475976807e-18,
+      "logit_max_error": 0.0,
+      "gradient_relative_l2": {
+        "token.weight": 0.001624350668862462,
+        "position.weight": 0.0021691371221095324,
+        "blocks.0.uk": 0.004412081558257341,
+        "blocks.0.uv": 0.002456486690789461,
+        "blocks.0.q.weight": 0.004221557639539242,
+        "blocks.0.o.weight": 0.0023283425252884626,
+        "blocks.0.w1.weight": 0.0026030258741229773,
+        "blocks.0.w2.weight": 0.0024077564012259245,
+        "blocks.1.uk": 0.004044812638312578,
+        "blocks.1.uv": 0.002146288054063916,
+        "blocks.1.q.weight": 0.0041346061043441296,
+        "blocks.1.o.weight": 0.0017741471529006958,
+        "blocks.1.w1.weight": 0.002470359904691577,
+        "blocks.1.w2.weight": 0.0023724704515188932,
+        "down.0.weight": 0.004907503258436918,
+        "down.1.weight": 0.0045450106263160706,
+        "output.weight": 0.0
+      },
+      "checkpoint_gradient_max_error": 2.3283064365386963e-10,
+      "training_steps": 32,
+      "training_loss_absolute_drifts": [
+        0.0,
+        0.00033402442932128906,
+        0.0003418922424316406,
+        1.8835067749023438e-05,
+        0.0002300739288330078,
+        0.00023674964904785156,
+        2.765655517578125e-05,
+        8.535385131835938e-05,
+        0.0003325939178466797,
+        0.00045990943908691406,
+        4.363059997558594e-05,
+        0.0001423358917236328,
+        0.0002856254577636719,
+        0.00044989585876464844,
+        0.0002562999725341797,
+        0.0002472400665283203,
+        0.0003859996795654297,
+        0.0003235340118408203,
+        0.00021123886108398438,
+        0.00010323524475097656,
+        0.0005064010620117188,
+        0.00024640560150146484,
+        4.2438507080078125e-05,
+        0.0015271902084350586,
+        0.00018548965454101562,
+        0.0033731460571289062,
+        0.00028336048126220703,
+        0.0012392997741699219,
+        0.001048445701599121,
+        0.0014818906784057617,
+        1.9788742065429688e-05,
+        0.000904083251953125
+      ],
+      "final_training_losses": {
+        "tensor": 1.4124584197998047,
+        "torch": 1.4133625030517578
+      },
+      "trained_causal": "passed",
+      "trained_decode_max_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cache_count": 2,
+      "cache_bytes": 8224,
+      "stable_cache_storage": true,
+      "stale_weights_rejected": true
+    }
+  ],
+  "coverage": {
+    "artifacts": [
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 34,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/078121bff6689c0fc0fda8528d55547e3b77f42919d3b5a457ead6959e70f622.tbin",
+        "sha256": "31c835a963ab2186cd21b4c0721f4dfc072ca764fd590dae1f6e3d822f384502",
+        "cache_hit": true,
+        "export_source_sha256": "5ae748411b8145366edb017a3fdf8c2d4badd260962c10950537ce579aaa62ba"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 17,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/3878509bcda6ec9bb25a484b1a5655f43821c22f7f2c9ed8286f99d940ff25e3.tbin",
+        "sha256": "d84deab31250fcd8cee8cba8c03f246b1207ce156eef26a30b623ba9263829bc",
+        "cache_hit": true,
+        "export_source_sha256": "30af8079462dac8a699c970afa08aee788d6c94fda78cf932146e4f0a6be9b4f"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 2176,
+          "dtype": "float32",
+          "other_dtype": "float32",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/a48f5710e2e7e04e7c6bde78b436cc51679a19cb0798613a5ba01346591ae543.tbin",
+        "sha256": "9fa800bfecb02422a083769ea14f7f992aee8ed76782bc52933421594b9ca891",
+        "cache_hit": true,
+        "export_source_sha256": "70eb9849f5e5aa9bd629d03b8783e3a4808545d4026f9211027c1dcc7b7a9dcb"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms",
+          "r": 34,
+          "c": 64,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/aba5d40417ee51908697b0928ab7c6f594e09811854034df034fa3e81ed46f20.tbin",
+        "sha256": "b015e64f82e1146ec20f9bc880a93fa67d8181203c0fe9a6a9503a20823ac0af",
+        "cache_hit": true,
+        "export_source_sha256": "6b304a9951ed1d31252a8f3949774409f4b28b5b3449790f4616af3ad61083c2"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 2176,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/e15647f89307264092b7369ad4e199c7e09a843ec9a716dfa8af2bcab69f50aa.tbin",
+        "sha256": "f399d50a48a2746edf1c8801ef5738e65fbbc7d9cce7a5c97a19a119bbd67f64",
+        "cache_hit": true,
+        "export_source_sha256": "62a2a7a5a00688788d2d9ae50ba08681be001f4eec07898e690a2fb9c6e5fe07"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 4096,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/35f09495e5f213a4054728d6a839fdeedd59141f770735cdfd31028fab47cf3b.tbin",
+        "sha256": "1f699d721dcbf6f2b4ec09f61aed5a1044fcdf056213482d6d42b66b9cb5cb89",
+        "cache_hit": true,
+        "export_source_sha256": "41e82fb985cbd2afd51b9bffa408a060241c186388a6539ff5f280a7a5486fb0"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 34,
+          "k": 64,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/bbfcb06fd71a281e43477fb1dac93cdb7363100feffcbbd295871e8acff9640f.tbin",
+        "sha256": "ea110512e648bb452ede14d97dccb58d4efc5ccbe410c52244395bfaacac4ddd",
+        "cache_hit": true,
+        "export_source_sha256": "1db6461cd9597cc2a5e8ba8cbb509d2a9649b6ba514473e1725cc0eebdb937db"
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          2,
+          17,
+          17,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/1d2346769ee5d02c7fcebf1f11af040c839b7367c0b7c68c28a9ba611e82e96d.tbin",
+        "sha256": "33793a55e39e5ff2c363fd3b17f5438f9155d1e5e1ac38e53bea35936623d377",
+        "cache_hit": true,
+        "export_source_sha256": "7ac37ea320b92790803f25fb812f0ed0cba87b52e141d3c883a0e64db6047e3f"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 2176,
+          "dtype": "float32",
+          "other_dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/b6528364cbd7b2858e5695c51f5a7ea9f9ad584aa05f6d0d60da5708b735751c.tbin",
+        "sha256": "46ff95699bc1e7618eff0e9bdd053467c7e81d0719d24772c1f3c31b25518665",
+        "cache_hit": true,
+        "export_source_sha256": "a74543025971b6695af8a22970924da6caca54248bfe3b20ebbf805a9bc864aa"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 16384,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/278c22295659bcc3b3a91215736d800caa3f4ae50487bf57a03e7e764bc8e694.tbin",
+        "sha256": "eb6d21e52e8d6f036cebd5fc0180ba38d3869fee51fbd608b866b7d00701355e",
+        "cache_hit": true,
+        "export_source_sha256": "c3c9b06ba57e81b657c589a9785ea7b1090278f7377f8d7d559c367cce193766"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 34,
+          "k": 64,
+          "c": 256,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/72256c85c161659cd0365c2b95b69c98c91c4b5d020ff095187e70425f864f4a.tbin",
+        "sha256": "b629b2aec9c22279725a4b1395c0a377fcbe58aca1ac6ecb27dbff0ca5f0c1bb",
+        "cache_hit": true,
+        "export_source_sha256": "06fa896367a3c2869174e928a4adcccf9450ce19202f97751ebaa494d2c38f2e"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gelu",
+          "n": 8704,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/cac75d43ebb178437b16ec56d4edd269b2de384520dd568df5e3693bd64d708a.tbin",
+        "sha256": "fce3f3b681c07057beb185fdd826cc3b3bdb417f7793a5d8541ba4ef31e58f1b",
+        "cache_hit": true,
+        "export_source_sha256": "ff73db2c4ce122754a6be57ef1fa342c099a09ca07e75b92e60038022855ca12"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 34,
+          "k": 256,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/c96b7a6a0ff588dc0e6a4ea090be9f79a190bf3f407b2118697a09745293857a.tbin",
+        "sha256": "af6f29abb6d3e36c80d1a6772a9f221daf9e1d2de27f074227decf67b36c43ee",
+        "cache_hit": true,
+        "export_source_sha256": "18328356ea8f419c13d9cfae9d7ad20988635a22920dcd04c44fee901cf05097"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "ce_parts",
+          "r": 34,
+          "v": 64,
+          "dtype": "bfloat16",
+          "ignore_index": -100
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/1611300bde066c63a65f7b63a3f6b8ed5f6f85f496e87abdfad54a1c2dc1b3e4.tbin",
+        "sha256": "70e4e7c020e5dcb7def4b04fd14562fea0f417e58e3af7d30e467e98e8bcbf3d",
+        "cache_hit": true,
+        "export_source_sha256": "1b57ff427a37aeb7e9cc49e76f4ee370fafb82843df11db5c3fd813c1632dc00"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "ce_finish",
+          "r": 34,
+          "v": 64,
+          "dtype": "bfloat16",
+          "ignore_index": -100
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/810f8abde7f7097fadd1abef3be31ce01fcb1b633a493b524d94949f7653405a.tbin",
+        "sha256": "dfb1e55a9fbf10a5f7023e9cca221a35b454314c511f09ea23f6a96cd36e040b",
+        "cache_hit": true,
+        "export_source_sha256": "c2cd8fdf9326acaf83c650e65867399ce97917dac028b3520bbfd21e85ef41ca"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "ce_reduce",
+          "r": 34,
+          "v": 64,
+          "dtype": "bfloat16",
+          "ignore_index": -100
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/2fa485abc53b78d6936d7d3916b01321ec0d6a41df9e24995298dc56d0a33981.tbin",
+        "sha256": "a7e8e8f3408cd69611426684ca2e890f78173550d88a60258aed039d77529bb2",
+        "cache_hit": true,
+        "export_source_sha256": "b50a12c309b4519d582fea94f39c6fed0189c87af439faea9abd6f5d5f5a919e"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "ce_seed",
+          "r": 34,
+          "v": 64,
+          "dtype": "bfloat16",
+          "ignore_index": -100
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/7300759ddfd719c9218df901351f5579da0957e56b8bfd116af259f365f972ba.tbin",
+        "sha256": "4f643df86d4276a0821a405028d18e1d2169f40c3e9b0d55cda10377c1f9607c",
+        "cache_hit": true,
+        "export_source_sha256": "cf0adaab612f336c3a39c368848cd070963f847451da3d196146a9347c5cccef"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "ce_dx",
+          "r": 34,
+          "v": 64,
+          "dtype": "bfloat16",
+          "ignore_index": -100
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/d267ede625ac9eac4bb2bc132ab754ac33306404f08bb26315dae3c4c5883130.tbin",
+        "sha256": "5480ec1edbf9bf439af30c681f6c5db8d6783d42e229e1844bb4a453736d6dcb",
+        "cache_hit": true,
+        "export_source_sha256": "5411f24e40d96b39287540cd91464ca6b90b75da25c500b3bfeefa1a74bd62ed"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 34,
+          "k": 64,
+          "c": 64,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/c7ca38bc6dde374958186ade3a025128087e6a18ecae3ef340cd889b07f55fcf.tbin",
+        "sha256": "f77f8b912efec9e06e04811f96e3fef5b57064231df4a77616f6504776c3cb00",
+        "cache_hit": true,
+        "export_source_sha256": "649ebd67d637a6e1b0f3fc3681aec2cfb5e619fa24826bb2de803500ea40f1f9"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 64,
+          "k": 34,
+          "c": 64,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/814755da4e76f77e87812e55389a12d00e6464ac13a52d1ee574d53770cdf93a.tbin",
+        "sha256": "18bf97d1674ea60fb6b4e87cf222c0916d74a1f418e8096dcf7ed3ad2580bf94",
+        "cache_hit": true,
+        "export_source_sha256": "a35a6d18ceeed04ccd8c0b2f675299d0c4a1f0060a9408380012e9f24955f4d7"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 2176,
+          "dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/887cf49e3ecf68bcc7dd216cd0981f1715edf3aab4e7c7cfb70477166316ca8f.tbin",
+        "sha256": "7fd3b0f9ee35277bd09d30edb7399861187a1e6ffe72a2727704bf7b39c20a0e",
+        "cache_hit": true,
+        "export_source_sha256": "3d331fa91c21fe5997ccba3e84ac190c45c5a23f4b7abae54e4244d1b7878b54"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 4096,
+          "dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/949f9dd0e380a75cc1468739baa1b8c55a3014e8c7a2db477c02d733b6c6410e.tbin",
+        "sha256": "1c9f9065e72bbe8827bbfc37e2159a1f4e7fdb53fe7d8ed6f4743928f2fa0549",
+        "cache_hit": true,
+        "export_source_sha256": "4bdd83018f44fdcc125e075694b4bfaadfda217d617de9bbe291be481e7d2c76"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms_dx",
+          "r": 34,
+          "c": 64,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/31f5237b6e2467b926ac6922951a9b873c039d5c345530e254832cc97328b052.tbin",
+        "sha256": "afcf4ad37b1670bdfd825743d89bd0bf493ac6443c10f4e8045e85c04969025b",
+        "cache_hit": true,
+        "export_source_sha256": "d5fd7389310d8684575adab2eeb67ea93d87550a71bb448f615d0338cf27a5d2"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms_dw",
+          "r": 34,
+          "c": 64,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/09f745e012a9cb1b8705136167678c375787887bb935ddfa522333d56bbf7fc7.tbin",
+        "sha256": "faa4ce934935296d0ee14716ac5a2e63b006d705be30115715c3daca0310ef1a",
+        "cache_hit": true,
+        "export_source_sha256": "daadbe045dad80e412b475e54c3e659bca2769bb1e081477046aa50c1bba28c6"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 34,
+          "k": 64,
+          "c": 256,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/ef4134a4ae1f72e9bda8a335672ba11af3bf2319b506dae5334a3f6cfca1c995.tbin",
+        "sha256": "8a8f2f9f1080fe837c74f83da9318161af1049a140e9508546743936755c054f",
+        "cache_hit": true,
+        "export_source_sha256": "800e3748607d87adc4ee4a5b25dd706b4a2b9742e07767f541f100f68c85b8ae"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 64,
+          "k": 34,
+          "c": 256,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/1b51608c25df51360a76c3248ed257a5c1027757b9587c0fcc849a1072675430.tbin",
+        "sha256": "90ab91273dde9bfd7b5fbe66d2632f33484a3f5b385a5556ee90af2cac86e460",
+        "cache_hit": true,
+        "export_source_sha256": "4c7fba38fa1cb8bfa9821059037c2b05b34d27aadf40003328272f9420bee7f7"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 16384,
+          "dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/8100611fffd6f70ff8cf632f3deb44ad0d26a12879750585d59bed6dcbbc596f.tbin",
+        "sha256": "d1ac44c3e5ecc7e1cf2a32dbd06c86bedc877207242be96b53891ba0a413adc6",
+        "cache_hit": true,
+        "export_source_sha256": "fdc2cbbe1f13275eded275946a7f37743795d2316015a093f787210fe1160e41"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gelu_dx",
+          "n": 8704,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/38a692f4f807cff6de5dc5f11675e59fc309f64fe3bbae1f692262ad75d6aacf.tbin",
+        "sha256": "e600f9ffcfbeabcdcf5af092ba356c231a4c4b2d75400aa685713831a8380985",
+        "cache_hit": true,
+        "export_source_sha256": "0a1906a2a0076592ce3e6fdf35f828cf6bd0dd2cb7ee30ad0e26f85f81753fc2"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 34,
+          "k": 256,
+          "c": 64,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/8bc97c0c4fadf44ff4adbc1117335b193a787f860cc74c9276e60769f71629bf.tbin",
+        "sha256": "9ff1f1cd3758b9c023c701b2c39788746d2cfe2dbfa66669717599fcfdd0dc3f",
+        "cache_hit": true,
+        "export_source_sha256": "e6e685569e0dd0aa7d5ea17af4ec3afbd977c6b2f214472c37cb12ed3fa27874"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 256,
+          "k": 34,
+          "c": 64,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/52b8268a55ce674eeb84974cfb8d131519d41565858efb9007413f2b21650b5d.tbin",
+        "sha256": "a36104c2c10ab8f8cee7357e4553fac92035b11aa7586c86b3e782a049e6cfc5",
+        "cache_hit": true,
+        "export_source_sha256": "366a41c2d530326631c76970828ca817c077963d796b711e2c3034135536770f"
+      },
+      {
+        "factory": "attention_delta",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          17,
+          32,
+          "bfloat16"
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/e5636dd82390d160433179792ee994f887907e271faf7f57b1690aaf9d71e29b.tbin",
+        "sha256": "6c8ccd3a24f821c5b2789a42e9e330d2f8e30392273cf5d979f37e8ddb857f49",
+        "cache_hit": true,
+        "export_source_sha256": "62167d961bb612ace13eda88a09b1efb457fc825da13aaed4e71ac74d771c5f3"
+      },
+      {
+        "factory": "attention_dq",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          2,
+          17,
+          17,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/3b0f90203bbe5cda12f0b32ec8a9c855144756aa86ae201f06093d7cdb1ced6c.tbin",
+        "sha256": "c5dd407281c33bddc673f88675910800fa59778d253587f555d254f4a6b633fc",
+        "cache_hit": true,
+        "export_source_sha256": "59b947f38944f4333c0b5ce3afa04cb29b1ba7625568978d6f7a0e9583adc213"
+      },
+      {
+        "factory": "attention_dkv",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          2,
+          17,
+          17,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369,
+          false
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/47f8e71b9e1405bbf4aefc26c1a26cc1cc17bc40f6405dac08792bd4248452ab.tbin",
+        "sha256": "e188ec6c18ca7cf71382f74bb04d248e66221628f646d56257e1de7a6f821afe",
+        "cache_hit": true,
+        "export_source_sha256": "48bcdf06b28e8170335433928b9a97f49f3eb6d117b661458a1f8bc55e980955"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "zero",
+          "n": 4096,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/61657d2e442322d381e1843db9f3c5ff7f93b9fdde636a13fea473fd9950ca3b.tbin",
+        "sha256": "c4a7199177a58ddd7f9ba0a7be9ed92320be2f4b74f17129937b91ac203f9909",
+        "cache_hit": true,
+        "export_source_sha256": "44f311c7dd8ce2148e4a6687f63dd30c7a2f66e868e26f99a50ae14efd7ba8b7"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding_scatter",
+          "r": 17,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/7740c70b97d51def1630661d0412012a66e3c316c7a0880fc9b398ad99b95acf.tbin",
+        "sha256": "41b11dde6d9d682bfccde0f412199a918cc1ccaa817f99f08c503cf16b11a68e",
+        "cache_hit": true,
+        "export_source_sha256": "1cd4e02b6c030f6d98c76f0576cec855d869f67354a4c02dd07b5a9ef6f1ff0b"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding_scatter",
+          "r": 34,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/ca433a34e7f28ef6c1d9982b83068349290e1ecf6f027d4a5b65d6cc7b342f47.tbin",
+        "sha256": "81d584059285d5c744d6db504d3773618698e34faa25fad349b40343cdb4500b",
+        "cache_hit": true,
+        "export_source_sha256": "9161307fd62970a7a2034e0d11d0054c9ada5c24b2bebe9cd2058b3282d3f775"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "sumsq",
+          "n": 4096,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/ceb335c795f0395d1da7215ad5071c9eff6878e5900541c2879318529debcb01.tbin",
+        "sha256": "25ac10ad292a3bc173fb53586756d650484f82d72c710181e9ff99ddffa0bc01",
+        "cache_hit": true,
+        "export_source_sha256": "21b15575b0070902396cac6baa700ee2e10ab481f5cc8adc293331675f69d627"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "sumsq",
+          "n": 16384,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/d4c6699e7b4d08df724bec3256660ab6380e7bf4864bd616493c0c1c5bbbe6f3.tbin",
+        "sha256": "374eb27f0f02956e66d91d2b5d1be8b3f6e83e35ae14e9990cf3817a00e71870",
+        "cache_hit": true,
+        "export_source_sha256": "c865883cc28818eb85b86c7b6d952a211efd95efd72df70e38cc278c6779966a"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "clip",
+          "n": 108,
+          "limit": 1.0,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/96034127d9eb5ccfef8fd7ad86942bde22b983ca77b8f85231c564c51c268e25.tbin",
+        "sha256": "508951a46f6f29681d29e20fde296b4a9ee56c4e85e11924c6a38d74cb2c1e08",
+        "cache_hit": true,
+        "export_source_sha256": "ef95fd31a2f28ca3131bd0d10ed275ed0b6c88921633ff0cf1ba1e57c6a5489a"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "zero",
+          "n": 1,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/20fa03b1f3bcec94511104fbce17a6851d90b0eed95d89bcd860654f22140aa7.tbin",
+        "sha256": "61b4eed8dc9b9222849dd5048b7bd086cbaa6091a01415c36f4e0472b77bce57",
+        "cache_hit": true,
+        "export_source_sha256": "9b153839f9d765075c538df89967c2dfbafb14f6fdb1e51727b08a7c9cded639"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "adam_step"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/ffd72c7b935bc30d67968c07d72744ee99fce59e8f3010cf3a54baf7cf1f2713.tbin",
+        "sha256": "c8afc025bdc886a982cfc53ff22ae2a9dd52d8222b22f7183ce8302ff4072d96",
+        "cache_hit": true,
+        "export_source_sha256": "636c7797f56e0b7374b3928bfcdf651db7989008a1ea1728cfdce67f8dd339fb"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "adamw",
+          "n": 4096
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/619f4a9b894746ee36a3127d7d3dd170a662a5623502b575c60551e175dd25dc.tbin",
+        "sha256": "eed816ff400116d8704214f901ffbc10432eba8ae626063bfa861b44f3d36906",
+        "cache_hit": true,
+        "export_source_sha256": "afe7cc8db25fa6075043fc79ecbbf06a810d905cbcb9c001a55f88211dcd98c2"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "zero",
+          "n": 16384,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/01c4085e30b2ac59b839f5bfd3a718bfd423bc8bfa161c9e03b31560ab51d920.tbin",
+        "sha256": "d2924501d03df860da1f78ffc413edaca2b834c8dae2854b239e049ce7201cb1",
+        "cache_hit": true,
+        "export_source_sha256": "75e6d421753fea442c9d5e5fe2afe7631307695decd5e6fcaeb34ff9cfc03740"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "adamw",
+          "n": 16384
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/6e13b6624369e825872dbe106b29d1f3e2417ec64da238a700ed489ac8162b77.tbin",
+        "sha256": "74c6b9d3c836b5cfb4bd63520e0e7424a2353a0efdbfde7f53f8ca25591bf5a2",
+        "cache_hit": true,
+        "export_source_sha256": "c3643ce253a7756f441f65900108f2620c6181fc634e7f180c99b8bb0942ba2b"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 26,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/eb8a56a8246d323a9a3c9655fabd56687bdcfe522b57c3f02c67d506ff3a2957.tbin",
+        "sha256": "ecc540e48b81fc27bac5067a2ae95ecf9b250836e8a2db722f64569a5e050c4b",
+        "cache_hit": true,
+        "export_source_sha256": "efd5521dc973e24cd2d7f947433da26a8963bafd72283c6d4b6735625f11cd02"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 13,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/bea5d9a5a8a64e392642da1fb72d151e8bcdb0fe04f79a07dea2aff1a7832463.tbin",
+        "sha256": "c430a03599ab633f5f5e5e00d1817c5e602e35038f9bdfbba7c1f2fc636a00e6",
+        "cache_hit": true,
+        "export_source_sha256": "4e1bf4f4dadd49b495f46a9ee0dfaf2b126c743ce978ee05004662682615b613"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 1664,
+          "dtype": "float32",
+          "other_dtype": "float32",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/a881a297d82ddc3723a1956a4db62d577523fbcaa3f4108c23caa79495452ad0.tbin",
+        "sha256": "4177458564d1aef81ebf2fa7fcabb821eef8b440d677ebf668bc3a1fd1386c81",
+        "cache_hit": true,
+        "export_source_sha256": "75305dc480ae922a44d87a03cc4a19615a61a615731cb387a5d3567fd0189ab5"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms",
+          "r": 26,
+          "c": 64,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/ff4aec3a492581f1adc592d1dd96c3c4c9b092fc697468676fbd8b10360b4d07.tbin",
+        "sha256": "8097468ac5fbab30b9cd314980516e9166c9a75290000c203d625f039e85256e",
+        "cache_hit": true,
+        "export_source_sha256": "aa54190810aa41f4f6f968f569ad12b5a2c770a90eb0762980862d5140fa4c5a"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 1664,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/0145dfde46d46f308a3546985d45eff21250d3a6d27e5bd3058dd808dc05e1f9.tbin",
+        "sha256": "806fc696cd29064fccdbc9b5e1b0301144d4a888a5f7d30b362a80988b4e89f6",
+        "cache_hit": true,
+        "export_source_sha256": "b9a4aba4d9ff4e3893b1ccbf95f446319dbac8029fda1727a687cfd2e2483558"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 26,
+          "k": 64,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/6f60ffbbd9e08d80d2ff95a3866952884b977f43cdd90ba08204afa8d8783835.tbin",
+        "sha256": "3aa531fd27bebbb1b968cda50b5a9fd53f622cb50056b2939ae853aa318869f8",
+        "cache_hit": true,
+        "export_source_sha256": "c16b55302447446471bee3b0ede11a6177d494f5cd1507dfb57318af6a4c8438"
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          2,
+          13,
+          13,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/0c7e6dc8e503beb07539f99381edebb875467ffe947c7ec36e47eca1ff6d0afa.tbin",
+        "sha256": "681cc2731c4c7a93cb3b5b76c95db1cf5ad016a48aafb4adc844abbfa070cb2d",
+        "cache_hit": true,
+        "export_source_sha256": "95248506475aa25efeebfca733a7405fa0a95d3ce59426bf7752abfcaf21177f"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 1664,
+          "dtype": "float32",
+          "other_dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/2d0dafd0910f8c4248a372b56043d24115bda7fa314ca364e20cee0963ea233a.tbin",
+        "sha256": "29e8545a634ee2591ea6301e853d25be40ff0feee1f8373e575ea82e3563c33e",
+        "cache_hit": true,
+        "export_source_sha256": "db534ad8dff4cf34e2b00906ed54cdd34c728ff6b17f15aab3c3d050a4113a70"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 26,
+          "k": 64,
+          "c": 256,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/5ea0921bda25802056a25a87a78e5cdb2d9324c2713957532b71429b52c10fb8.tbin",
+        "sha256": "a42e871b48e1c0da0e1a5480496ecb2beb347de771d88ccc5a5ad8008aba6539",
+        "cache_hit": true,
+        "export_source_sha256": "fe87e1889bc84931de48b75869c7092392d454042c6187eef5fab5efedcc67cf"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gelu",
+          "n": 6656,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/d83e5647fa20d9e521cbb090d8ead82c10e986e8eff2999d12affb236a2eb5f8.tbin",
+        "sha256": "144ea9e1da9fb274281f9a20f35e61b1e3272554b6104dc0a6b3cf53bcc473e0",
+        "cache_hit": true,
+        "export_source_sha256": "d4f468a124613c8b7116f93a07506bd672fa3fd27c5e840c5866c5c608249954"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 26,
+          "k": 256,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/d4c43cbe8b9da2fc2ca74955c0cc89ec3c4ed583cb8a61f07557a5cfd4969ce9.tbin",
+        "sha256": "be1a5849f973908d5860f3003e8de7ca17ad0e882daf9f6d010c76943022431d",
+        "cache_hit": true,
+        "export_source_sha256": "dc96e733fc4e1fcfc8aedeffa11c723748366d501b600a9368b81109755a1654"
+      },
+      {
+        "factory": "cache_advance",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          2,
+          32,
+          13
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/047c6947eb306821ce32d3499cc2b9dbc459d2630e4a19deba4538512062d504.tbin",
+        "sha256": "a1c2d9745736f60aae7920981a52557764050499df22ef55a722cc6236da3e90",
+        "cache_hit": true,
+        "export_source_sha256": "3e3e97c4a543d805f65d566eb0be8f4af114fe8987af3e6f69495ac24b86144f"
+      },
+      {
+        "factory": "cache_append",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          2,
+          2,
+          32,
+          32,
+          32,
+          13,
+          "bfloat16",
+          false
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/43083dacfdd68da9178c5cb3b858460e73028e37d72ec54e76ae4486207e9ef6.tbin",
+        "sha256": "2a654eae4dd7a37fb8ace1285843d93c988aabbb6c3a22997c6e9112b6f2e5a1",
+        "cache_hit": true,
+        "export_source_sha256": "7390269b58f17f41e56cd5f6d671c14f1a9ef37d14284e9d44e3793da5f0fc19"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 2,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/0c808f613551eb36d360eba5514bee488472b6958bf32226a08e7971b76cb63d.tbin",
+        "sha256": "775a75c1413d1bc94af1dd4d54763cde32e475eeeb3692b645870e8585f9f19b",
+        "cache_hit": true,
+        "export_source_sha256": "4d13d0b4da44f76682b8de7cae3b10ac6715134f12c712b8bf8ce08e72a634ca"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 1,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/cd7d2dabc65420f6444ee757212d40fdfb6ba216eadb044766dcb1f976dcab8d.tbin",
+        "sha256": "9f15100ed742226588d0e3fb90f98299724eed19a2a9b49afd57b37b09659cfc",
+        "cache_hit": true,
+        "export_source_sha256": "1cb86964ba626ea51b30777909bbd32cb1c2f24bf5a5d24297b730fdb2373b59"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 128,
+          "dtype": "float32",
+          "other_dtype": "float32",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/4f27fe27b0c6ec07bda67bdc92dde46cc126f62e7a9644f046235bc4630f9ae9.tbin",
+        "sha256": "6c9c64a52b6bbaf6ce0e47d131687b952d6e5d6bebb252dd891c4debaf8fb97b",
+        "cache_hit": true,
+        "export_source_sha256": "391fdaf54ebc04d45332b9e92cad8f0aa4e56a7d15e8de6533b3ee1aa53a9b32"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms",
+          "r": 2,
+          "c": 64,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/e39b8ce79e2ba4230f02775f5c2d71ba64b3334e8d12d81465e7c7836871055f.tbin",
+        "sha256": "3b2523af7f764b532098dea7ba9808ff14260da4bfd4746fe32f118da9816ce2",
+        "cache_hit": true,
+        "export_source_sha256": "f7eefcdb4a01970d5d934cc842ec6de65c933b712290bfaa98fa777f8e4fbcb8"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 128,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/1abd862efcd05f728e3a54bd639517d00d373bde44422bbfddd60148c50fd50d.tbin",
+        "sha256": "181d4271a964ee5bdacf05c2c4beaeae42d6230fec3a1565e9eca931696d50be",
+        "cache_hit": true,
+        "export_source_sha256": "979170fec405143a2c695c35641f35a583f522098c0644983c91463e4b304f59"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 2,
+          "k": 64,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/6ba9bb52ec7a0557299dde5179ce368def23cd70229ee7bba0e1515d8ab7c77a.tbin",
+        "sha256": "d4fced032140322e975b6b6f8256c6f6367fea757e0b0eaf41e79cc0dbf35aee",
+        "cache_hit": true,
+        "export_source_sha256": "5e0ed966029c6e51361112fcb262d68b6e2be7724c8e224c397f8c1bb3de55b8"
+      },
+      {
+        "factory": "cache_advance",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          2,
+          32,
+          1
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/17b3e8dd8a749d2e6b9a9ec4b5748cecf9e153665cc5a60ef3b7ca599bf2ff80.tbin",
+        "sha256": "4bc53fd5f7f408372418a408f7fde2b0d08622c47d2e9906ce7ccc82f88ece30",
+        "cache_hit": true,
+        "export_source_sha256": "5e1dbfcdb2933835932a588a7c8f9d90b7a49848da4502112b7074cdbe84e7c8"
+      },
+      {
+        "factory": "cache_append",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          2,
+          2,
+          32,
+          32,
+          32,
+          1,
+          "bfloat16",
+          false
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/55a3a4a5e63c14da80f11e0330d104d5d992d9ff2cdec742a8add87a7a0801cb.tbin",
+        "sha256": "fe05d2a1cbeefb5de339f47e960001b77aece1a32ffeb51aed9af6a2fefa510f",
+        "cache_hit": true,
+        "export_source_sha256": "57c40d4a77e30355180e03455d00dc11039d9bb06dcb10d42877428fa9d0c776"
+      },
+      {
+        "factory": "decode_partial",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          2,
+          2,
+          2,
+          32,
+          32,
+          32,
+          "bfloat16",
+          0.1767766952966369,
+          32
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/1facf607b1bc036fb35c51ee3d92b1d1160db108c7e1bff87d6072c961636144.tbin",
+        "sha256": "14855581d7b28685ae068f4cb69324d889dce84b184238dd9473cbbee35fccf5",
+        "cache_hit": true,
+        "export_source_sha256": "a0152a51d6da434a4161caad4c195d1310bc32dc805c3e91fae17543723ee9cd"
+      },
+      {
+        "factory": "decode_merge",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          2,
+          2,
+          32,
+          "bfloat16",
+          32
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/88beadc245cfeca0de493532bf15b918f65518ca260c5c16ce4c3a90a2e211fc.tbin",
+        "sha256": "0aaf1ff3dd011a64510a08f3c67c1837ad754b00908043a02d9e2e06494748aa",
+        "cache_hit": true,
+        "export_source_sha256": "ec55fb1b5ca244bafd066e557a30ec851d530f588276dc46136b07032810de52"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 128,
+          "dtype": "float32",
+          "other_dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/a5d9fc8304082234173201d42b070cb6a1d140e05d354665a212fca492ae2761.tbin",
+        "sha256": "7e240d00072e985f435f103a4712a6c5426126798ca52f49473b151c6d211b60",
+        "cache_hit": true,
+        "export_source_sha256": "f2233e1fddc2bc4446874ac75d5d79df8b2b5648101d1425c404c1168ecda902"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 2,
+          "k": 64,
+          "c": 256,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/a4d7a899771aa0209c942b71e00dc02a751125f78987441b85849a7eded7e393.tbin",
+        "sha256": "12c14010f1ffa182ae760db1441a57b7d49bc681ad70fe164878b43702c75425",
+        "cache_hit": true,
+        "export_source_sha256": "fced8c0ac2f85a7a9cb9adad845ea3f67fc50329fca4ab4abc9096fd268bd998"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gelu",
+          "n": 512,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/28d96e2a99948559a70ac3ec22e17bf32aee53b80c1dcf3275aba05e31e1a3a6.tbin",
+        "sha256": "4cd7d790d4186098e2ef3f5b1da5723b58685392e8cea20ce7bae7318afe26c2",
+        "cache_hit": true,
+        "export_source_sha256": "ee45399eb6a78b0ffd5a33f0197c0b2c75f7b8e3a5f4cddac78f6e40119b3c76"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 2,
+          "k": 256,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/2a7100c33f5dc1d3c6ec818fc27496843f827ee556a68b5feb7b075c0ddc7632.tbin",
+        "sha256": "093872c8c16034a583fcad9cf6027643c1fbe78d13e33babb6af23f4f09a45c1",
+        "cache_hit": true,
+        "export_source_sha256": "c792f2c127f995854e640b39bc6db0752c8140a480c9c0bae772215d7e26a092"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 28,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/6358df61fb0a0f3a96abce16bc4f2e04d99889bf6a591d7ecaba073acf709c3a.tbin",
+        "sha256": "d42a5ca442ef46675108cab6dd325c6c645386cf6bfb6d80c04d450451650266",
+        "cache_hit": true,
+        "export_source_sha256": "5ae7b19289897b98a2a64b6bb5943e1704f87951e9c2d2742cd7428d67824041"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 14,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/17231df1ca94136cce869951e73d3d2c4882bdaa82beed0f188533b362653188.tbin",
+        "sha256": "a0ff3ddc128a9441457ead204f7236146f12ae1578e9a8e4375fe8a26a0652de",
+        "cache_hit": true,
+        "export_source_sha256": "3dd4352a32bed0b0705e1b6e8db815f81af9469a8b6801971e736a0277d8b779"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 1792,
+          "dtype": "float32",
+          "other_dtype": "float32",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/c9a81fa2161904ccdc3a618f0b383e5258b900684565f7ff2e45f9624c0c62fa.tbin",
+        "sha256": "f3007995d93fb3dcb7c558bd1985d1989a8b601f92bfa5359920e4672547b144",
+        "cache_hit": true,
+        "export_source_sha256": "1d6ef5d9d7311d718307a3f926ecad89f65cb8fdb598cc266fd0583a5d72f876"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms",
+          "r": 28,
+          "c": 64,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/8718b0ce90dbd3edbfced5f94511eb9dbf1c0196b3271520dd2c7ea1d54b02cb.tbin",
+        "sha256": "0432c974ef427026f517d5dec7e491eca76e99e2819643a7d8b5761e0dd4c74a",
+        "cache_hit": true,
+        "export_source_sha256": "47e6dff4e9b1493cd8838742cfd61400505c23856a867f4ef6d73b44d906b4ea"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 1792,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/047b69e2fca48b659ada027b7829fbff651645c64e03b28ebab2a00b0baeafe6.tbin",
+        "sha256": "242869e93c6b24ee8565f901767fe5e6445078f54d6a4e9851362719df80a575",
+        "cache_hit": true,
+        "export_source_sha256": "091ca69009dc3a41f9f5982cbd0959d3c09099e0a513486783f28b7a84eb0f8c"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 28,
+          "k": 64,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/5d80d9485c6fae71801082a66266c00c0958e73fe46dabc757c50790e39fac37.tbin",
+        "sha256": "2a5821b44a90b190cb7b37a09b353cf5b3f78e4ffe7b413e243f1d3a6cc24523",
+        "cache_hit": true,
+        "export_source_sha256": "84933d1d4bbde069689d97c229887e5000dd2a9abb2f8759f08cc21354a93167"
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          2,
+          14,
+          14,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/0d528df4b52897959658597094fe6e5efd4255f96f5a532281b27a399cc526dc.tbin",
+        "sha256": "42779e6a51a8dcd556e88e6d8b9670f66fe05b8bef9997bf29f254efcbe86cdf",
+        "cache_hit": true,
+        "export_source_sha256": "3baae49a6e943e7f178cac3c912bc76a5c07fca35c0ae766b0c38e352105836b"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 1792,
+          "dtype": "float32",
+          "other_dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/df1314d2a1930702e831b22674429a4c656eee395fd1e1d38f8a568b50bd1206.tbin",
+        "sha256": "5c170d16b58b808af8a1d3b89733c982099c6e52b6ab852bab607413eb52e238",
+        "cache_hit": true,
+        "export_source_sha256": "f2d2f0865d6c1290bf75a62a8ac6150893bdcdcd602d75818d6bca280d8b2386"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 28,
+          "k": 64,
+          "c": 256,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/c55da1ccc7b3068db87bc6af15ae25fb98d50083edabe888f19a38bab60775ee.tbin",
+        "sha256": "9f759f9a406fa7ea0c809837262977a7dfdd1ef54c135b67097a6a9fd95cb0ec",
+        "cache_hit": true,
+        "export_source_sha256": "6f52fe0feb6aa159f268399cbbc6e85614447c0cb5c43bfb93183a81c880791b"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gelu",
+          "n": 7168,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/504466e1033fd4e65f2a863a3b5f2b5a820790db8a823a1a81cbd48caa4acc19.tbin",
+        "sha256": "5c95460272bdb8bc512c91867688f4b8caec2d9e58fe1a1c67b6828ec0e14871",
+        "cache_hit": true,
+        "export_source_sha256": "5ffab212e52e7f6061cb9cfb58e4bd16654008ced4db1fd1003dd4605721da3d"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 28,
+          "k": 256,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/33756d770c3d0a09844f85b1b55c4b01cdb6fec0c30201de2fcd813115f0e3d7.tbin",
+        "sha256": "8bbe0f633860cd792d4f7eb9da0741139521565d2b0b573d64e984e8e2d70758",
+        "cache_hit": true,
+        "export_source_sha256": "17148cd4d85c35dde89fae3c81b6a472ef030389c3f319f67f98a5c253c262e6"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 30,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/3f562ae43c11f67184625c31c5e2b92b04ebb7f0199dd466ca42c8fc9a10c1f5.tbin",
+        "sha256": "25ffae800fb37d785caa7fc6f27cd679fabe7e90f647d32a3442ed5622046659",
+        "cache_hit": true,
+        "export_source_sha256": "fb1494c0bf7b60e59610c535f6629b6cadc35d2204d2d99d1609368bc2cfca76"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 15,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/159dd55e3166399c15a03e41f16240a4ef3b87a2a5c070522020625de75435a0.tbin",
+        "sha256": "80bd55d079ed33ac2f2dbbe96adf5d8a8bd3ef8f98da72f203ec10f34b58a40d",
+        "cache_hit": true,
+        "export_source_sha256": "5fec6788407d27b22811fce1c07a75f08f94c27c96b482a86cfc3da7d8bf7661"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 1920,
+          "dtype": "float32",
+          "other_dtype": "float32",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/31dd5f2c1f8d830f362090236bed8d01589f13cc56e37339569bffb2ef74f385.tbin",
+        "sha256": "4a1a8a14b1b1cdc64df72caca9a314413309add417e4f518f5d62ee0b4f3672f",
+        "cache_hit": true,
+        "export_source_sha256": "11cd00f467a8e33431789e1f44daf21843feae9bad11c9f6407d5a80871bf3cb"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms",
+          "r": 30,
+          "c": 64,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/c8c27d1d9c05645e00aaa0c830c684228707d29fc07ef775afd1a45fc7d628f8.tbin",
+        "sha256": "9322d39de19888460b7f31cc1e6e1bd66c950615635fead4962b5989b35313e4",
+        "cache_hit": true,
+        "export_source_sha256": "491f4be2c07d6e79972b22ebff6b745a9535ba58eea32463376e580ff777d048"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 1920,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/280d1497d225732aeeaa5c9d5c884e4c374e22d3f134e7fc02b88dbde9dba70a.tbin",
+        "sha256": "23ad3af9adbf38e20d2002f32956228861d83a7b363e6490431f826ef9dff648",
+        "cache_hit": true,
+        "export_source_sha256": "5f547cc0408ca05c75642d4d34a8ae6a176aa0394b87c5b87093696db5175223"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 30,
+          "k": 64,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/13f3723c91942f9deb0dd66cda3a39b620de3ac196f0af3d55e0749ec8d56943.tbin",
+        "sha256": "c543de1a416b9cbe1548c7fe3bda21fa7bf19df96e71528644c84968b8ed58df",
+        "cache_hit": true,
+        "export_source_sha256": "b09155241110554a9c2b36f792807a351281b13bf574e1e60e271c20602ea2e7"
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          2,
+          15,
+          15,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/1ffa27cbbc64756a9ed93ea36f1dd51bddcb0ad130c2d780761068f185f87c5d.tbin",
+        "sha256": "7079164fb4535d1ad0ed859f22b7f5308d40b30791b0e6e52168c4ca5e6f4771",
+        "cache_hit": true,
+        "export_source_sha256": "14772775cf7c84e92eccb4fa7100e9a7da131120de8657cda72337cbbdd4e57e"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 1920,
+          "dtype": "float32",
+          "other_dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/ae17557231c6b55849ba033e8683c149749d157a655c62d56e75293c0eaf89d8.tbin",
+        "sha256": "0f0fc2350d39e93be6f4ee69cca534eef31a1de1ddcca7ee5f7892071716c043",
+        "cache_hit": true,
+        "export_source_sha256": "242b31917e81b5c4dec0f3161dd7c004719c6e3826a19f8bba9e71c13572b198"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 30,
+          "k": 64,
+          "c": 256,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/9528d7e8a92c0e9766e421bff43716d4504cd7c38a97dec327f915ea7d2ad8fd.tbin",
+        "sha256": "3afbc8bdff2b391ac4ba825ce69c7e73b9a9f6bae1ec887ac7602fe7b487281e",
+        "cache_hit": true,
+        "export_source_sha256": "8e47a7848a992637d067287d8f46acb621079409bfe4f2badbd16d350a242407"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gelu",
+          "n": 7680,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/5771fda7fb530f6bb84fb3bf413c0623854f8c5b76c74551fe535bf39a69efde.tbin",
+        "sha256": "0731a63165e407bc9db2d76c0e613f6e0248d067734a48bceb40a037d0c8eca7",
+        "cache_hit": true,
+        "export_source_sha256": "c3d59c8eb11470e2813fb507b8b5ede560617e666013bc080b2cc830d11dfa8e"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 30,
+          "k": 256,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/3ff5725ab853e627e74953c406a45b2b6479ce3d20f4a5780c408e1000c797cb.tbin",
+        "sha256": "e6922c68558d3476e69b331ce4e4b2ff25d6c3b24e37d2afe16c9e42917b1990",
+        "cache_hit": true,
+        "export_source_sha256": "fd94d281a094fa6c8a43da5e4784a71719b752db83426d56151cd14ee75190b1"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 32,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/b57b96c8c43ae02b8179db583e76cf58d9d940e83a5f47907ee4bef69e2f656b.tbin",
+        "sha256": "4ca4e0fb72204337076d7d99b977d9a86d17363843c419e900c3bc73c71cf537",
+        "cache_hit": true,
+        "export_source_sha256": "0a35f641be58d4e7a4308f275ed3a693fdcaa6a22c1352a92d824e7a61618571"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 16,
+          "c": 64,
+          "v": 64,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/107c142cc16b93c8f63ca9506da8a36766ae2ce5c320b091f81ef3ef00345807.tbin",
+        "sha256": "c750bfa4ccaf35eba854f18fe89822894d0600a8899111c49760510fa434656c",
+        "cache_hit": true,
+        "export_source_sha256": "1f9cb80e0363da34ddf89c955adcd970c73511921d56dd41eb9de4709013a0a6"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 2048,
+          "dtype": "float32",
+          "other_dtype": "float32",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/e0e6859e4cbdeae8745d9fdfdb72b8edbfb9db2a9dea85dabba6fde177aad77c.tbin",
+        "sha256": "182a123a228c53080680132616c596b03eb0f0cbc628c9abd92dd162180ea385",
+        "cache_hit": true,
+        "export_source_sha256": "343768ec1330b1918563242ddd80141e0ce9560269ef23977f0c0caf6520f27f"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms",
+          "r": 32,
+          "c": 64,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/127a47bb9316d900ca2ac44e5838e8f600a682e918de39d736820e0287413b56.tbin",
+        "sha256": "b0d4b43379da3aebcd72f9dd43a756246ba02c9d36a7cacbaddc5a30e74e8ef0",
+        "cache_hit": true,
+        "export_source_sha256": "ba8c0d319ba2747e594bc0bab5ed2db6f70b3b71bcffc34d56283b070f1ddc5a"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 2048,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/9f325837dcee80ec7c80b75af1c5d4b3475acf5af5276c21f8e025cd833c20e6.tbin",
+        "sha256": "3ed252d6864ba4c62338e8a6b708378219a53a93634ed667998cceb09246505e",
+        "cache_hit": true,
+        "export_source_sha256": "b08409f081009f3a7f421e2cd5b53d2f98e2d29d272e7b823bb8933e4c45fc66"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 32,
+          "k": 64,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/eb4ed1d05e86c6010aab2b430490ffbcab444656c344a048319240459c0830fc.tbin",
+        "sha256": "fa31c4bd327571c73f073d05351a1c861c0060441f6472eaea2f0e1aaa7b62a2",
+        "cache_hit": true,
+        "export_source_sha256": "7eea9d1c29703f476ba944d9e4509c4da9b262ed40d271aa73189d190d611d28"
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          2,
+          16,
+          16,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/0a62f2cc32e2ffbde6513c659e4530f6213d45bd1ecec8a6cef3850ad32afd51.tbin",
+        "sha256": "ba2acffda72409e90f7b8c00d9d9ca1c9b66d299d531fa51d7ab46cd2bb32518",
+        "cache_hit": true,
+        "export_source_sha256": "8f02e2891180f1b1bcc9665e8e3eb1c402136a71edba053858834937c5828ee4"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 2048,
+          "dtype": "float32",
+          "other_dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/b9852bfcdb0b93abb1767cbded69e2bc04d8bbd01c32a5ba171c0b9663b2e5d8.tbin",
+        "sha256": "e407124b3740912752720675f256fe3b01ad6a719128d390a01a51849ca52469",
+        "cache_hit": true,
+        "export_source_sha256": "0adf8cc5076902599aad383a4dc7ee365c4f152a97e4bd2cb3d74841694184c2"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 32,
+          "k": 64,
+          "c": 256,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/167c586d8ad4a261e54999f415184db185a6c69297c2debcd715b69a569bb486.tbin",
+        "sha256": "e8f1d8a5ef421fd64fa6f49c8b598d29a16b678218eed6276aa3625f0facfe92",
+        "cache_hit": true,
+        "export_source_sha256": "36f0b917a9d817e3325430cc77a45dec00cc2d0b0193fbf5b6a4c2cc6307b2c1"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gelu",
+          "n": 8192,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/bba4ac4f99809d04addd91a61672be8d90b85567703ad8d140338358a2799393.tbin",
+        "sha256": "bcf4b21a183b12656cba9dc80c712d0b4db8e24d9441a5d96abc0bef109d93a4",
+        "cache_hit": true,
+        "export_source_sha256": "e4af53a450012b52890dc6c9d8f863d2f660d3c5f39c1e4678290fe25335860e"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 32,
+          "k": 256,
+          "c": 64,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/173065315458800b7e47989fe680b9fa0b05f4450e73b56d22ff261b3d854109.tbin",
+        "sha256": "cb8220ff5bf3e93b832f902389c332c206f7cfe3f9d13b469359ca7776da0612",
+        "cache_hit": true,
+        "export_source_sha256": "ded972fc9662b410737255089a2961f201bd9116b4fa62fdbe9c986ac9827d8b"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 34,
+          "k": 64,
+          "c": 32,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/4045b514305e8a6ec1600ec9b9028951a2fc3956e2c14d41c161ec5dd7eab656.tbin",
+        "sha256": "697bcf7829959af54df44aa31ae977f6232269920c4daf78e27f7def0a1effa3",
+        "cache_hit": true,
+        "export_source_sha256": "c6b380ca356c47acefdfe691c2df4cf60b10dd2b28134310f242c00c8c47611c"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 2,
+          "m": 32,
+          "k": 32,
+          "n": 64,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/f9b7d83fe2a471a9b3d97a0bd8609eec728139db9c859c5606cb5d3fde49dedd.tbin",
+        "sha256": "e5d6a3f13924ce006ce2189a93cb100fab097c70c91e7f62620b2aedabd9e79d",
+        "cache_hit": true,
+        "export_source_sha256": "0983ec6fd2621f67e039c3171bdcc97a646f82e869e46be6a67550f18d64b524"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 2,
+          "m": 64,
+          "k": 32,
+          "n": 32,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/a18418ebdac4da9f45c526e2266b82692b77e32c110973554598e807bcadc860.tbin",
+        "sha256": "0f5d5d8759541ae0ab029c84ef83dafcbe89a9b436c73d480701cdf340b42d51",
+        "cache_hit": true,
+        "export_source_sha256": "6b12abd7084768b5df4113c867a9db06f3c11b40d527fda69e2ed7a572f518c1"
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          1,
+          17,
+          17,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/2e8a128633de2a2ea8dac1afc2a98de0adb5ded59f5c1954099167b0b2a36adf.tbin",
+        "sha256": "a95d934927a9f2697cf830e2de5166203950697f074e3515846ff52a56851131",
+        "cache_hit": true,
+        "export_source_sha256": "b4afef15f47c8562c94f5d424d4c798bd623f93ae92f0a2d2a0af5a51250cbab"
+      },
+      {
+        "factory": "attention_dq",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          1,
+          17,
+          17,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/e2940808d4ab350f9ad5e4b9e0df2568e9fea0fbd01c30c141518f326d8a7c65.tbin",
+        "sha256": "e9462207284f085e6db634c0f66827fbbcfcf947ed1f638e052de0bbc1ab9bef",
+        "cache_hit": true,
+        "export_source_sha256": "cf858c66f22fb53cc51d392ea7c4341fc7c25c01522ea699064e72a88885a6b9"
+      },
+      {
+        "factory": "attention_dkv",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          1,
+          17,
+          17,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369,
+          false
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/2bb8b5fb71e564892a483831a42a5de704125a828417348d31f6148de3c3125d.tbin",
+        "sha256": "7b7be554960ef663fd43570e8a66705650a2fc345c1476daec964045f0bfb906",
+        "cache_hit": true,
+        "export_source_sha256": "4cc1145eccb9a637b91a3d9e43a79601f769efa5016e51bc9af22f8d061f2fee"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 2,
+          "m": 64,
+          "k": 32,
+          "n": 32,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/e65948b71662d84d6d2d9d48dbc1f25249efaeb01e53a389c6137655f4f817cb.tbin",
+        "sha256": "5d4a78b2ac0a7ab00fb79bdfc53b07768ba6e21f233ce1a4fe812fc2c05fbc7c",
+        "cache_hit": true,
+        "export_source_sha256": "325d51a0052137213d56c09c18e0d350f6c401a0e93837bf771b541eaa41d7dd"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 2,
+          "m": 32,
+          "k": 64,
+          "n": 32,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/58c59cc87b9b7de96d4bbf7d8c139ee2f5f1eacc827e074378936df67ae5e9c2.tbin",
+        "sha256": "8e5346931f2e07cbcee0b42291ea580bbe2f83dce260513c791354e6ebc2e8f4",
+        "cache_hit": true,
+        "export_source_sha256": "7c3d9327792cb956303e6c5d55f94c00f0faf704f8f661ec43ecfee499aa6b72"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 2048,
+          "dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/8474c97a4e4a8165437153c67711be248834527f60033efe9384c96e68f284da.tbin",
+        "sha256": "a9be320d89b4f9b2d6968c4657d5e1daf15645df8f12ac149288a4a7308ee44e",
+        "cache_hit": true,
+        "export_source_sha256": "7b83bb6c49d7c0ca6bc5ddaf1c757d75881e0e9e61b58552d78cdd115244f863"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 2,
+          "m": 32,
+          "k": 64,
+          "n": 32,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/c586247c4d21f1f2f9ad8f54efc670ca05b6ebc126a0b305d5a2df9b5d842a6f.tbin",
+        "sha256": "6372fc71354defcd108ae6703657b4d3a7b669af9fc9058b688609839a320f88",
+        "cache_hit": true,
+        "export_source_sha256": "a72dd38e4ed453b963fd68324805e8e4e0cc1150afd717123c425fc8e75920d7"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 2,
+          "m": 32,
+          "k": 32,
+          "n": 64,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/57c4ec8d168193281877ea2afe1f56f84a9b9366db76dbc6037a32093dcaaad8.tbin",
+        "sha256": "f005312dfcccc92d233e9138e38e9b8473e5e0dc9f6885ae9c9838655a2a2621",
+        "cache_hit": true,
+        "export_source_sha256": "e84c2c1b65a4bd47a04783f787e6113e8d49d6343cf134ac490aed15678e0432"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 34,
+          "k": 32,
+          "c": 64,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/6a28e2f1ce36d76034fa8099c6ead32311d8a5cf40e7401d3869dfc7ed867786.tbin",
+        "sha256": "2fad914245728c4a73cc9d453e8d04c13239926bb4f6fe13d1098608abf63e95",
+        "cache_hit": true,
+        "export_source_sha256": "5b56d0045a7178a6d0c0b52689d6fbd9b9cb3c127ec4e5ba8bfb7e7099c7a401"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 32,
+          "k": 34,
+          "c": 64,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/b6850d649591e7569c90610687084c641973fd0d1535b0680053a138868713fb.tbin",
+        "sha256": "3d960c6649a139e551a14a153f922f0f5f9ebff6465865804e8fff7ad6e89b51",
+        "cache_hit": true,
+        "export_source_sha256": "9371fedfa26bb60574d18e87aceca4630a6ec0842ee4ebd68fb5889ef4b603d3"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "sumsq",
+          "n": 2048,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/2b89efa06d7033e193ca3b8a8d19123037f4bef44e624c84735c13fb37edef04.tbin",
+        "sha256": "006518c7092eb088309a8aaa2fbf1bd86a2e9438eb93a45d1ab1813ae568e7b2",
+        "cache_hit": true,
+        "export_source_sha256": "5d3cb2c95e680f20d504d61d11f3123791215489b446b617151f65647cb0af87"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "clip",
+          "n": 102,
+          "limit": 1.0,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/a294785bc7e7558ca0a77b5060b48599bcbbb943f25c80fd03bb4007da240225.tbin",
+        "sha256": "d6ecb5e66707f0b5a4745f2a0388997a73926724f881cce794e7b395e23ae978",
+        "cache_hit": true,
+        "export_source_sha256": "186d2e251d7482d014642ed495f8fcbc81f1a44069958274d01422228d4168ad"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "zero",
+          "n": 2048,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/2f9f534b4459dcfff68e4f1b685492cda705bf67aafdabdc2d92432d18253b62.tbin",
+        "sha256": "5fbf3cfeb9d7ebe35d957dbcc560383000f2abaa613684b47bad9cb0454bd83c",
+        "cache_hit": true,
+        "export_source_sha256": "1663fab35580c8d949dcad3e646bfa860b4496578f5585b108366fda7d3c5138"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "adamw",
+          "n": 2048
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/381af1ba3c23d586e5c23a617f29010ea213b4f31ed57aad5311b4cb345e09df.tbin",
+        "sha256": "737560753ebfe462bbae5ccf9fa5b313d96f69d1d5c5106a3fd1c07b206621b7",
+        "cache_hit": true,
+        "export_source_sha256": "436cd47015ead4e32ed59481a3628f629cf77ab2c8e0f6dd5566c157db9ae390"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 26,
+          "k": 64,
+          "c": 32,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/a6a8fcc96bf2f080ec120eec10b8e97c40583d0391ab0ce75b1a27bb40debb4e.tbin",
+        "sha256": "cfc16816a49fa6efc75fdbebf4c85d1aa9625139eb22f981cc98359cc39360f1",
+        "cache_hit": true,
+        "export_source_sha256": "3e8c085948a1a86bd9750adb9a734e6ff075980cbdff476fcff3b63dcd766f59"
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          1,
+          13,
+          13,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/412f66357f03bcbd613072321d418b1afd139833578376a12dbb84a3cd99351f.tbin",
+        "sha256": "9f7277ba065a7909d70a7bad16ab97688c1a6aa59dd6327b6754be09df991fa9",
+        "cache_hit": true,
+        "export_source_sha256": "c4d1b897737ceb7c683d5984644d14a2139166a9acb1f7c7ed023624f1dcc0eb"
+      },
+      {
+        "factory": "cache_append",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          2,
+          1,
+          32,
+          32,
+          32,
+          13,
+          "bfloat16",
+          true
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/ea18020e30d622471123c379a63323e22b6be8370424a0327422c0231b8b740c.tbin",
+        "sha256": "cccba112e528dd96f283f890ed123605176a6433a7bd87de02763df8c0758092",
+        "cache_hit": true,
+        "export_source_sha256": "908fecbd364a78cba84a791d34c309e7927d62549f9fefe25c09e472e00dbc61"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 2,
+          "k": 64,
+          "c": 32,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/61b5e66bc7a03bfb8a6789eb26363af749d098f60865b96a8fc96b11a8ed15dc.tbin",
+        "sha256": "e0567392f3d5f0d87b53c63800c5dce2907bff27fc0c3c78fac7ce6c60576436",
+        "cache_hit": true,
+        "export_source_sha256": "a5b676de2934cca93a627554de1f36507945e7cf42290a092c8d9aa989828551"
+      },
+      {
+        "factory": "cache_append",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          2,
+          1,
+          32,
+          32,
+          32,
+          1,
+          "bfloat16",
+          true
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/594044d7abadda46fd571f36b4bcc50e37d1dcf1c90389d273bfe250ee7605b8.tbin",
+        "sha256": "47bdea8f43d920d8ca8a88d411e06c9a2d2d88b41b83917f6c89af515e5c6765",
+        "cache_hit": true,
+        "export_source_sha256": "2222dadfa7dc291fb0a07690414852c637f01c09355c06b90e0db1132a477620"
+      },
+      {
+        "factory": "decode_partial",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          2,
+          2,
+          1,
+          32,
+          32,
+          32,
+          "bfloat16",
+          0.1767766952966369,
+          32
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/fbb666d7271e6fc921ed63e50a24f1aa63ebdbc4bfc3ed2efea68c2f75520af5.tbin",
+        "sha256": "e5c13e27eeae91717314f04778da49904626bd8fe078f12b785250a4915ae265",
+        "cache_hit": true,
+        "export_source_sha256": "e91f4a425dad269b4037858fb0211f3b0bef3133ecc7caa48c26cdbe7ca6ecb5"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 28,
+          "k": 64,
+          "c": 32,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/e64367d43e5cfff5cef115126b652aaef1c178c521ff53641dcb7299df1e97a1.tbin",
+        "sha256": "d52a3384609d018f789d9d5117827384854e2c5126f9abe657aedf3f08cabf0f",
+        "cache_hit": true,
+        "export_source_sha256": "19a310786c432c4c714e5d60de802efa4a252a8c7f561e831204c7c29f6c8175"
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          1,
+          14,
+          14,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/1ae0059a45bc6c0f5d24ac896f2588f2653c38372f60b14f846e1eb12b5521f4.tbin",
+        "sha256": "889a9a380efe326c4f41678c486afc9099579b8e9d7d5f881f5ecfc87f22d33f",
+        "cache_hit": true,
+        "export_source_sha256": "9d7337c2d50f3ffa5900a800dfe211300ad3690ae5b434469251ca90764f65bb"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 30,
+          "k": 64,
+          "c": 32,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/7d2f0a3c5c59181fa0fd57a8da3bb623788cb0ba2a55b0ec695ce8772565caa1.tbin",
+        "sha256": "e21ac2df9b06c46220687b02b976efca175f25bc007b3c9b9a63425ab0b56f8d",
+        "cache_hit": true,
+        "export_source_sha256": "665a181c331381ed4f036548dd4116cc097e1754f0f9384ded4c3c685c5645f6"
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          1,
+          15,
+          15,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/65d14b870e99225f3bad48b5731f780cbac499ddfccaa0f65be4287425583362.tbin",
+        "sha256": "ed8cebdceffb9a0212fe57879aaef1ddf9521d3854c5183d5f56e695cd85a80d",
+        "cache_hit": true,
+        "export_source_sha256": "0e0f91e5e41029263392bd004f764b94dee1b1472bb12dcc304ccf9edae79c50"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gemm",
+          "m": 32,
+          "k": 64,
+          "c": 32,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/2b14f58b2c734c14b5d27539fda4cc4213e0172b9bd37881415d522ba0f414fe.tbin",
+        "sha256": "bd45a2c1ea4d817417e6ed6e13bb289a148c4af6a4c6e4961db1831418c97ce0",
+        "cache_hit": true,
+        "export_source_sha256": "cdc5fd4f3d09ce499c0d7c40cb3070ce33d63d521475e16d8db21c15195fd315"
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          2,
+          2,
+          1,
+          16,
+          16,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.1767766952966369
+        ],
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/c278d77ef61cd81c39e11c6ba4990dc2e44b026286db913f03c62d655387c035.tbin",
+        "sha256": "4b7fbbe350439130f1695b2e69249c53960cca67cb2d6e1167b30187b2d66527",
+        "cache_hit": true,
+        "export_source_sha256": "540b97443b70c56e713608cf585e697eabfbb505556a9f48b8f2decc2ff22b83"
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "clip",
+          "n": 104,
+          "limit": 1.0,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "benchmarks/results/l40s-native/artifacts/2d6c521f7e83e2edaa93e775b2f68c8f3772a00fb0f9dc3be57f542227eec950.tbin",
+        "sha256": "8738f29952df7600a60ed579cfbc3410e9c7fd2f74cae4eb065d7a79b641c460",
+        "cache_hit": true,
+        "export_source_sha256": "a064ab5d7f1f5cb832dcfef03522965311a043a6970a80e7122502c0d18969e5"
+      }
+    ],
+    "calls": {
+      "make_kernel:embedding": 276,
+      "make_kernel:add": 2685,
+      "make_kernel:rms": 3120,
+      "make_kernel:cast": 19292,
+      "make_kernel:gemm": 13212,
+      "attention_forward": 1350,
+      "make_kernel:gelu": 1422,
+      "make_kernel:ce_parts": 99,
+      "make_kernel:ce_finish": 99,
+      "make_kernel:ce_reduce": 99,
+      "make_kernel:ce_seed": 99,
+      "make_kernel:ce_dx": 99,
+      "make_kernel:rms_dx": 1470,
+      "make_kernel:rms_dw": 1470,
+      "make_kernel:gelu_dx": 630,
+      "attention_delta": 630,
+      "attention_dq": 630,
+      "attention_dkv": 630,
+      "make_kernel:zero": 354,
+      "make_kernel:embedding_scatter": 210,
+      "make_kernel:sumsq": 1536,
+      "make_kernel:clip": 96,
+      "make_kernel:adam_step": 1536,
+      "make_kernel:adamw": 1536,
+      "cache_advance": 45,
+      "cache_append": 45,
+      "decode_partial": 72,
+      "decode_merge": 72,
+      "make_kernel": 904
+    },
+    "fallbacks": [],
+    "layout_copies": 0,
+    "compute_dtype": "torch.bfloat16"
+  }
+}

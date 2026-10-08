@@ -14,3 +14,5 @@ benchmarks/results/l40s/artifacts/
 benchmarks/results/l40s/checkpoints/
 benchmarks/results/l40s/data/
 benchmarks/results/l40s/*.log
+benchmarks/results/l40s-native/*.log
+benchmarks/results/l40s-native/checkpoints/
