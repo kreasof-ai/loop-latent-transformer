@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "case_count": 672,
+  "new_case_count": 416,
+  "reused_case_count": 256,
+  "qualification_count": 12,
+  "full_qualification_count": 12,
+  "numerical_source_commit": "36e40d7be01ed3be942689efa109f858fbe4a1f2",
+  "tensor_repository": "https://github.com/kreasof-ai/tensor",
+  "tensor_commit": "7fc6b8cf9c7a2e58a55d9f8ba7e7dc1a990d87eb",
+  "runtime_binary_sha256": {
+    "_executor_2_14.cpython-312-x86_64-linux-gnu.so": "0716696345eaceb596b2b6611f322762a8ad071c0517c29e1dd72f3780314b67",
+    "_launch.abi3.so": "7421706b1868dc723d7b6061723b928f48f7423f35de8a45e31ef10f512cbf44"
+  },
+  "sources": {
+    "experiments/l40s/latent_checkpoint_model.py": "4faf147a1f06729b353fbf1a97cc089aa8be72eedddf091f6725e95681593986",
+    "experiments/l40s/latent_checkpoint_sweep.py": "54591f2d918a69e02a24d6250da0653a6b3d74a9c751f8dbe9c70f4354b1ac00",
+    "experiments/l40s/latent_checkpoint_summary.py": "a40366715f381344e2b900e582b3e60d82fb3ab59a3fa87194f6f93d692bafc6",
+    "experiments/l40s/latent_checkpoint_manifest.py": "e4fe369f030930d7b21db8e421919ee629fb39f582abf9e838c41521e375e7cc",
+    "experiments/l40s/latent_checkpoint_report.py": "def73a600e16395cdefa5e47fdbd6c6aa4aa101dc9a9c0e273788f9c654089bd",
+    "experiments/l40s/run_latent_checkpoint_sweep.sh": "368ad6532f5d02a9f5c237b005ff702e39f20319f5a8933d4ebfce99c7cae8dc",
+    "experiments/l40s/full_latent_qualification.py": "6b029810b1e5a2de044f28e843aa67bf236b620c4998d774070afd6fb273042f",
+    "experiments/l40s/checkpoint_numerics_diagnostic.py": "c81d87ad4028b50ff38e24815b6d4d648e4b5bfff574f3c3b3953c4362758ecf",
+    "experiments/l40s/LOOP_SWEEP.md": "08d8882bdc486c53aae481f4985373176b7b7047bd4e57eb0e5a0332cfdf9b01"
+  },
+  "audit_sha256": "ccc2831e30be3f26e3e64118b1eb095a1d32322b2c457392d047d58cd3b49456",
+  "baseline_manifest_sha256": "eb27d964b19f131e9cf2f51c508f29d34f562105e0d6ee8e045fec1d9d2a12b1",
+  "ac_region": "one full Transformer block",
+  "lac_region": "existing LLT latent attention and folded output projection; explicit inputs Q_r, C, output weight",
+  "checkpoint_exact": true,
+  "lac_applicable_models": [
+    "llt"
+  ],
+  "qualification_controls": "Repeat uncheckpointed backward; deterministic Torch algorithms and CUBLAS_WORKSPACE_CONFIG=:4096:8 only for correctness; unchanged Tensor kernels and primary performance settings.",
+  "notes": "Primary old no-checkpoint records reused intact; original allocator-setup retries remain separate; all residual/query/MLP state outside LAC counts toward measured memory."
+}

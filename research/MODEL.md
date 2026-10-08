@@ -79,6 +79,14 @@ necessary. No reconstruction of residual/query/MLP activations from C is claimed
 and ordinary loop checkpointing is not latent activation checkpointing. Constant
 cache bytes in T do not imply constant total training memory or computation.
 
+The separate [rank/AC/LAC sweep](../experiments/l40s/LOOP_SWEEP.md) adds exact
+per-block AC and LLT's native latent attention/output checkpoint region. LAC
+preserves projected queries Q_r, shared C and the folded output weight as inputs;
+query formation, residual and MLP paths stay outside that region. It introduces
+no residual codec or approximate reconstruction. Full-size checkpoint gradient
+checks use deterministic Torch execution and unchanged Tensor kernels; the
+primary latency/memory profiles keep their original execution settings.
+
 Tensor executes the numerical projections, batched folds, embeddings, RMSNorm,
 GELU, residual adds, attention and its backward, full cross entropy, clipping and
 AdamW. PyTorch controls storage/layout, autograd, checkpoint scheduling and tied

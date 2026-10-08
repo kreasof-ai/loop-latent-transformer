@@ -1,0 +1,46 @@
+{
+  "status": "error",
+  "arguments": {
+    "phase": "full_qualification",
+    "model": "llt",
+    "rank": 32,
+    "loops": 16,
+    "backend": "torch",
+    "policy": "none",
+    "samples": 9,
+    "repeats": 3
+  },
+  "started_utc": "2026-10-08T18:30:56Z",
+  "error": "('torch', 'ac', {'global_relative_l2': 0.003052402633447916, 'cosine': 0.9999953414553683, 'maximum_parameter_relative_l2': 0.006205218370977081, 'per_parameter_relative_l2': {'token.weight': 0.002696075902459247, 'position.weight': 0.0026904922716752583, 'blocks.0.uk': 0.004802954987211257, 'blocks.0.uv': 0.003931277765426367, 'blocks.0.q.weight': 0.0048653141246334545, 'blocks.0.o.weight': 0.003935223102901655, 'blocks.0.w1.weight': 0.004042184039169382, 'blocks.0.w2.weight': 0.003642294709149037, 'blocks.1.uk': 0.004628862124323233, 'blocks.1.uv': 0.003778384935793877, 'blocks.1.q.weight': 0.00457338013268534, 'blocks.1.o.weight': 0.0037602722534403775, 'blocks.1.w1.weight': 0.0038081519137728352, 'blocks.1.w2.weight': 0.003429869608645054, 'blocks.2.uk': 0.004358336624670868, 'blocks.2.uv': 0.003588590215789707, 'blocks.2.q.weight': 0.0043225176899153814, 'blocks.2.o.weight': 0.0035940582299115505, 'blocks.2.w1.weight': 0.0036337201332090545, 'blocks.2.w2.weight': 0.0032483877793060647, 'blocks.3.uk': 0.004290392784424895, 'blocks.3.uv': 0.003460053498259263, 'blocks.3.q.weight': 0.0042509556442598545, 'blocks.3.o.weight': 0.0035004863098259107, 'blocks.3.w1.weight': 0.0034981479853130213, 'blocks.3.w2.weight': 0.0031270122724428263, 'blocks.4.uk': 0.00424207954234618, 'blocks.4.uv': 0.003432066347564903, 'blocks.4.q.weight': 0.004175698420611761, 'blocks.4.o.weight': 0.003440203737490343, 'blocks.4.w1.weight': 0.0033804897000920993, 'blocks.4.w2.weight': 0.0030152229056698465, 'blocks.5.uk': 0.0039856218234211255, 'blocks.5.uv': 0.003333974888261707, 'blocks.5.q.weight': 0.004059200227873988, 'blocks.5.o.weight': 0.0032954505365439847, 'blocks.5.w1.weight': 0.003271128353180813, 'blocks.5.w2.weight': 0.0028974287061159336, 'blocks.6.uk': 0.003979072934204687, 'blocks.6.uv': 0.0032965573219302423, 'blocks.6.q.weight': 0.003953249799879758, 'blocks.6.o.weight': 0.003243481242350159, 'blocks.6.w1.weight': 0.00318606307337305, 'blocks.6.w2.weight': 0.002806203936127586, 'blocks.7.uk': 0.003912306283042306, 'blocks.7.uv': 0.003226399070675574, 'blocks.7.q.weight': 0.0039266598735539435, 'blocks.7.o.weight': 0.003217723730128295, 'blocks.7.w1.weight': 0.0031077168755929575, 'blocks.7.w2.weight': 0.002732925269174807, 'blocks.8.uk': 0.0038902445668711296, 'blocks.8.uv': 0.003161797442853904, 'blocks.8.q.weight': 0.003831010379760987, 'blocks.8.o.weight': 0.003126517404628797, 'blocks.8.w1.weight': 0.003028074884081635, 'blocks.8.w2.weight': 0.002649092661065074, 'blocks.9.uk': 0.0037568304260895283, 'blocks.9.uv': 0.0031221364084337956, 'blocks.9.q.weight': 0.0038310435951847592, 'blocks.9.o.weight': 0.003082313418308392, 'blocks.9.w1.weight': 0.002971056552001861, 'blocks.9.w2.weight': 0.0025802227654371335, 'blocks.10.uk': 0.0037550044829519837, 'blocks.10.uv': 0.003153652717301302, 'blocks.10.q.weight': 0.003757303944175797, 'blocks.10.o.weight': 0.003055244390375103, 'blocks.10.w1.weight': 0.00291198344438187, 'blocks.10.w2.weight': 0.002540281774193048, 'blocks.11.uk': 0.0036657478561032465, 'blocks.11.uv': 0.0030393892644932836, 'blocks.11.q.weight': 0.0037059033937662618, 'blocks.11.o.weight': 0.002991549921445091, 'blocks.11.w1.weight': 0.0028631958905278843, 'blocks.11.w2.weight': 0.0024669171937384857, 'down.0.weight': 0.006205218370977081, 'output.weight': 0.0}})",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/latent_checkpoint_sweep.py\", line 154, in main\n    if a.phase in ('qualification','full_qualification'):out.update(qualification(a,full=a.phase=='full_qualification'))\n                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sagemaker-user/loop-latent-transformer/experiments/l40s/latent_checkpoint_sweep.py\", line 90, in qualification\n    assert metrics['maximum_parameter_relative_l2']<1e-5,(backend,policy,metrics)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('torch', 'ac', {'global_relative_l2': 0.003052402633447916, 'cosine': 0.9999953414553683, 'maximum_parameter_relative_l2': 0.006205218370977081, 'per_parameter_relative_l2': {'token.weight': 0.002696075902459247, 'position.weight': 0.0026904922716752583, 'blocks.0.uk': 0.004802954987211257, 'blocks.0.uv': 0.003931277765426367, 'blocks.0.q.weight': 0.0048653141246334545, 'blocks.0.o.weight': 0.003935223102901655, 'blocks.0.w1.weight': 0.004042184039169382, 'blocks.0.w2.weight': 0.003642294709149037, 'blocks.1.uk': 0.004628862124323233, 'blocks.1.uv': 0.003778384935793877, 'blocks.1.q.weight': 0.00457338013268534, 'blocks.1.o.weight': 0.0037602722534403775, 'blocks.1.w1.weight': 0.0038081519137728352, 'blocks.1.w2.weight': 0.003429869608645054, 'blocks.2.uk': 0.004358336624670868, 'blocks.2.uv': 0.003588590215789707, 'blocks.2.q.weight': 0.0043225176899153814, 'blocks.2.o.weight': 0.0035940582299115505, 'blocks.2.w1.weight': 0.0036337201332090545, 'blocks.2.w2.weight': 0.0032483877793060647, 'blocks.3.uk': 0.004290392784424895, 'blocks.3.uv': 0.003460053498259263, 'blocks.3.q.weight': 0.0042509556442598545, 'blocks.3.o.weight': 0.0035004863098259107, 'blocks.3.w1.weight': 0.0034981479853130213, 'blocks.3.w2.weight': 0.0031270122724428263, 'blocks.4.uk': 0.00424207954234618, 'blocks.4.uv': 0.003432066347564903, 'blocks.4.q.weight': 0.004175698420611761, 'blocks.4.o.weight': 0.003440203737490343, 'blocks.4.w1.weight': 0.0033804897000920993, 'blocks.4.w2.weight': 0.0030152229056698465, 'blocks.5.uk': 0.0039856218234211255, 'blocks.5.uv': 0.003333974888261707, 'blocks.5.q.weight': 0.004059200227873988, 'blocks.5.o.weight': 0.0032954505365439847, 'blocks.5.w1.weight': 0.003271128353180813, 'blocks.5.w2.weight': 0.0028974287061159336, 'blocks.6.uk': 0.003979072934204687, 'blocks.6.uv': 0.0032965573219302423, 'blocks.6.q.weight': 0.003953249799879758, 'blocks.6.o.weight': 0.003243481242350159, 'blocks.6.w1.weight': 0.00318606307337305, 'blocks.6.w2.weight': 0.002806203936127586, 'blocks.7.uk': 0.003912306283042306, 'blocks.7.uv': 0.003226399070675574, 'blocks.7.q.weight': 0.0039266598735539435, 'blocks.7.o.weight': 0.003217723730128295, 'blocks.7.w1.weight': 0.0031077168755929575, 'blocks.7.w2.weight': 0.002732925269174807, 'blocks.8.uk': 0.0038902445668711296, 'blocks.8.uv': 0.003161797442853904, 'blocks.8.q.weight': 0.003831010379760987, 'blocks.8.o.weight': 0.003126517404628797, 'blocks.8.w1.weight': 0.003028074884081635, 'blocks.8.w2.weight': 0.002649092661065074, 'blocks.9.uk': 0.0037568304260895283, 'blocks.9.uv': 0.0031221364084337956, 'blocks.9.q.weight': 0.0038310435951847592, 'blocks.9.o.weight': 0.003082313418308392, 'blocks.9.w1.weight': 0.002971056552001861, 'blocks.9.w2.weight': 0.0025802227654371335, 'blocks.10.uk': 0.0037550044829519837, 'blocks.10.uv': 0.003153652717301302, 'blocks.10.q.weight': 0.003757303944175797, 'blocks.10.o.weight': 0.003055244390375103, 'blocks.10.w1.weight': 0.00291198344438187, 'blocks.10.w2.weight': 0.002540281774193048, 'blocks.11.uk': 0.0036657478561032465, 'blocks.11.uv': 0.0030393892644932836, 'blocks.11.q.weight': 0.0037059033937662618, 'blocks.11.o.weight': 0.002991549921445091, 'blocks.11.w1.weight': 0.0028631958905278843, 'blocks.11.w2.weight': 0.0024669171937384857, 'down.0.weight': 0.006205218370977081, 'output.weight': 0.0}})\n",
+  "duration_seconds": 6.9300866769990535,
+  "checkpoint_policy": "none",
+  "checkpoint_boundary": null,
+  "checkpoint_exact": true,
+  "extension_sources": {
+    "experiments/l40s/latent_checkpoint_model.py": "4faf147a1f06729b353fbf1a97cc089aa8be72eedddf091f6725e95681593986",
+    "experiments/l40s/latent_checkpoint_sweep.py": "54591f2d918a69e02a24d6250da0653a6b3d74a9c751f8dbe9c70f4354b1ac00"
+  },
+  "provenance": {
+    "llt_commit": "29fb6163e03b60d4ddf75601faa8761f921246d8",
+    "tensor_commit": "7fc6b8cf9c7a2e58a55d9f8ba7e7dc1a990d87eb",
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "sources": {
+      "experiments/l40s/loop_sweep.py": "930d47ffb8708ba13ad83f14a461ed1c67e9df1df3e12f4455aca69ac188dd30",
+      "experiments/l40s/model.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+      "experiments/l40s/tensor_model.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+      "experiments/l40s/prepared_inference.py": "64ff5add22486377e0ce39a2cb561ee5de0db3842744280295611d41b2de80e4",
+      "experiments/l40s/nanogpt_scale.py": "cfacf0fc9d9d84ab49adfaef58fd538e7e76a48dd79448c84a89d05f6c463813"
+    },
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "capability": [
+      8,
+      9
+    ],
+    "native_cpp_executor": true,
+    "driver": "595.91.07",
+    "nvrtc": "/home/sagemaker-user/tensor/build/nvrtc-12.9"
+  }
+}

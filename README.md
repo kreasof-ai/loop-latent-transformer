@@ -25,7 +25,30 @@ Constant total training memory and constant total communication have **not**
 been demonstrated: exact loop checkpoints retain full residual boundary states,
 and compute still grows with T.
 
-## Four-model loop sweep — 2026-10-08
+## Rank and exact checkpoint sweep — 2026-10-08
+
+The [combined L40S sweep](experiments/l40s/LOOP_SWEEP.md#exact-rank-ac-and-native-boundary-lac-results)
+adds LLT ranks **32, 64 and 128**, full-block AC for every architecture, and exact
+LAC at LLT's existing latent attention boundary. It combines **416 new cases**
+with the unchanged original 256: **664 passed and 8 original OOMs**, at B4/S1024
+and every loop count 1–16. Twelve small and twelve full-size qualifications pass;
+the audit covers 954 CUDA artifacts and zero implicit Tensor numerical fallback.
+
+At T=16, Tensor LLT rank 64 takes **411.77 ms / 25.11 GiB** without checkpoints,
+**518.51 ms / 4.79 GiB** with AC, and **432.84 ms / 21.70 GiB** with LAC.
+AC recomputes a full block; LAC recomputes latent attention and the folded output
+projection, retaining projected queries, the shared latent and folded weights.
+Residual/query/MLP paths outside LAC still consume memory. The conventional
+controls have no existing latent boundary, so their LAC cells are **N/A**.
+
+AC lets the 192-layer stack complete graph training on both backends:
+**663.75 ms / 21.56 GiB** with Tensor and **584.96 ms / 23.06 GiB** with PyTorch.
+Full-size Torch gradient qualification uses deterministic backward: default BF16
+execution also varies between two unchanged uncheckpointed runs. The primary
+performance settings are unchanged. See [combined CSV](benchmarks/results/l40s-latent-checkpoint-sweep/combined.csv)
+and [gradient checks](benchmarks/results/l40s-latent-checkpoint-sweep/exact-gradient-checks.csv).
+
+## Original four-model loop sweep — 2026-10-08
 
 The [four-model L40S report](benchmarks/L40S_LOOP_SWEEP.md) profiles **LLT,
 Naive Loop, an independent deeper stack, and a fixed-depth model with exactly
@@ -356,8 +379,12 @@ existing latent boundary can use it. **Among this project's four controls, only
 LLT has that boundary.** Naive Loop, the independent stack, and the fixed-depth
 parameter-matched model use conventional full-width attention and residuals;
 LAC is not applicable to them without changing their architectures. Standard
-activation checkpointing applies to all four. Native-boundary LAC remains to be
-implemented and qualified; the recorded exact loop checkpoints are ordinary AC.
+activation checkpointing applies to all four. Native-boundary LAC is implemented
+and qualified for LLT ranks 32, 64 and 128 in the
+[combined sweep](experiments/l40s/LOOP_SWEEP.md#exact-rank-ac-and-native-boundary-lac-results).
+It checkpoints latent attention and the folded output projection, with Q_r, C
+and the folded output weight as explicit inputs. Earlier exact loop checkpoints
+remain ordinary AC.
 
 # Training Strategy
 
@@ -391,22 +418,22 @@ See [CPU checkpoint findings](benchmarks/README.md#cpu-checkpoint-findings).
 
 ## Remaining Training Target
 
-The next LAC study must identify exact checkpoint regions beginning at existing
-latent boundaries, list every required input, and compare outputs and all
-parameter gradients with uncheckpointed execution. It must separately measure
-the residual/query/MLP state that remains outside those regions. Eliminating
+The native attention-region LAC passes output and all-parameter gradient checks,
+including full-size T=16 checks. Its measured total memory includes retained
+residual/query/MLP state outside that region and still grows with depth. Eliminating
 full residual checkpoints would require further architectural or recomputation
 work; reconstructing K/V alone does not establish that result. MELT-style chunking
 remains untested and does not by itself parallelize dependent residual loops.
 
 ## Current Implementation Guidance
 
-- **Checkpointing:** exact per-loop checkpoints are verified on CPU and CUDA;
-  compare against naive using the same policy.
+- **Checkpointing:** exact per-loop and full-block AC are verified, alongside
+  LLT's native attention-region LAC. Compare full-block AC across all controls;
+  report LAC's narrower region explicitly.
 - **Projection folding:** tied up-projections remove repeated query/output
   projection work; differentiable folding is tested on CPU.
-- **Rank:** 32 and 64 qualify for the tested 768D GPU decoder; rank 128,
-  an earlier proposal setting, currently has excessive latency.
+- **Rank:** 32, 64 and 128 qualify at width 768 and B4/S1024 through 16 loops.
+  Higher rank costs more latency and memory; trained quality remains unmeasured.
 - **Residuals:** retain or recompute full states for exact gradients.
   A small residual or outlier path does not by itself guarantee exactness.
 - **Training fusion and chunking:** further candidates to measure; neither establishes

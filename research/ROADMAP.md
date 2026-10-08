@@ -47,13 +47,20 @@ remain separate research work.
   Independent all-parameter gradient comparisons pass in FP64 and BF16.
 - [ ] Explore
   reversible blocks, residual-state storage, or extra recomputation if needed.
-- [ ] Define LAC regions at existing low-rank latent boundaries. List all
+- [x] Define LAC regions at existing low-rank latent boundaries. List all
   required branch inputs and verify exact outputs and all parameter gradients
   without adding a residual codec or approximate backward reconstruction.
-- [ ] Profile LLT with KV ranks 32, 64, and 128 under native-boundary LAC and
+  The implemented attention/output region retains Q_r, C and the folded output
+  weight; full-size T=16 gradient and cache checks pass on both backends.
+- [x] Profile LLT with KV ranks 32, 64, and 128 under native-boundary LAC and
   ordinary AC. Use AC for the conventional controls and mark LAC not applicable
   where the architecture has no suitable existing latent boundary. Measure all
   retained residual/query/MLP state as well as the latent and recomputation cost.
+  The [combined sweep](../experiments/l40s/LOOP_SWEEP.md) retains 672 performance
+  records and 24 qualification cases. Peak allocation includes every branch;
+  this is an aggregate memory measurement, not a saved-tensor category breakdown.
+  Torch qualification uses deterministic backward; primary performance settings
+  remain unchanged and default-execution variability is retained in diagnostics.
 - [x] Test matched checkpoint policies. Do not attribute ordinary checkpoint
   savings to latent compression or claim constant total training memory from
   a cache whose size is independent of loop count.
