@@ -1,7 +1,7 @@
 {
   "kind": "regenerated architecture-family view",
-  "view_generator_commit": "4cf1e353f3b35aecc35dd72b3adf2824b10ce83c",
-  "view_generator_worktree_dirty": true,
+  "view_generator_commit": "65ab0d7323b9b5356448d11ee05e3b1bb3ad431c",
+  "view_generator_worktree_dirty": false,
   "view_generator_sources": {
     "experiments/l40s/research_summary.py": "7f9ae6aa99427fb12644cc6d06e9512d1a8608efa09d38237cdfd1501c75fef3",
     "experiments/l40s/research_report.py": "6e6e49ce7f71f838861240039dd61bdc610eb3522905cbb210a412a4bb8ccb65",

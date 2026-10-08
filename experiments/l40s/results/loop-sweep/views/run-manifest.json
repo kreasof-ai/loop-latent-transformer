@@ -2,8 +2,8 @@
   "status": "passed",
   "kind": "regenerated view; no new GPU measurements",
   "case_count": 672,
-  "view_generator_commit": "4cf1e353f3b35aecc35dd72b3adf2824b10ce83c",
-  "view_generator_worktree_dirty": true,
+  "view_generator_commit": "65ab0d7323b9b5356448d11ee05e3b1bb3ad431c",
+  "view_generator_worktree_dirty": false,
   "view_generator_sources": {
     "model/__init__.py": "a78f9cad3b89308d43c169c9b67a12a1b76f95bdb39be201650fd3038ce4bf15",
     "model/checkpointing.py": "29bc46e582bbd501122b22727e99b768f03a8b24acc29de1d7598b54244d8f88",
