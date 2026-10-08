@@ -20,3 +20,4 @@ benchmarks/results/l40s-nanogpt/*.log
 benchmarks/results/l40s-loop-sweep/*.log
 benchmarks/results/l40s-loop-sweep/capture-recovery/*.log
 benchmarks/results/l40s-loop-sweep/capture-recovery/artifacts/
+benchmarks/results/l40s-latent-checkpoint-sweep/*.log
