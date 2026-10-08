@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "dtype": "float64 reference and CUDA BF16 autocast",
+  "checks": [
+    {
+      "kind": "naive",
+      "checkpoint_gradient_max_error": 0.0,
+      "causal_and_cached_decode": "passed"
+    },
+    {
+      "kind": "llt",
+      "checkpoint_gradient_max_error": 0.0,
+      "folding_output_max_error": 2.498001805406602e-16,
+      "folding_gradient_max_error": 1.0408340855860843e-17,
+      "causal_and_cached_decode": "passed"
+    },
+    {
+      "kind": "layerwise",
+      "checkpoint_gradient_max_error": 0.0,
+      "folding_output_max_error": 3.3306690738754696e-16,
+      "folding_gradient_max_error": 8.239936510889834e-18,
+      "causal_and_cached_decode": "passed"
+    },
+    {
+      "kind": "naive",
+      "dtype": "bfloat16 autocast",
+      "checkpoint_gradient_max_error": 0.0
+    },
+    {
+      "kind": "llt",
+      "dtype": "bfloat16 autocast",
+      "checkpoint_gradient_max_error": 0.0
+    },
+    {
+      "kind": "layerwise",
+      "dtype": "bfloat16 autocast",
+      "checkpoint_gradient_max_error": 0.0
+    }
+  ]
+}

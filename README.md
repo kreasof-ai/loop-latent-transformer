@@ -3,7 +3,7 @@
 A proposed architecture combining **Multi-head Latent Attention (MLA)**,
 **Looped Transformers**, and **YOCO / U-YOCO**, with a proposed training
 strategy called **Latent Activation Checkpointing (LAC)**. The current
-implementation evidence covers synthetic inference and CPU training prototypes;
+implementation evidence covers synthetic GPU inference/prefill and CPU/GPU training prototypes;
 the full combination and trained-model quality remain unvalidated.
 
 ## Core Idea
@@ -25,7 +25,33 @@ Constant total training memory and constant total communication have **not**
 been demonstrated: exact loop checkpoints retain full residual boundary states,
 and compute still grows with T.
 
-## Provisional Evidence — 2026-10-06
+## L40S CUDA study — 2026-10-08
+
+The new [L40S report](benchmarks/L40S.md) prioritizes kernels and memory scaling:
+30 decoder geometries, ten causal-prefill geometries, 20 GPU-training geometries,
+attention/partition sweeps through 64K histories, and an independent rotating
+decoder repeat. Tensor supplies custom CUDA attention kernels; PyTorch supplies
+other model operators and training backward. All correctness checks pass, and
+149 CUDA binaries have verified provenance.
+
+At width 768, 12 layers, 4K historical tokens and ten loops, rank-64 LLT uses
+**210.9 MiB** peak CUDA allocation versus **1,651.1 MiB** for naive looping:
+**87.2% less memory**. Its independent CUDA-graph median is **6.712 ms** versus
+**9.974 ms** for same-backend naive. Rank 128 also qualifies on this CUDA schedule.
+Ordinary Python Tensor calls have significant adapter overhead: rank-64 LLT takes
+65.5 ms versus 50.8 ms for naive Flash. Graph and eager timings are distinct.
+
+GPU training does **not** meet the combined resource target in any of 20 tested
+geometries. At 20 loops, width 512 and a 4K vocabulary, checkpointed LLT saves
+76.1% versus uncheckpointed naive but costs 55.9% more time. With the same
+checkpoints, the additional saving is only 8.9%; at a 50K vocabulary it is 0.47%.
+This confirms that checkpointing and the vocabulary/optimizer floor must be
+counted explicitly. Trained quality, RoPE and distributed scaling remain open.
+
+See [raw results, figures and reproduction](benchmarks/L40S.md) and the
+[Tensor feature gaps and compiler reproducer](experiments/l40s/TENSOR_FOLLOWUPS.md).
+
+## Earlier provisional evidence — 2026-10-06
 
 The current [regime report](benchmarks/REGIMES.md) searches for at least **50%
 less peak live tensor storage**, at most **20% extra median latency** versus
@@ -106,7 +132,8 @@ for training, gradients and dense Adam state. Driver/runtime overhead and
 native operator scratch are excluded; these numbers are not process RSS/VRAM.
 The seven completed regime reports cover 48 configurations including repeats
 and 231 method/policy measurements, with correctness and artifact-hash checks.
-RoPE, prefill, learned quality, GPU backward, H100/NVLink and distributed
+These earlier runs did not test causal prefill or GPU backward; the new L40S
+study above covers both. RoPE, learned quality, H100/NVLink and distributed
 communication remain unverified. Timings are medians, not tail-latency guarantees.
 See [reports and reproduction commands](benchmarks/REGIMES.md#scope-reports-and-reproduction).
 
@@ -199,7 +226,8 @@ form by **20–34%**, up to **9.2 GB** on a single device.
 **Current conclusion:** absorption is conditional, not an inference-only rule.
 The local CPU prototype differentiates folded projections exactly and finds
 useful small-rank training regimes. This does not validate large-rank absorbed
-training or GPU backward. On this Vulkan implementation, even inference at
+training at production scale. The L40S study now measures GPU backward at
+prototype scales. On this Vulkan implementation, even inference at
 rank 96/128 fails the latency target despite cache savings.
 
 ## 3. LAGA (Latent All-Gather Attention)
@@ -250,7 +278,7 @@ additional checkpoints, replay or a different forward architecture.
 
 ## Measured Exact Loop Checkpointing
 
-The verified CPU path uses a shared KV latent and ordinary exact checkpoints:
+The verified CPU and CUDA paths use a shared KV latent and ordinary exact checkpoints:
 
     C = Down_KV(Norm(initial_state))     # shared sequence latent
     folds = differentiable_fold(weights)
@@ -288,7 +316,7 @@ dependent residual loops.
 
 ## Current Implementation Guidance
 
-- **Checkpointing:** exact per-loop checkpoints are the verified CPU path;
+- **Checkpointing:** exact per-loop checkpoints are verified on CPU and CUDA;
   compare against naive using the same policy.
 - **Projection folding:** tied up-projections remove repeated query/output
   projection work; differentiable folding is tested on CPU.
@@ -367,7 +395,7 @@ keeping latency acceptable. Current performance claims use the
 | Value proposition | Current evidence | Remaining target |
 |---|---|---|
 | Inference memory close to non-loop | Rank 32: 135.746 MiB at both one and ten loops; 91.5% below naive at ten loops | Preserve trained quality with the shared latent |
-| Acceptable latency at a useful rank | Rank 32 is 20.4% faster; rank 64 has 4.2% tax in the tested GPU decoder | Verify RoPE, prefill and production workloads |
+| Acceptable latency at a useful rank | Vulkan ranks 32–64 qualify; CUDA graph decode also qualifies at rank 128 | Verify RoPE and production workloads; reduce eager Tensor adapter overhead |
 | Training memory close to non-loop | At 20 loops: 1,188.818 MiB with exact checkpoints, versus 1,200.897 MiB for non-loop LLT | Achieve a substantial additional saving over equally checkpointed naive; currently only 0.58% |
 | Exact backward from compact state | Exact residual-boundary checkpointing passes gradient checks | Establish whether a redesigned forward or reconstruction method can eliminate full residual checkpoints |
 | Lower distributed KV traffic | No local distributed measurement | Share/shard latents without repeated KV transfers; measure total collectives and synchronization |
@@ -573,8 +601,9 @@ cleanly, or does the gated state need its own checkpoint?
 ## 3. Does absorption ever help in training?
 
 The CPU prototype demonstrates exact differentiable folding and useful
-small-rank timing regimes. The relevant open questions are the GPU-backward
-crossover, larger ranks, RoPE and quality at useful training scales.
+small-rank timing regimes. The L40S study measures GPU backward but finds no
+qualifying combined memory/latency regime. Larger trained scales, RoPE and quality
+remain open questions.
 
 ## 4. How does the latent behave under TP sharding?
 
@@ -600,8 +629,9 @@ The earlier rank-128, 4K decoder's absorbed path took **134.966 ms** versus
 **53.088 ms** for its matched naive-cache path; tile-fused expansion took
 **812.852 ms**. The current folded rank-32/rank-64 regimes qualify. These
 measurements show that expansion/fusion and rank must be evaluated in their
-actual schedule. GPU backward and optimized matrix-kernel performance remain
-unmeasured; see the [decoder results](benchmarks/README.md#complete-decoder-and-allocation-protocol).
+actual schedule. The [L40S study](benchmarks/L40S.md) now measures PyTorch CUDA
+backward and Tensor forward attention; fully Tensor-backed training remains
+unmeasured. See also the [earlier decoder results](benchmarks/README.md#complete-decoder-and-allocation-protocol).
 
 ## 8. Can RevNet-style reversibility be combined with MLA?
 

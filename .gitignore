@@ -10,3 +10,7 @@ benchmarks/results/extended-smoke/
 benchmarks/results/decoder-smoke/
 benchmarks/results/regime-inference-smoke/
 benchmarks/results/regime-training-smoke/
+benchmarks/results/l40s/artifacts/
+benchmarks/results/l40s/checkpoints/
+benchmarks/results/l40s/data/
+benchmarks/results/l40s/*.log

@@ -1,5 +1,8 @@
 # Memory and latency regimes
 
+This report records the earlier Vulkan/CPU regimes. The newer [L40S CUDA
+study](L40S.md) measures graph/eager decode separately and adds GPU training.
+
 This follow-up searches **system-resource regimes**, not equal-quality trained
 models. GPU inference uses the RX 6700 XT/Vulkan Tensor runtime. CPU training
 uses a Ryzen 5 5600, four PyTorch threads, FP32 and Adam.

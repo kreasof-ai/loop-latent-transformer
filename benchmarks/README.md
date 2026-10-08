@@ -1,5 +1,9 @@
 # Local Vulkan and CPU measurements
 
+The newer [L40S CUDA study](L40S.md) adds Tensor decode kernels, causal prefill,
+GPU training memory and matched checkpoint controls. This page preserves the
+earlier Vulkan/CPU benchmark history.
+
 Measured on **AMD Radeon RX 6700 XT**, Windows, Vulkan, using the adjacent
 [Tensor checkout](https://github.com/kreasof-ai/tensor) at commit
 `fa006eda9f01b5b2539ad1ca7eda03bc41f253c4`. Measurements were collected on
