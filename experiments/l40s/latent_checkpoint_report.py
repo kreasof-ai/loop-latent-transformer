@@ -23,7 +23,7 @@ and the [architecture](../../docs/ARCHITECTURE.md).
 
 ## Model and measurement protocol
 
-Every model uses residual width 768, 12 heads (head dimension 64), independent
+The original LLT/four-control study uses residual width 768, 12 heads (head dimension 64), independent
 input embedding/output weights, vocabulary 50,304, learned absolute positions
 with capacity 1025, exact GELU, and unweighted RMSNorm with epsilon 1e-5.
 Master weights, embeddings, residuals, AdamW states, and loss reductions are FP32;
@@ -171,6 +171,8 @@ Earlier exploratory studies are indexed in the [archive](../../archive/README.md
 
 '''
     text += (VIEWS / 'tables.md').read_text()
+    from experiments.l40s.research_report import section
+    text += section()
     if results_root() == PUBLISHED_RESULTS:
         destination = ROOT / 'experiments/l40s/LOOP_SWEEP.md'
     else:

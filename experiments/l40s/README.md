@@ -10,6 +10,8 @@ for training/inference latency and peak memory at B4/S1024, T=1..16, and LLT ran
 |---|---|
 | [loop_sweep.py](loop_sweep.py), [run_loop_sweep.sh](run_loop_sweep.sh) | Original 256-case rank-64 and conventional baseline grid |
 | [latent_checkpoint_sweep.py](latent_checkpoint_sweep.py), [run_latent_checkpoint_sweep.sh](run_latent_checkpoint_sweep.sh) | 416 additional rank/AC/experimental-LAC cases and checkpoint qualification |
+| [research_sweep.py](research_sweep.py), [run_research_sweep.sh](run_research_sweep.sh) | Additional recurrent/cache-sharing architecture profiles |
+| [research_summary.py](research_summary.py), [research_report.py](research_report.py) | Added-family audit, joined CSV, plots and canonical report extension |
 | [full_latent_qualification.py](full_latent_qualification.py) | Repeatable full-size gradient controls |
 | [checkpoint_numerics_diagnostic.py](checkpoint_numerics_diagnostic.py) | Torch BF16 repeated-backward diagnostics |
 | [loop_sweep_recovery.py](loop_sweep_recovery.py), [run_loop_sweep_recovery.sh](run_loop_sweep_recovery.sh) | Separate retries for graph capture after eager-gradient release |

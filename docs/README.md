@@ -9,6 +9,7 @@ current resource-cost result; the architecture describes what was implemented.
 | Document | Question it answers |
 |---|---|
 | [Architecture](ARCHITECTURE.md) | What does LLT compute, and what scales with loop count? |
+| [Additional architecture profiles](RESEARCH_BASELINES.md) | Which source designs and adaptations are profiled? |
 | [Checkpointing](CHECKPOINTING.md) | Which states do AC and the current LAC discard or retain? |
 | [Model package](../model/README.md) | Where are the reference, backend adapter, and checkpoint implementations? |
 | [Inference helpers](../inference/README.md) | How are serving weights prepared and cached decode measured? |
