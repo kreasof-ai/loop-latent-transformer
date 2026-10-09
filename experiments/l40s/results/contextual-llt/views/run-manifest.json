@@ -1,0 +1,22 @@
+{
+  "generator_source_commit": "badc2f3c17b6bdbe43cee2f89444b1865d3d4ef7",
+  "generator_sources": {
+    "experiments/l40s/contextual_llt_report.py": "aeff917b3124755309cced4c2d3da23f08b9132d069437bf47e91b2019c63fe3",
+    "experiments/l40s/runtime.py": "c4d922bfa41a4954b5c1bb2ffc362e438e95d18df20dbf1525c3f1e3e77e5ed2",
+    "experiments/l40s/research_summary.py": "7f9ae6aa99427fb12644cc6d06e9512d1a8608efa09d38237cdfd1501c75fef3"
+  },
+  "generator_sources_dirty": false,
+  "measurement_manifest_sha256": "b5c0a162b513b70bbc0759cedacd8aa1d3aea861711854074df199d3089b8bcd",
+  "report_sha256": "a6edba85365a9f03695f5fcafe2c371f5f9d5ae84ad315d7093a317ff35a9326",
+  "view_sha256": {
+    "summary.json": "4f395d1b3e1efe14b24d87b9cb87b29447193ae545a6a0604b8c30bedd1d6113",
+    "summary.csv": "f18cd4d36192153d5481b1d2fd4f41d374aa5f22569b27d63dbaab705af71350",
+    "all-architectures.json": "b3d3add5d5c41f5e711f0b9465f43a419c85a89a84e3d00e7f57cac1791d16d4",
+    "all-architectures.csv": "7b4f706fe32ff963492ada93ceb2b9df03d604df349d5adde24dbe72fae22a9b",
+    "audit.json": "d33f3b03a4bf81a23b2033b571fdda4e7232495377931819ce726356ea440f3e",
+    "training_graph.png": "f42ea38c7b3fe76f4cfb817273ee6b589268fe2beaf7087253802113f5cfd23f",
+    "training_graph.pdf": "ae314af2893d55377078c56269778a0a83dc38465608bdb3b03f7eb4fb6c4277",
+    "decode_graph.png": "b9e43bd8e1613a846f5d3962ca4beae5f08e35f48540091f49380bf6d6d00289",
+    "decode_graph.pdf": "c45acb3b072a31e6a8ec2877ded31ab941a18115a15f689a47849e35397319b9"
+  }
+}

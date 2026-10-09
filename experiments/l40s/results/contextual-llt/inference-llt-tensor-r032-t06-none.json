@@ -1,0 +1,1074 @@
+{
+  "status": "passed",
+  "arguments": {
+    "phase": "inference",
+    "rank": 32,
+    "loops": 6,
+    "backend": "tensor",
+    "policy": "none",
+    "samples": 9,
+    "repeats": 3,
+    "model": "llt"
+  },
+  "started_utc": "2026-10-08T23:50:55Z",
+  "config": {
+    "kind": "layerwise",
+    "width": 768,
+    "heads": 12,
+    "layers": 12,
+    "loops": 6,
+    "rank": 32,
+    "vocab": 50304,
+    "max_seq": 1025,
+    "untied": false,
+    "gelu": "none",
+    "mlp_width": 3072
+  },
+  "parameter_count": 149717760,
+  "effective_depth": 72,
+  "unique_layers": 12,
+  "stacked_parameter_target": 587662080,
+  "sequence_length": 1024,
+  "batch_size": 4,
+  "checkpoint_policy": "none",
+  "parameter_bytes": 598871040,
+  "prompt_eager": {
+    "gpu_samples_ms": [
+      58.7081298828125,
+      58.54719924926758,
+      58.86975860595703,
+      58.730430603027344,
+      57.94611358642578,
+      58.8144645690918,
+      59.4257926940918,
+      60.297054290771484,
+      58.40486526489258
+    ],
+    "wall_samples_ms": [
+      58.73724499542732,
+      58.571089000906795,
+      58.893238005111925,
+      58.751513992319815,
+      57.969385001342744,
+      58.83504499797709,
+      59.44648200238589,
+      60.31956100196112,
+      58.42852599744219
+    ],
+    "gpu_median_ms": 58.730430603027344,
+    "wall_median_ms": 58.751513992319815,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 793787392
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 793787392
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 793787392
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 793787392
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 793787392
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 793787392
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 793787392
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 793787392
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 793787392
+      }
+    ],
+    "peak_allocated_bytes": 911874048
+  },
+  "prompt_graph": {
+    "gpu_samples_ms": [
+      34.10324350992838,
+      34.00738016764323,
+      34.00738016764323,
+      34.00396728515625,
+      34.01041158040365,
+      34.030932108561196,
+      34.039807637532554,
+      34.06028747558594,
+      34.03502909342448
+    ],
+    "gpu_median_ms": 34.030932108561196,
+    "baseline_allocated_bytes": 793384960,
+    "capture_peak_allocated_bytes": 911349760,
+    "capture_peak_reserved_bytes": 1182793728,
+    "replay_peak_allocated_bytes": 793787392,
+    "replay_peak_reserved_bytes": 1067450368,
+    "repeats_per_sample": 3
+  },
+  "startup_eager": {
+    "gpu_samples_ms": [
+      62.73740768432617,
+      62.1209602355957,
+      62.67289733886719,
+      62.93299102783203,
+      62.934017181396484,
+      63.13875198364258,
+      63.41011047363281,
+      63.02201461791992,
+      62.13324737548828
+    ],
+    "wall_samples_ms": [
+      62.766713002929464,
+      62.146397001924925,
+      62.69713900110219,
+      62.97944800462574,
+      62.96074700367171,
+      63.16184999013785,
+      63.44131899822969,
+      63.04492898925673,
+      62.155606006854214
+    ],
+    "gpu_median_ms": 62.93299102783203,
+    "wall_median_ms": 62.96074700367171,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811107328
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811107328
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811107328
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811107328
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811107328
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811107328
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811107328
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811107328
+      },
+      {
+        "peak_allocated_bytes": 911874048,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811107328
+      }
+    ],
+    "peak_allocated_bytes": 911874048
+  },
+  "startup_graph": {
+    "gpu_samples_ms": [
+      34.520406087239586,
+      34.43336486816406,
+      34.4114990234375,
+      34.433311462402344,
+      34.45043182373047,
+      34.42483266194662,
+      34.468180338541664,
+      34.4081064860026,
+      34.44804382324219
+    ],
+    "gpu_median_ms": 34.43336486816406,
+    "baseline_allocated_bytes": 793384960,
+    "capture_peak_allocated_bytes": 911349760,
+    "capture_peak_reserved_bytes": 1186988032,
+    "replay_peak_allocated_bytes": 811107328,
+    "replay_peak_reserved_bytes": 1071644672,
+    "repeats_per_sample": 3
+  },
+  "cache_bytes": 3149184,
+  "fold_bytes": 14155776,
+  "decode_eager": {
+    "gpu_samples_ms": [
+      52.8487663269043,
+      53.25004959106445,
+      52.3612174987793,
+      53.1486701965332,
+      52.58649444580078,
+      54.06934356689453,
+      52.343807220458984,
+      51.5338249206543,
+      51.948543548583984
+    ],
+    "wall_samples_ms": [
+      52.87813000904862,
+      53.27320999640506,
+      52.38431799807586,
+      53.17155699594878,
+      52.60814398934599,
+      54.09139099356253,
+      52.366867996170186,
+      51.55559800914489,
+      51.979027994093485
+    ],
+    "gpu_median_ms": 52.58649444580078,
+    "wall_median_ms": 52.60814398934599,
+    "memory_samples": [
+      {
+        "peak_allocated_bytes": 811559424,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811510272
+      },
+      {
+        "peak_allocated_bytes": 811559424,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811510272
+      },
+      {
+        "peak_allocated_bytes": 811559424,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811510272
+      },
+      {
+        "peak_allocated_bytes": 811559424,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811510272
+      },
+      {
+        "peak_allocated_bytes": 811559424,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811510272
+      },
+      {
+        "peak_allocated_bytes": 811559424,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811510272
+      },
+      {
+        "peak_allocated_bytes": 811559424,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811510272
+      },
+      {
+        "peak_allocated_bytes": 811559424,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811510272
+      },
+      {
+        "peak_allocated_bytes": 811559424,
+        "peak_reserved_bytes": 1021313024,
+        "allocated_after_bytes": 811510272
+      }
+    ],
+    "peak_allocated_bytes": 811559424
+  },
+  "decode_graph": {
+    "gpu_samples_ms": [
+      3.063466707865397,
+      2.9859838485717773,
+      2.984618822733561,
+      2.9859838485717773,
+      2.9859838485717773,
+      2.983935991923014,
+      2.986325263977051,
+      2.984618822733561,
+      2.9835945765177407
+    ],
+    "gpu_median_ms": 2.9859838485717773,
+    "baseline_allocated_bytes": 811107840,
+    "capture_peak_allocated_bytes": 811559424,
+    "capture_peak_reserved_bytes": 1023410176,
+    "replay_peak_allocated_bytes": 811510272,
+    "replay_peak_reserved_bytes": 914358272,
+    "repeats_per_sample": 3
+  },
+  "prepared_weight_bytes": 192282624,
+  "inference_protocol": "Prepared BF16 linear weights, FP32 master/embedding/residual; prompt=last logits without KV stores; startup includes KV allocation/copy and LLT fold rebuild; decode=one supplied token with 1024-token history; captured rewind included.",
+  "coverage": {
+    "artifacts": [
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 4096,
+          "c": 768,
+          "v": 50304,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/d6c0c6dcc44b8b27b379404332f06759e1207dde3c7118f979ab4a5f5f7099f5.tbin",
+        "sha256": "ecf6375203ea4b1d5678a46526dd0bb6e6700c3cb389815ca987b3c27d117d2e",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 1024,
+          "c": 768,
+          "v": 1025,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/a44ede6216dc3c4d661fffc09b69e307a6978c7b3dce938e4e970304fcf2fa40.tbin",
+        "sha256": "deff77998b24809e8746529cb03270dac0152817704b73707f4c3f4da77605b8",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 3145728,
+          "dtype": "float32",
+          "other_dtype": "float32",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/43f186a44e920eb79074733fb1ff0c8259c684962cfbf835a6256e0a9867812c.tbin",
+        "sha256": "dcfc4657c55f5e453b28c5864e21b367d013c167bd5a572826a60bd0cfbd817e",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 24576,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/8187750e59262a0a8b14c1b3262a94d90f2764e447a2a1b11128612a761c9516.tbin",
+        "sha256": "ae5679204eef2c74a946b7f5d6544161bda122740c389a4c17ed4e438d131848",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 589824,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/3e8c97c532b8c587815c31bc06ac34ae453fca33ed1de4ddc98bee94997a7fea.tbin",
+        "sha256": "c51677f1e27ee435f78aa182befa95833808a4efe0f2f0afa8fe1bb40a1d1135",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 12,
+          "m": 32,
+          "k": 64,
+          "n": 768,
+          "ta": true,
+          "tb": false,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/cfaf58b5ade882d9619ceebb2ef0226234ae980965668f3638ca277c71e13d90.tbin",
+        "sha256": "2854827aa92f62796b24ceabd9290e6c4dc65524b6390d083a34620433b8e343",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_bmm",
+        "parameters": {
+          "batch": 12,
+          "m": 768,
+          "k": 64,
+          "n": 32,
+          "ta": false,
+          "tb": false,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/cb50c0084c01ccb2a4b80ce0046b8730cf264d09cab8af88ef02d9fbd8502f05.tbin",
+        "sha256": "6cdb9b918c2c6f60424627eac37078b2bc27d119a30340d805dea68fec0d7b3e",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms",
+          "r": 4096,
+          "c": 768,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/10796247dec4e4ae997b9d5393e6cf9f369f8f1cd0eb8ab3e5091eb047f31707.tbin",
+        "sha256": "748d255dd8164381e04189a306341026a882593a6b4454d9f501b08ca70dc7e4",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 3145728,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/5e605f869ff8ed04c1e876641ab1e5cf76f56c3f778176bb6836897c88f361a3.tbin",
+        "sha256": "9f2af8e1a948fda68d8a3319be0192c82eb268b2e9cf7af6a12d71f9a5160a1a",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 768,
+          "c": 32,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/ba35a62fc8773bf87fabaddcdb341cd34de12017586422095fb22930efac259e.tbin",
+        "sha256": "c8a4585e8f28261f8d5e8e0043c229be9018d29b29c288fc5ec5d97a875f6c71",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 768,
+          "c": 384,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/229c4a7679691652b5c1746cf4555f6163a5a2db5a2986b79c9967973e14285c.tbin",
+        "sha256": "6ea0a364a8c9f96b9d31fae3541b7de7c2885effd0f8bc3bc754fe82e5682b18",
+        "cache_hit": true
+      },
+      {
+        "factory": "attention_forward",
+        "module": "tensor_torch.templates.llt",
+        "parameters": [
+          4,
+          12,
+          1,
+          1024,
+          1024,
+          32,
+          32,
+          "bfloat16",
+          true,
+          0,
+          0.125
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/fd14fa571f52b60123ec96af2fb14b11473b50a87fc3f26b2ba2805b7ed876a7.tbin",
+        "sha256": "47b6eb21b8e18aacd7c5debde1051a6cb257e46bb2edf17cc3390403d4435a7c",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 384,
+          "c": 768,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/b7f5c58e0a893f0b1290be0ef453d009d904dac8df711f9f3cb34c1af08f2395.tbin",
+        "sha256": "686f654c05a65b2a0fb8948513b500bc76cd563427bcdb57bfef31b90a974b28",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 3145728,
+          "dtype": "float32",
+          "other_dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/fd3eb05a047161bcac00e29172a4b2120f0019c5bb5f6f56f3fa841f86257c97.tbin",
+        "sha256": "41470400c7d2fecaee9e250cca1aa09455d581e5dfae2c837ac8fa03bcb4f307",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 2359296,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/7c4932e3da496e4bc886dacd8fe0592263e0166c81c9c7d77e50440722980946.tbin",
+        "sha256": "b9fcb84ccccb40b7f8313a2732f47f83fc7043a5052d5b4fa7bf14b8dea868ac",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 768,
+          "c": 3072,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/f4f6bb3cf294f7f5b01891889ae33021888277c8037ffe8221c53a42e23c9700.tbin",
+        "sha256": "0872d2fc5c239a2c55cc77f338c026ae1d0cd1b1a52b0e3a19c8665a7514ac16",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gelu",
+          "n": 12582912,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/c51861f1bd8e100b014916f0b05178c02af355405ed416804554bcaa153995ff.tbin",
+        "sha256": "d3e73cd5fe298e9fe1079bd55e07e57e6eb2d28d7f6e8b01ae84f312f4e7e5d3",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4096,
+          "k": 3072,
+          "c": 768,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "mma",
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "threads": 256,
+            "stages": 3
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/50e9592463711fce73458cfc78fd888908f593124df474335ea84c7ba49302ac.tbin",
+        "sha256": "bc7f8025a78746b18c473d6bc017534fadcb9405f526f72061f8b11804a42938",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 3072,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/db9a0bf78ddac510d3b48e98a3d5e78950a633573e9a438cb4b58d05303d9f61.tbin",
+        "sha256": "4c768fad60dad80a815eda5dc5b1adabbea1475f50a0766b314f1864d16734e4",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "cast",
+          "n": 38633472,
+          "dtype": "float32",
+          "out_dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/87eab3c07ae84ff5e42da9dd934fc511e9c207305333b96d9a3331201a9e387f.tbin",
+        "sha256": "dd01847a34cb2bd01f4ce2ec39220319f464b04188ec3fbe3f5d40d8991894f4",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4,
+          "k": 768,
+          "c": 50304,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "gemv",
+            "rows": 8,
+            "chunk": 256,
+            "threads": 256
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/7d42e8f391af9c1f70105725f3e4f35d9d6525ffe9e4b3901ee68eccf437f49e.tbin",
+        "sha256": "35aebf946f87a3acc7a6aaafd02047911e74ec72285daff02b1dcc1976eb43b1",
+        "cache_hit": true
+      },
+      {
+        "factory": "cache_advance",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          4,
+          1025,
+          1024
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/a83035c9a32b5e88e6323d92b1d155b849d09e22895534af579a92a6fbba90d1.tbin",
+        "sha256": "4155f9b5827be8fa01c63c9f25bfe1c5491917ebb49de5475cf2073bae8f6eb0",
+        "cache_hit": true
+      },
+      {
+        "factory": "cache_append",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          4,
+          1,
+          1025,
+          32,
+          32,
+          1024,
+          "bfloat16",
+          true
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/ba2d27b0cec1330645e000b4a8d9f9a33498dd55f5fc6577cee2c4f221850b29.tbin",
+        "sha256": "eec7387be7bff89fc3b8ca53372bdb6d885bf16a681f1f3cb12f02c1f39915d3",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 4,
+          "c": 768,
+          "v": 50304,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/a05bfd82e75ad33780d533ad49f8fae113e8f0c5a157fc164ec5efd60156a729.tbin",
+        "sha256": "b4dd545d28c67ad2c9b11f04a98518ca08e9b13070f6c46e72ccd75ff0be612d",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "embedding",
+          "r": 1,
+          "c": 768,
+          "v": 1025,
+          "dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/44879d5b7ddc77b5ed9aeeec4175033e1a9742639b50bb05d803693664625558.tbin",
+        "sha256": "961aab8c3db5e3f9a6e6590cd094423f21aafdda77bcf7f3a64ec6bbfa9af8eb",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 3072,
+          "dtype": "float32",
+          "other_dtype": "float32",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/901376d0ddc0bcfc59f3a5f260f3c5d34fa79ee1794819a6d0a4ef9ee9baf494.tbin",
+        "sha256": "21c78972aee8083f42aee0e05177bc9c8dcb08c43f2ebe7037c0e96bcfe2279c",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "rms",
+          "r": 4,
+          "c": 768,
+          "dtype": "float32",
+          "eps": 1e-05
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/f593cde7abc9e6fbbf348bfd23e60685622ad0ca00d8854e79818ced5bfce325.tbin",
+        "sha256": "cdaf870d299ed778e4c74ab01d43b45e8a784e7fbe4e6c381009aeeb5aebe209",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4,
+          "k": 768,
+          "c": 32,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "gemv",
+            "rows": 8,
+            "chunk": 256,
+            "threads": 256
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/908a2370fddb3d71a3dbdd4d930101baa1428d234bc5382e67ba2e6601cbb998.tbin",
+        "sha256": "b0e61d6cebe20f45b7f0d57aae4327b8b0be838a77a438f17c1b0970ec85be17",
+        "cache_hit": true
+      },
+      {
+        "factory": "cache_advance",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          4,
+          1025,
+          1
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/ff90cea462775f09e22a1e74b2e624bec956b0ce516e3e1c6ca2697d5061ef06.tbin",
+        "sha256": "9828bf693d09181c6e89e0ac2a7701e0e0d2e50d8eb07c2a5bd33a1ce383b0ff",
+        "cache_hit": true
+      },
+      {
+        "factory": "cache_append",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          4,
+          1,
+          1025,
+          32,
+          32,
+          1,
+          "bfloat16",
+          true
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/de7c9eb1bc2d4b2e6c1aaf1e0f8a0488be12788c20c026cd6852047de5c83e03.tbin",
+        "sha256": "20c1b229667e58ba51e37eaf58cade94b17b6cb3d8b12b021db473b3f0289def",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4,
+          "k": 768,
+          "c": 384,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "gemv",
+            "rows": 8,
+            "chunk": 256,
+            "threads": 256
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/0c72e3201425f7d3ed5bf2a3edb848a61abb1d985b0bea2d152402a66468a851.tbin",
+        "sha256": "69101ad5c713637d1a602767d8a704f9fa43dee6a13fda82f1826d4724fc7352",
+        "cache_hit": true
+      },
+      {
+        "factory": "decode_partial",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          4,
+          12,
+          1,
+          1025,
+          32,
+          32,
+          "bfloat16",
+          0.125,
+          32
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/1c9bf52a07b42fe48c13296e292061cf6d73c3aef950ac1e8cc7ff898dd7c71a.tbin",
+        "sha256": "42aa1a2f51597458dd5fb09e1e00e1f9455f7f841976ad53fa888ea5b7ee5051",
+        "cache_hit": true
+      },
+      {
+        "factory": "decode_merge",
+        "module": "tensor_torch.templates.llt_decode",
+        "parameters": [
+          4,
+          12,
+          32,
+          "bfloat16",
+          32
+        ],
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/862b07fade59677817ccd9fb49ce91a743d94d5615989213ca35d6af8e0a22b7.tbin",
+        "sha256": "7418bb784e9107f6567ffcb282d5875c9fb1dadc680c057257f702d3e0524718",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4,
+          "k": 384,
+          "c": 768,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "gemv",
+            "rows": 8,
+            "chunk": 256,
+            "threads": 256
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/828b574d142ca5ac248372cb0aa0c0f5e230dcf22a6fb4eb8c60328cb3c86ad2.tbin",
+        "sha256": "b0d89d141caa2de8a9b5661ae779241db3987134d07ead0d8393277a53a21b22",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "add",
+          "n": 3072,
+          "dtype": "float32",
+          "other_dtype": "bfloat16",
+          "out_dtype": "float32"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/3aa3612ad9dba454d8e8bbaa712ed574267ba4615d72805dd6c430dc95ebb55a.tbin",
+        "sha256": "71d713c50daa3ffb5b50c962ab879b26da8f6d35af5f196fb50e09cf3b0f5b16",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4,
+          "k": 768,
+          "c": 3072,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "gemv",
+            "rows": 8,
+            "chunk": 256,
+            "threads": 256
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/9c8782ee44babd37cc63394aff2f3352683bc7deffc1d63028597573496aff07.tbin",
+        "sha256": "5db8cad94212fcfd04d0dc869f22860c6badbb74e0584557b086ca15da81c523",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_ops",
+        "parameters": {
+          "kind": "gelu",
+          "n": 12288,
+          "dtype": "bfloat16"
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/2caa9508b8689dd07c218e72ed05687f235f771c06db656cf6bd272320635558.tbin",
+        "sha256": "d3616de45015dfb243ceed7dddd92eafb136da810c9a4d894db4f29f03150560",
+        "cache_hit": true
+      },
+      {
+        "factory": "make_kernel",
+        "module": "tensor_torch.templates.llt_gemm",
+        "parameters": {
+          "kind": "gemm",
+          "m": 4,
+          "k": 3072,
+          "c": 768,
+          "ta": false,
+          "tb": true,
+          "dtype": "bfloat16",
+          "out_dtype": "bfloat16",
+          "schedule": {
+            "family": "gemv",
+            "rows": 8,
+            "chunk": 256,
+            "threads": 256
+          }
+        },
+        "target": "sm_89",
+        "path": "/home/sagemaker-user/llt-contextual-l40s-2026-10-08/contextual-llt/artifacts/3c6d2f59eab85fc95854fc18993e4f5674b499a192ce7b18036ddf2d947d304a.tbin",
+        "sha256": "6d61d77b48e5e80a807ebd7a582d6b992eaabd4b00a64a8d241674b5d3a589ba",
+        "cache_hit": true
+      }
+    ],
+    "calls": {
+      "make_kernel:embedding": 100,
+      "make_kernel:add": 7250,
+      "make_kernel:cast": 9111,
+      "make_kernel": 1200,
+      "make_kernel:rms": 7250,
+      "make_kernel:gemm": 15050,
+      "attention_forward": 2376,
+      "make_kernel:gelu": 3600,
+      "cache_advance": 408,
+      "cache_append": 408,
+      "decode_partial": 1224,
+      "decode_merge": 1224
+    },
+    "fallbacks": [],
+    "layout_copies": 0,
+    "compute_dtype": "torch.bfloat16",
+    "gemm_profile": "optimized",
+    "cache_inference_weights": true,
+    "inference_weight_cast_hits": 8989
+  },
+  "checkpoint_boundary": null,
+  "training_protocol": "Full-token loss/backward, clip=1, AdamW FP32 states; policy=none",
+  "cache_banks": 12,
+  "expected_cache_bytes": 3149184,
+  "duration_seconds": 7.194873013999313,
+  "architecture": {
+    "name": "contextual_per_layer_loop_shared",
+    "latent_source": "each layer's input residual during the first loop",
+    "loop_sharing": "first-loop memory reused without refresh on later loops",
+    "layer_sharing": false,
+    "checkpoint_policies": [
+      "none",
+      "ac"
+    ],
+    "description": "LLT stores one contextual rank-R latent cache per physical layer. During the first loop, layer i constructs C_i from its normalized input residual and uses it as attention memory. Later loops reuse that same C_i while their queries and residual states evolve. The first layer's memory is embedding-derived; deeper layers' memories contain preceding first-loop computations. Historical memory is not refreshed on later loops. There are 12 banks, independent of T; BF16 KV payload is 2*B*S*R*12 bytes."
+  },
+  "provenance": {
+    "llt_commit": "5edfe1c163d1825a949a0cac96a3ae3d15418681",
+    "tensor_commit": "a41ab7d0bdb03d808f8f58d15ceee517601f588a",
+    "tensor_repository": "https://github.com/kreasof-ai/tensor",
+    "sources": {
+      "model/contextual_llt.py": "f0b40a783ab8c03b495df6aa700e02f90bb7b0e8050c7be38b738922681045ae",
+      "model/reference.py": "31eb6d4a0dbaeb2917be7e1a70724de786ad1dab6c64eb1972003ca3a33079ba",
+      "model/tensor_backend.py": "6048f09dd4bdc2da4f942b61517f4fe2d5670bead82ff9b97390ede5f606e6e4",
+      "model/__init__.py": "a78f9cad3b89308d43c169c9b67a12a1b76f95bdb39be201650fd3038ce4bf15",
+      "inference/prepared.py": "c8802c225db98dc55b267602024bb0629dc4340a5c65cfaa2e52208d8a913cdf",
+      "experiments/l40s/loop_sweep.py": "4b4ba280c6954a8407555b4c0661b5ffe96e7e5743d67cd4b8c93203289ae945",
+      "experiments/l40s/contextual_llt_sweep.py": "e6702c0bea3e2df1b406e9bb56e0be24d529f54eb7a2ca1aec1f5c2b6e3a5f13",
+      "experiments/l40s/timing.py": "f1b99d91a5f5d47e9915d011bec1085156a1ecdef2ca6e05e4ee4c95a9ba5d7d",
+      "experiments/l40s/runtime.py": "c4d922bfa41a4954b5c1bb2ffc362e438e95d18df20dbf1525c3f1e3e77e5ed2",
+      "experiments/l40s/latent_checkpoint_sweep.py": "4adefa81197c7f8470df0e17f2ff006f003290ac6d3d6357452446960168d8e6",
+      "model/checkpointing.py": "29bc46e582bbd501122b22727e99b768f03a8b24acc29de1d7598b54244d8f88"
+    },
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NVIDIA L40S",
+    "native_cpp_executor": true,
+    "runtime_binary_sha256": {
+      "/home/sagemaker-user/tensor/packages/tensor-torch/src/tensor_torch/_launch.abi3.so": "7421706b1868dc723d7b6061723b928f48f7423f35de8a45e31ef10f512cbf44",
+      "/home/sagemaker-user/tensor/packages/tensor-torch/src/tensor_torch/_executor_2_14.cpython-312-x86_64-linux-gnu.so": "0716696345eaceb596b2b6611f322762a8ad071c0517c29e1dd72f3780314b67"
+    },
+    "nvrtc": "/home/sagemaker-user/tensor/build/nvrtc-12.9",
+    "driver": "595.91.07"
+  }
+}
