@@ -4,12 +4,14 @@ The current inference code supports the measured prefill and supplied-token
 cached-decode operations. The main study does not include sampling, beam search,
 or a production generation service.
 
-[BackendTransformer](../model/tensor_backend.py) owns the architecture-dependent
-cache allocation and the `prefill`, `decode_token`, and `rewind` operations. LLT stores one shared latent
-history. Conventional loop controls store independent K/V histories for each
-block application. Prefill, cache copies, and weight preparation happen before
-timed token decode; their latency and memory are reported separately as serving
-startup in the [main experiment](../experiments/l40s/LOOP_SWEEP.md).
+[ContextualLLT](../model/contextual_llt.py) defines current LLT decode, using the
+common allocation/rewind helpers in [BackendTransformer](../model/tensor_backend.py).
+LLT stores one latent history per physical layer, constructed during the first
+loop and reused thereafter. Each new token appends once per layer, not once per
+loop. Conventional loops and the refreshed latent control keep per-application
+histories. Prefill, cache copies and weight preparation are measured separately
+from cached decode as serving startup in the
+[main experiment](../experiments/l40s/LOOP_SWEEP.md).
 
 [prepared.py](prepared.py) provides `prepare(model)` for the Torch serving control.
 It attaches a linear operation that caches BF16 copies of FP32 master parameters.

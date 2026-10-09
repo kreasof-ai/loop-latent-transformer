@@ -14,3 +14,7 @@ See [reproducibility](../docs/REPRODUCIBILITY.md).
 Added-family CPU tests compare none/AC gradients for every parameter, cached/full-
 forward supplied-token logits, rewind behavior, architecture-specific work counts, and seeded stochastic GRT
 checkpoint gradients/RNG consumption.
+
+The contextual LLT checks establish folded/unfolded equality, exact AC gradients,
+first-loop per-layer memory reuse, contextual dependence of deeper memories,
+causality, and multi-token decode with stable cache addresses.

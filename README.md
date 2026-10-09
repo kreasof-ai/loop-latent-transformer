@@ -1,35 +1,30 @@
 # Loop Latent Transformer
 
 Loop Latent Transformer (LLT) is an architectural research prototype that reuses
-a small stack of Transformer blocks while attending to a shared, low-rank KV
-latent derived from the input embeddings. Queries and residual states evolve
-through the loops; the historical KV latent stays fixed. Projection folding
-avoids materializing full-width keys and values.
+Transformer blocks while attending to **one contextual low-rank memory per layer**.
+Each memory is built from that layer's input during the first loop and reused on
+later loops. Queries and full-width residuals evolve; historical memories remain
+fixed. Projection folding avoids expanded K/V storage. KV storage is constant
+in loop count, with L latent banks rather than a single global bank.
 
-The current evidence is a **kernel latency and memory study on NVIDIA L40S**.
-It does not yet establish trained language-model quality. Numerical kernels use
-[Tensor](https://github.com/kreasof-ai/tensor), with matched PyTorch controls.
+The evidence is a **kernel latency and memory study on NVIDIA L40S**, without a
+trained-quality claim. Numerical kernels use [Tensor](https://github.com/kreasof-ai/tensor),
+with matched PyTorch controls. The current sweep measures none and standard AC;
+LAC is excluded. The globally shared embedding-latent prototype and its LAC
+measurements remain [historical](archive/reports/L40S_GLOBAL_LATENT_SWEEP.md).
 
 ## Start here
 
 - [Architecture](docs/ARCHITECTURE.md): equations, model variants, parameters, and cache scaling.
 - [L40S loop sweep](experiments/l40s/LOOP_SWEEP.md): the main experiment, all loop counts, ranks, training/inference latency, and peak memory.
-- [Checkpointing](docs/CHECKPOINTING.md): exact block AC and the preliminary LLT latent-region policy.
+- [Checkpointing](docs/CHECKPOINTING.md): exact block AC and historical latent-region limitations.
 - [Documentation map](docs/README.md): implementation and reproduction guides, research questions, and historical work.
 
-The sweep covers batch 4, sequence 1024, T=1..16, and LLT ranks 32/64/128 against
-Naive Loop, independent stacks, and fixed-depth models that match each stack's
-parameter count. Five added profiles cover U-YOCO, LPT, GRT, a per-layer latent
-control, and an attention-only loop control. The joined study contains **1152
-performance records (1144 passed, 8 OOM)**: the original 672 plus 480 new cases.
-The [architecture contract](docs/RESEARCH_BASELINES.md) identifies source fidelity,
-precision, and work-count differences. Backend and checkpoint checks are separate.
-
-At rank 64 and T=16, captured Tensor training takes **518.51 ms / 4.79 GiB with
-block AC**, compared with **411.77 ms / 25.11 GiB without checkpoints**. The current
-LAC checkpoints only the latent attention/output branch and remains exploratory;
-it is not a completed solution for checkpointing whole loops through latent state.
-See the main report for the full protocol, Torch comparisons, and inference.
+The sweep covers B4/S1024, T=1..16, and LLT ranks 32/64/128 against Naive Loop,
+independent stacks, and fixed-depth models matched to each stack's parameter count.
+Additional controls cover U-YOCO, LPT, GRT, refreshed per-layer/per-loop latents,
+and attention-only looping. The [architecture contracts](docs/RESEARCH_BASELINES.md)
+identify source fidelity, precision and work-count differences.
 
 ## Repository map
 
@@ -49,12 +44,7 @@ Reading the report needs no environment setup. Regenerate its audited tables and
 figures on CPU with Python and Matplotlib:
 
 ```bash
-python -m experiments.l40s.loop_sweep_summary
-python -m experiments.l40s.latent_checkpoint_summary
-python -m experiments.l40s.research_summary
-python -m experiments.l40s.latent_checkpoint_report
-python -m experiments.l40s.loop_sweep_manifest
-python -m experiments.l40s.latent_checkpoint_manifest
+python -m experiments.l40s.contextual_llt_report
 ```
 
 Run the CPU model checks in a Python environment with Torch and Tensor's Torch

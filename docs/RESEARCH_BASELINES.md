@@ -43,7 +43,7 @@ its fixed nanoGPT-scale geometry. Token/output weights are independent. The fina
 cross-decoder can evaluate only the last prompt position because it reads a fixed
 memory and has no cross-position writes; both prompt and serving-startup profiles
 use this valid last-position optimization. Training computes every token's logits.
-The preserved LLT prompt path computes all query positions at every application.
+The historical global-latent LLT prompt path computes all query positions at every application.
 Its fixed embedding-derived latent also permits last-query-only prompt execution;
 that serving optimization is absent from the original measurements. Prompt latency
 therefore reflects current execution choices as well as architectural work.
@@ -80,8 +80,8 @@ control, not DeepSeek-V2. Each physical block has its own rank-64 down projectio
 C is refreshed from the evolving block input on every application. Head-specific
 linear expansion weights are folded into queries/output exactly as in LLT. The
 cache stores one rank-64 latent per applied block. The control omits DeepSeek's
-query-compression branch, decoupled rotary-key stream, and MoE. It isolates
-cross-layer/loop memory sharing from per-application latent storage.
+query-compression branch, decoupled rotary-key stream, and MoE. It keeps LT banks, whereas current LLT builds L contextual banks on the first
+loop and reuses them thereafter. These are different memory-sharing rules.
 
 **Attention-only loop:** an FFN-frequency control inspired by
 [MixerLoop, 2608.18230v1](https://arxiv.org/html/2608.18230v1). Each physical block

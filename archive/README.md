@@ -15,6 +15,7 @@ studies. The current architectural description is in
 | [Initial L40S kernels](reports/L40S.md) | Early CUDA kernel experiments |
 | [Native model study](reports/L40S_NATIVE.md) | Earlier implementation profiles |
 | [Actual nanoGPT study](reports/L40S_NANOGPT.md) | Historical nanoGPT comparison, with its vendor source preserved |
+| [Global input-latent sweep](reports/L40S_GLOBAL_LATENT_SWEEP.md) | Superseded global-cache LLT ranks and historical LAC, with all original measurements |
 | [Original rank-64 loop report](reports/L40S_LOOP_SWEEP.md) | Baseline study before the combined rank/checkpoint report |
 | [Earlier checkpoint report](reports/L40S_LATENT_CHECKPOINT.md) | Previous presentation of the combined study; superseded by LOOP_SWEEP.md |
 | [Retired benchmark scripts](benchmarks/) | Earlier CPU/Vulkan and regime harnesses |

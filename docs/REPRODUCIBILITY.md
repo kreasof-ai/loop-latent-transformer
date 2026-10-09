@@ -21,30 +21,24 @@ in `model.reference` requires only Torch. CPU report regeneration requires
 Matplotlib and the Python standard library, without importing the GPU backend.
 This repository does not install or develop the Tensor runtime.
 
-## Regenerate published views on CPU
+## Regenerate the current report on CPU
 
-From the repository root, leave `LLT_RESULTS_ROOT` unset:
+Leave `LLT_RESULTS_ROOT` unset and run:
 
 ```bash
-python -m experiments.l40s.loop_sweep_summary
-python -m experiments.l40s.latent_checkpoint_summary
-python -m experiments.l40s.research_summary
-python -m experiments.l40s.latent_checkpoint_report
-python -m experiments.l40s.loop_sweep_manifest
-python -m experiments.l40s.latent_checkpoint_manifest
+python -m experiments.l40s.contextual_llt_report
 ```
 
-The three summary commands strictly audit the raw records, source snapshots, and
-compiled artifact hashes before generating CSVs/tables/figures in `*/views/`.
-The report command rebuilds the single canonical LOOP_SWEEP.md. Manifest commands
-record current view-generator source hashes while preserving original manifests.
-These commands perform no GPU measurements or Tensor compilation.
+This audits the 288 replacement LLT records and joins them with 768 preserved
+non-LLT records. It regenerates the canonical report, active CSVs and LLT figures.
+Historical summary/report tools remain available for their original source families;
+the report entry point delegates to the current generator when its audit exists.
+Raw historical records and their source snapshots remain unchanged.
 
-Strict artifact auditing needs the ignored CUDA artifact caches that accompanied
-the original runs. They are present on the measurement machine and are not
-included in Git. A fresh clone retains the committed raw records, source snapshots,
-original audits, and generated report, but needs those artifacts to repeat the
-strict audit. Missing artifacts cause a failure rather than weakening verification.
+Strict artifact auditing needs the ignored CUDA artifact caches on the measurement
+machine. They are not included in Git. A fresh clone can read the committed raw
+records, audits, source snapshots and figures; repeating the strict audit needs
+the original artifact caches. Missing artifacts cause audit failure.
 
 ## Verify the reorganization
 
@@ -63,39 +57,38 @@ Raw files still contain the absolute paths used when measured. The
 measured JSON. New views use current paths. Original measurement manifests and
 regenerated-view manifests are deliberately distinct provenance records.
 
-## Fresh GPU sweep with the current layout
+## Fresh contextual LLT sweep
 
-Set a separate output directory and the installed GPU/CPU Python executables.
-On the existing measurement machine:
+Use a new output root and run sequentially on an isolated NVIDIA L40S:
 
 ```bash
-export LLT_RESULTS_ROOT=/tmp/llt-fresh-l40s
+export LLT_RESULTS_ROOT=/tmp/llt-contextual-fresh-l40s
 export LLT_PYTHON=/home/sagemaker-user/tensor/.venv/bin/python
-export LLT_CPU_PYTHON=python
+export LLT_CPU_PYTHON=/opt/conda/bin/python
 export TENSOR_CHECKOUT=/home/sagemaker-user/tensor
 export TENSOR_NVRTC_HOME=/home/sagemaker-user/tensor/build/nvrtc-12.9
-experiments/l40s/run.sh
+bash experiments/l40s/run_contextual_llt_sweep.sh
+python -m experiments.l40s.contextual_llt_report
 ```
 
-These paths select an installation; the numerical dependency is the
-[Tensor repository](https://github.com/kreasof-ai/tensor). Change the paths for
-another machine. `run.sh` runs GPU jobs sequentially in fresh processes: original
-256 cases and eight backend checks, separate capture retries, 416 extension cases,
-12 small/12 full checkpoint checks, and BF16 diagnostics. It then runs CPU audits
-and writes a report inside the new run's `loop-sweep/views/`. It leaves the
-published report and measured payloads in place.
+These installation paths can be changed for another machine; the dependency is
+[Tensor](https://github.com/kreasof-ai/tensor). The runner first checks all ranks
+at small T4/T16, measures 288 fresh performance cases, then checks every rank on
+both backends at full B4/S1024 T16. No LAC worker or policy is run.
 
-The grid uses B4/S1024, width 768, 12 heads, 12 base blocks, vocabulary 50,304,
-position capacity 1025, T=1..16, and LLT ranks 32/64/128. Training uses full-token
-loss and all model parameters. There are three warmups, nine timing samples,
-and three graph replays per sample; optimizer counters check 42 actual updates.
-Use the main report for exact precision, memory, and inference definitions.
+The geometry is W768/H12/L12/V50304/P1025, T1..16, rank32/64/128. Each layer
+builds memory from its first-loop input and reuses it on later loops. Training
+profiles none/AC. Inference profiles prompt, startup and one supplied cached token.
+Three warmups, nine samples and three graph replays match the historical protocol.
+Full-size numerical checks use deterministic controls separately from timing.
 
-`LLT_RESUME=1` resumes an interrupted run with the same sources and runtime.
-Do not mix numerical revisions in one output directory: the strict audit checks
-source-family consistency. A recorded OOM is a result; supplementary capture
-retries remain separate. The published output root is rejected by GPU workers.
-Do not run concurrent GPU benchmarks when reproducing isolated measurements.
+`LLT_RESUME=1` resumes only with identical numerical sources and runtime.
+Each job uses a fresh process. OOM is retained as a measured outcome. Do not mix
+source revisions in one campaign or run concurrent GPU benchmarks. GPU workers
+reject the published output root. The report generator writes the canonical
+report only after auditing the complete replacement grid.
+
+For the historical global-latent sweep, use its frozen revisions and `run.sh`.
 
 ## Reproduce the original source layout
 

@@ -8,6 +8,8 @@ for training/inference latency and peak memory at B4/S1024, T=1..16, and LLT ran
 
 | Files | Purpose |
 |---|---|
+| [contextual_llt_sweep.py](contextual_llt_sweep.py), [run_contextual_llt_sweep.sh](run_contextual_llt_sweep.sh) | Current contextual per-layer LLT: 288 fresh profiles, ranks 32/64/128, none/AC, no LAC |
+| [contextual_llt_report.py](contextual_llt_report.py) | Strict current LLT audit and replacement active report/CSV/plots |
 | [loop_sweep.py](loop_sweep.py), [run_loop_sweep.sh](run_loop_sweep.sh) | Original 256-case rank-64 and conventional baseline grid |
 | [latent_checkpoint_sweep.py](latent_checkpoint_sweep.py), [run_latent_checkpoint_sweep.sh](run_latent_checkpoint_sweep.sh) | 416 additional rank/AC/experimental-LAC cases and checkpoint qualification |
 | [research_sweep.py](research_sweep.py), [run_research_sweep.sh](run_research_sweep.sh) | Additional recurrent/cache-sharing architecture profiles |
@@ -18,7 +20,7 @@ for training/inference latency and peak memory at B4/S1024, T=1..16, and LLT ran
 | [loop_sweep_record.py](loop_sweep_record.py) | Preserve and classify allocator OOM failures |
 | [timing.py](timing.py) | CUDA-event, synchronized wall time, and allocator sampling |
 | [loop_sweep_summary.py](loop_sweep_summary.py), [latent_checkpoint_summary.py](latent_checkpoint_summary.py) | Strict CPU audits, tables, CSV exports, and figures |
-| [latent_checkpoint_report.py](latent_checkpoint_report.py) | Single current report generator |
+| [latent_checkpoint_report.py](latent_checkpoint_report.py) | Report entry point: current contextual LLT when available, historical generator otherwise |
 | [manifest.py](manifest.py), [loop_sweep_manifest.py](loop_sweep_manifest.py), [latent_checkpoint_manifest.py](latent_checkpoint_manifest.py) | Provenance for regenerated views |
 | [runtime.py](runtime.py) | Output roots and resolution of original recorded paths |
 | [run.sh](run.sh) | Sequential fresh-run pipeline |
@@ -27,7 +29,7 @@ Model code lives in [model/](../../model/README.md), and serving helpers in
 [inference/](../../inference/README.md). Experiment harnesses select geometry and
 measurement policy rather than defining the architecture.
 
-The scripts work both as direct files and as `python -m experiments.l40s.<name>`.
+Use `python -m experiments.l40s.<name>` for the current contextual LLT tools. Historical tools also support direct-file execution.
 Report tools run on CPU with Matplotlib. GPU workers use Torch and Tensor's native
 Torch adapter. See [reproducibility](../../docs/REPRODUCIBILITY.md) for dependencies,
 commands, and the distinction between original sources and the current layout.
@@ -36,6 +38,6 @@ commands, and the distinction between original sources and the current layout.
 
 The [results index](results/README.md) explains frozen raw payloads, source
 snapshots, original manifests, and regenerated `views/`. No new GPU timings were
-collected during the repository reorganization. New GPU runs require a separate
-`LLT_RESULTS_ROOT`; the report generator writes a fresh-run report inside that
-run's `views/` rather than replacing the published study.
+collected during the repository reorganization. New GPU runs require a separate `LLT_RESULTS_ROOT`. The contextual LLT report
+generator replaces the canonical report after a complete successful audit and
+retains historical raw records unchanged.

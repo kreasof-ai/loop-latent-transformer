@@ -84,6 +84,10 @@ that release eager gradients before capture remain separate from primary cases.
 
 
 def main():
+    if (results_root() / 'contextual-llt/views/audit.json').exists():
+        from experiments.l40s.contextual_llt_report import main as current_report
+        current_report()
+        return
     audit = json.loads((VIEWS / 'audit.json').read_text())
     assert audit['status'] == 'passed' and audit['case_count'] == 672
     rows = json.loads((VIEWS / 'combined.json').read_text())

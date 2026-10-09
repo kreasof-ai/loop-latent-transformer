@@ -1,21 +1,21 @@
 # Open research questions
 
 The [main L40S sweep](../../experiments/l40s/LOOP_SWEEP.md) measures resource cost
-for the current static input-latent architecture. This roadmap identifies what
+for the current first-loop contextual per-layer memory architecture. This roadmap identifies what
 those measurements leave unresolved; it does not report additional experiments.
 
 ## Architectural quality
 
 Train matched LLT, Naive Loop, and independent-stack controls to determine how a
-fixed input-derived KV memory affects language modeling. Sweep loop count and
+fixed first-loop contextual KV memory affects language modeling. Sweep loop count and
 latent rank at comparable training budgets. Compare quality as well as parameters,
 attention work, latency, and memory; equal parameters alone do not match compute.
 The current synthetic-token profiles establish no trained-quality result.
 
 ## Checkpoint boundary
 
-The current LAC branch passes exactness checks but retains most residual/query/MLP
-activation state. Find a native latent boundary that supports a larger useful
+The historical LAC branch passed exactness checks but retained most residual/query/MLP
+activation state. LAC is excluded from the current experiment. Find a native latent boundary that supports a larger useful
 recomputation region while preserving the intended model. Specify which state is
 sufficient to recover the evolving residual, and measure the extra recomputation
 and storage. Block AC is the qualified exact baseline. LAC remains preliminary.

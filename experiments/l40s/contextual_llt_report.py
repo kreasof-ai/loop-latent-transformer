@@ -10,6 +10,7 @@ import itertools
 import json
 import math
 import statistics
+import subprocess
 from pathlib import Path
 
 import matplotlib
@@ -76,6 +77,12 @@ def audit_new():
                     artifacts[artifact["sha256"]] = artifact
         if a["phase"].endswith("qualification"):
             assert d["status"] == "passed"
+            full = a["phase"] == "full_qualification"
+            controls = d["qualification_controls"]
+            assert controls["deterministic_algorithms"] == full
+            assert controls["primary_performance_settings_changed"] is False
+            if full:
+                assert controls["cublas_workspace_config"] == ":4096:8"
             for name, check in d["policy_checks"].items():
                 if name.endswith("_cache"):
                     assert check["max_abs_error"] < 0.05 and check["relative_l2"] < 0.03
@@ -165,6 +172,7 @@ def audit_new():
     }
     assert len(rows) == 288 and {key(r) for r in rows} == expected
     assert len(profiles) == len(commits) == len(definitions) == 1
+    assert len(checks) == 12
     assert {
         (d["arguments"]["rank"], d["arguments"]["loops"])
         for _, d in checks
@@ -198,6 +206,34 @@ def write_rows(path, rows):
         writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def verify_preserved(rows):
+    trusted = {}
+    for family in ("loop-sweep", "research-baselines"):
+        audit = json.loads(
+            (PUBLISHED_RESULTS / family / "views/audit.json").read_text()
+        )
+        assert audit["status"] == "passed"
+        trusted.update(audit["input_sha256"])
+    hashes = {}
+    for row in rows:
+        path = ROOT / row["raw_record"]
+        digest = sha(path)
+        assert trusted[row["raw_record"]] == digest
+        hashes[row["raw_record"]] = digest
+        raw = json.loads(path.read_text())
+        assert raw["status"] == row["status"]
+        assert raw["parameter_count"] == row["parameter_count"]
+        for metric in METRICS:
+            if metric in raw:
+                assert row[metric + "_gpu_ms"] == raw[metric]["gpu_median_ms"]
+                peak = raw[metric].get(
+                    "capture_peak_allocated_bytes",
+                    raw[metric].get("peak_allocated_bytes"),
+                )
+                assert row[metric + "_peak_gib"] == peak / 2**30
+    return hashes
 
 
 def label(model, rank):
@@ -260,12 +296,14 @@ def main():
     old = json.loads(old_path.read_text())
     preserved = [r for r in old if r["model"] != "llt"]
     assert len(preserved) == 768 and all(r["checkpoint"] != "lac" for r in preserved)
+    preserved_hashes = verify_preserved(preserved)
     rows = preserved + new
     assert len(rows) == len({key(r) for r in rows}) == 1056
     audit.update(
         active_case_count=len(rows),
         preserved_case_count=len(preserved),
         historical_join_sha256=sha(old_path),
+        preserved_input_sha256=preserved_hashes,
         active_passed=sum(r["status"] == "passed" for r in rows),
         active_out_of_memory=sum(r["status"] == "out_of_memory" for r in rows),
     )
@@ -297,13 +335,14 @@ def main():
     text += "The previous globally shared embedding-derived LLT rows are **superseded**, not relabeled or reused. Their raw records remain unchanged; the [historical report](../../archive/reports/L40S_GLOBAL_LATENT_SWEEP.md) retains their results. All non-LLT rows below retain their original measurements, dates, and source provenance.\n\n"
     text += "## Measurement protocol\n\nWidth 768, 12 heads, head dimension 64, 12 tied blocks, vocabulary 50,304, position capacity 1025, MLP width 3072, unweighted RMSNorm epsilon 1e-5, and exact GELU. FP32 masters, embeddings, residuals, losses, and optimizer state; BF16 projections and attention. Attention scaling stays 1/sqrt(64).\n\n"
     text += "Training includes full-token logits/loss, backward, gradient clipping at 1, and AdamW (lr 0.0006, betas 0.9/0.95, weight decay 0.1). Standard non-reentrant AC recomputes full block regions and preserves all latent-memory gradient paths. Three warmups, nine samples, three graph replays per sample; 42 optimizer updates are checked. Each case runs in a fresh process, sequentially on NVIDIA L40S. Compilation is excluded.\n\n"
-    text += "Inference measures causal prompt with last-position logits, serving startup including persistent-cache allocation/copies and fold rebuild, and one supplied cached token after 1024 tokens. Capacity is 1025; captured decode includes logical rewind. BF16 serving weight copies are counted. No sampling or beam search is included. Graph memory is peak allocated during capture, including graph pool and temporaries; allocator reservations and driver memory are excluded. Eager timing and memory remain in CSVs.\n\n"
+    text += "Inference measures causal prompt with last-position logits, serving startup including persistent-cache allocation/copies and fold rebuild, and one supplied cached token after 1024 tokens. Capacity is 1025; captured decode includes logical rewind. BF16 serving weight copies are counted. Current LLT prompt/startup computes all query positions in every loop. Fixed first-loop memories permit last-position-only queries in later loops, but that serving optimization is not implemented here. U-YOCO retains its measured last-cross-query optimization. No sampling or beam search is included. Graph memory is peak allocated during capture, including graph pool and temporaries; allocator reservations and driver memory are excluded. Eager timing and memory remain in CSVs.\n\n"
     text += "Controls retain their original adaptations: U-YOCO has 6T+6 attention/FFN applications, GRT 8T+4 with BF16 core residuals, and attention-only loop 12T attention updates but 12 FFNs. Other variants apply 12T blocks, except fixed depth with 12 blocks and widened MLPs matching the independent stack's parameters. Thus T and parameters do not imply matched compute. [Baseline contracts](../../docs/RESEARCH_BASELINES.md) document source fidelity and checkpoint boundaries.\n\n"
     text += f"## Results\n\n**{len(rows)} active records: {audit['active_passed']} passed, {audit['active_out_of_memory']} OOM.** This replaces 384 historical LLT records (including LAC) with 288 new LLT records and preserves 768 non-LLT records. New LLT: {audit['passed']} passed, {audit['out_of_memory']} OOM.\n\nCells are **CUDA graph milliseconds / capture peak allocated GiB**, per batch of four. Cache is persistent payload plus Tensor counters, separately from total GPU memory.\n\n## All architectures at T=16\n\n"
     for backend in ("tensor", "torch"):
         text += f"### {backend.capitalize()}\n\n" + table(
             records, variants, backend, (16,)
         )
+    text += "![LLT training latency and memory](results/contextual-llt/views/training_graph.png)\n\n![LLT cached-decode latency and memory](results/contextual-llt/views/decode_graph.png)\n\n"
     text += f"## Numerical qualification and provenance\n\n{audit['qualification_count']} qualifications cover all ranks at small T=4/16 and full B4/S1024 T=16 on both backends. AC loss and every parameter gradient must match none (relative L2 <1e-5). Small cross-backend gradients must be below 0.15 relative L2. Cached logits must match full causal execution (max absolute error <0.05; relative L2 <0.03). Full-size checks use deterministic controls separately from performance timings. Cache bank counts and byte formulas are checked. The audit verifies {audit['unique_artifact_count']} hashed CUDA artifacts and zero implicit Tensor numerical fallback.\n\n"
     text += "- [Active joined CSV](results/contextual-llt/views/all-architectures.csv).\n- [New LLT CSV](results/contextual-llt/views/summary.csv) and [audit](results/contextual-llt/views/audit.json).\n- [Reproduction harness](run_contextual_llt_sweep.sh).\n\n"
     text += "## Every loop count\n\n"
@@ -311,7 +350,8 @@ def main():
         text += f"### {backend.capitalize()} — T=1–16\n\n" + table(
             records, variants, backend, range(1, 17), True
         )
-    (ROOT / "experiments/l40s/LOOP_SWEEP.md").write_text(text)
+    report = ROOT / "experiments/l40s/LOOP_SWEEP.md"
+    report.write_text(text.rstrip() + "\n")
     for metric, title in (
         ("training_graph", "Training"),
         ("decode_graph", "Cached decode"),
@@ -346,6 +386,32 @@ def main():
         for ext in ("png", "pdf"):
             fig.savefig(VIEWS / f"{metric}.{ext}", dpi=160)
         plt.close(fig)
+    generator_paths = (
+        "experiments/l40s/contextual_llt_report.py",
+        "experiments/l40s/runtime.py",
+        "experiments/l40s/research_summary.py",
+    )
+    manifest = dict(
+        generator_source_commit=subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
+        ).strip(),
+        generator_sources={name: sha(ROOT / name) for name in generator_paths},
+        generator_sources_dirty=bool(
+            subprocess.check_output(
+                ["git", "status", "--porcelain", "--", *generator_paths],
+                cwd=ROOT,
+                text=True,
+            ).strip()
+        ),
+        measurement_manifest_sha256=sha(OUT / "run-manifest.json"),
+        report_sha256=sha(report),
+        view_sha256={
+            p.name: sha(p)
+            for p in VIEWS.iterdir()
+            if p.is_file() and p.name != "run-manifest.json"
+        },
+    )
+    (VIEWS / "run-manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     print("audit passed:", len(new), "new LLT records;", len(rows), "active records")
 
 

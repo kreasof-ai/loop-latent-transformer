@@ -27,7 +27,9 @@ logits = model(torch.randint(config.vocab, (2, 32)))
 
 `Config` retains the earlier small-fixture defaults, including tanh GELU.
 The main study explicitly selects exact GELU (`gelu="none"`) and its full measured
-geometry. It constructs `ContextualLLT` for none/AC comparisons. `Transformer` and `CheckpointTransformer` retain the historical global-latent implementation for frozen-result checks; they do not define the current LLT.
+geometry. It constructs `ContextualLLT` for none/AC comparisons. `Transformer`
+and `CheckpointTransformer` retain the historical global-latent implementation
+for frozen-result checks; they do not define the current LLT.
 
 `BackendTransformer(config, ops=None)` uses Torch operations. Passing an
 `Operators` instance from [Tensor](https://github.com/kreasof-ai/tensor) selects

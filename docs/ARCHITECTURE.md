@@ -49,6 +49,10 @@ Prefill constructs all L memories during the first pass. Each bank stores a
 single latent tensor physically shared by K and V. On a new token, the first
 loop constructs and appends its C_i at each layer, using that token's evolving
 first-loop state. Later loops read the same banks without appending again.
+Prompt/startup currently computes all query positions on every loop. Once the
+first-loop memories exist, later loops could evaluate only the requested last
+position; this optimization is not used in the measured implementation.
+
 This is causally consistent with full-sequence execution. Historical bank
 contents and allocated addresses remain stable across decode steps.
 
@@ -74,6 +78,10 @@ BF16 KV payload = 2BSRL bytes
 | Naive Loop / independent stack | LT full K/V pairs | 4BSWLT |
 | Fixed depth / matched parameters | L full K/V pairs | 4BSWL |
 | Historical global input-latent prototype | 1 | 2BSR |
+
+Cache grows linearly with physical layer count L and latent rank R. Increasing
+loop count T does not add banks. The memories stay fixed after their first-loop
+construction; this sharing changes the model compared with refreshed loop states.
 
 Serving allocates 1025 slots. Tensor adds 8B bytes of counters per bank.
 At rank 64, current LLT has approximately 6 MiB of KV payload at every T;
