@@ -10,7 +10,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 from torch.utils.checkpoint import checkpoint
-from tensor_torch.llt import KVCache
+from llt_tensor.llt import KVCache
 from .reference import Config
 from .tensor_backend import BackendTransformer, TorchCache
 

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llt-tensor"
+version = "0.1.0"
+description = "Loop Latent Transformer operators and kernels for Tensor"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12,<3.13"
+dependencies = ["tensor-workspace==0.1.0", "torch>=2.8,<2.15"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+llt_tensor = ["templates/*.py", "*.c", "*.cpp"]

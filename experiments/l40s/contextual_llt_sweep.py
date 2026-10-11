@@ -16,7 +16,7 @@ from pathlib import Path
 
 import torch
 from torch.nn.attention import sdpa_kernel, SDPBackend
-from tensor_torch.llt import Operators
+from llt_tensor.llt import Operators
 from model.contextual_llt import ContextualLLT
 from experiments.l40s import loop_sweep as base
 from experiments.l40s.latent_checkpoint_sweep import gradient_metrics
@@ -200,7 +200,7 @@ def save(stem, out):
         sources[name] = digest
     runtime = {
         str(path): hashlib.sha256(path.read_bytes()).hexdigest()
-        for path in (base.TENSOR / "packages/tensor-torch/src/tensor_torch").glob(
+        for path in (ROOT / "packages/llt-tensor/src/llt_tensor").glob(
             "*.so"
         )
     }

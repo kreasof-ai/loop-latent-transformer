@@ -9,3 +9,5 @@ archive/results/*smoke*/
 archive/results/*debug*/
 archive/results/rx6700xt/
 **/benchmark_source.py
+
+/build/

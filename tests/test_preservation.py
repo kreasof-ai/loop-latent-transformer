@@ -32,7 +32,11 @@ class PreservationTests(unittest.TestCase):
         baseline = PUBLISHED_RESULTS / 'loop-baseline'
         sources = json.loads((baseline / 'run-manifest.json').read_text())['sources']
         for old, current in [('model.py', 'model/reference.py'), ('tensor_model.py', 'model/tensor_backend.py')]:
-            self.assertEqual(sha(ROOT / current), sources['experiments/l40s/' + old])
+            # Only the backend import namespace changed during LLT extraction.
+            content = (ROOT / current).read_bytes().replace(
+                b'from llt_tensor.llt import KVCache', b'from tensor_torch.llt import KVCache'
+            )
+            self.assertEqual(hashlib.sha256(content).hexdigest(), sources['experiments/l40s/' + old])
         checkpoint = PUBLISHED_RESULTS / 'loop-sweep'
         digest = json.loads((checkpoint / 'audit.json').read_text())['extension_sources']['experiments/l40s/latent_checkpoint_model.py']
         original = ast.parse((checkpoint / 'sources' / digest / 'latent_checkpoint_model.py').read_text())

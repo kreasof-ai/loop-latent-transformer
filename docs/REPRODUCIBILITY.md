@@ -14,9 +14,11 @@ and artifact identities are retained in individual JSON records and the original
 The original rank/checkpoint extension pins Tensor commit `7fc6b8cf9c7a2e58a55d9f8ba7e7dc1a990d87eb`;
 the baseline has its own earlier Tensor revision and the same runtime binary hashes.
 
-Follow the native executor installation instructions in
-[Tensor](https://github.com/kreasof-ai/tensor) for its supported environment.
-LLT backend imports require its `tensor_torch` adapter. The pure Torch reference
+Current LLT backend imports use the independent
+[`llt-tensor` package](../packages/llt-tensor/README.md). Install it alongside core
+[Tensor](https://github.com/kreasof-ai/tensor). Historical measurements used the
+original `tensor_torch` adapter; retain their pinned revisions when reproducing
+those exact source and binary identities. The pure Torch reference
 in `model.reference` requires only Torch. CPU report regeneration requires
 Matplotlib and the Python standard library, without importing the GPU backend.
 This repository does not install or develop the Tensor runtime.

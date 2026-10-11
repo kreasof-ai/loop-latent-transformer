@@ -15,7 +15,7 @@ import traceback
 
 import torch
 from torch.nn.attention import sdpa_kernel,SDPBackend
-from tensor_torch.llt import Operators
+from llt_tensor.llt import Operators
 from experiments.l40s import loop_sweep as base
 from model.checkpointing import CheckpointTransformer
 

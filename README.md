@@ -57,3 +57,6 @@ python -m unittest discover -s tests -v
 The [reproduction guide](docs/REPRODUCIBILITY.md) covers dependencies, pinned
 measurement revisions, fresh GPU runs, and provenance. The published measurements
 are preserved; new profiles use a separate `LLT_RESULTS_ROOT`.
+
+The LLT Tensor backend lives in [`packages/llt-tensor`](packages/llt-tensor/README.md),
+independently of Tensor's PyTorch compatibility binding.

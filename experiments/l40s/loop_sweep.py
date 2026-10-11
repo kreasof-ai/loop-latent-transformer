@@ -24,8 +24,8 @@ import traceback
 
 import torch
 from torch.nn.attention import sdpa_kernel, SDPBackend
-from tensor_torch.llt import Operators, AdamW
-import tensor_torch.bridge as _bridge
+from llt_tensor.llt import Operators, AdamW
+import llt_tensor.bridge as _bridge
 from model import Config
 from model.tensor_backend import BackendTransformer
 from inference.prepared import prepare

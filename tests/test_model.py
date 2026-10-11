@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import patch
 
 import torch
+import llt_tensor.llt
 from model import Config, Transformer
 from model.checkpointing import CheckpointTransformer
 from model.tensor_backend import BackendTransformer
@@ -20,7 +21,10 @@ def load_source(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
     sys.modules[name] = module
-    spec.loader.exec_module(module)
+    # Frozen snapshots retain the original namespace; remap only while loading.
+    legacy = types.ModuleType('tensor_torch')
+    with patch.dict(sys.modules, {'tensor_torch': legacy, 'tensor_torch.llt': llt_tensor.llt}):
+        spec.loader.exec_module(module)
     return module
 
 

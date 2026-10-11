@@ -18,7 +18,7 @@ import subprocess
 import time
 import traceback
 import torch
-from tensor_torch.recurrent import RecurrentOperators
+from llt_tensor.recurrent import RecurrentOperators
 from model.research_baselines import (
     FAMILIES,
     ResearchTransformer,
@@ -207,7 +207,7 @@ def save(stem, out):
         snapshot.write_bytes(path.read_bytes())
         sources[name] = digest
     tensor_sources = {}
-    for path in (base.TENSOR / "packages/tensor-torch/src/tensor_torch").rglob("*.py"):
+    for path in (ROOT / "packages/llt-tensor/src/llt_tensor").rglob("*.py"):
         if "__pycache__" in path.parts:
             continue
         if path.name not in (
@@ -221,7 +221,7 @@ def save(stem, out):
         snapshot = OUT / "tensor-sources" / digest / path.name
         snapshot.parent.mkdir(parents=True, exist_ok=True)
         snapshot.write_bytes(path.read_bytes())
-        tensor_sources[str(path.relative_to(base.TENSOR))] = digest
+        tensor_sources[str(path.relative_to(ROOT))] = digest
     out["provenance"] = dict(
         llt_commit=subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
@@ -243,10 +243,10 @@ def save(stem, out):
             text=True,
         ).strip(),
         runtime_binary_sha256={
-            str(path.relative_to(base.TENSOR)): hashlib.sha256(
+            str(path.relative_to(ROOT)): hashlib.sha256(
                 path.read_bytes()
             ).hexdigest()
-            for path in (base.TENSOR / "packages/tensor-torch/src/tensor_torch").glob(
+            for path in (ROOT / "packages/llt-tensor/src/llt_tensor").glob(
                 "*.so"
             )
         },

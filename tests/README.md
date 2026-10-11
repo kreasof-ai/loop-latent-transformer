@@ -1,7 +1,7 @@
 # Verification
 
 Run `python -m unittest discover -s tests -v` from the repository root with Torch
-and Tensor's Torch adapter installed. These checks execute on CPU.
+and core Tensor and `packages/llt-tensor` installed. These checks execute on CPU.
 
 The suite checks relocated payload SHA256 values, resolution of recorded paths,
 numerical source preservation, checkpoint gradients, cached/full-forward logits,

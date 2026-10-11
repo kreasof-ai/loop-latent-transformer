@@ -9,7 +9,7 @@ from dataclasses import dataclass
 import torch
 from torch.nn import functional as F
 from torch.utils.checkpoint import checkpoint
-from tensor_torch.llt import KVCache
+from llt_tensor.llt import KVCache
 
 from model import Transformer, norm
 
