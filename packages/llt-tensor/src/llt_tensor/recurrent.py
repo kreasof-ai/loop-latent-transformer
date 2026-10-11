@@ -7,7 +7,7 @@ keys are a causal local bank, normalized together in one softmax.
 
 import torch
 from torch.autograd.function import once_differentiable
-from .llt import Operators, _dtype
+from llt_tensor.llt import Operators, _dtype
 
 WINDOW_MODULE = "llt_tensor.templates.llt_window"
 POINTWISE_MODULE = "llt_tensor.templates.recurrent_ops"

@@ -340,4 +340,4 @@ def attention_dkv(p):
     return kernel
 
 
-from .llt import attention_delta, attention_sum_heads
+from llt_tensor.templates.llt import attention_delta, attention_sum_heads

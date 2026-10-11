@@ -53,8 +53,10 @@ def save(name, result):
     )
     files += list((TENSOR / "src/tensor/runtime").glob("*.py"))
     files += [
-        TENSOR / "src/tensor/providers/cuda.py",
-        TENSOR / "src/tensor/compiler/nvrtc.py",
+        TENSOR / "src/tensor/providers/cuda/device.py",
+        TENSOR / "src/tensor/providers/cuda/driver.py",
+        TENSOR / "src/tensor/providers/cuda/graph.py",
+        TENSOR / "src/tensor/compiler/cuda/nvrtc.py",
         TENSOR / "src/tensor/artifacts/format.py",
         TENSOR / "src/tensor/include/tensor/abi.h",
         ROOT / "packages/llt-tensor/src/llt_tensor/executor.cpp",

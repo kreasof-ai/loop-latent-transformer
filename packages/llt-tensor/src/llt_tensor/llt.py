@@ -13,7 +13,7 @@ import math
 import weakref
 import torch
 from torch.autograd.function import once_differentiable
-from .bridge import Kernel, LaunchPlan
+from llt_tensor.bridge import Kernel, LaunchPlan
 
 
 class Operators:
@@ -49,7 +49,7 @@ class Operators:
     def kernel(
         self, factory, parameters, outputs, *, module="llt_tensor.templates.llt"
     ):
-        from tensor.compiler.entry import export_source
+        from tensor.compiler.frontend.source import export_source
 
         target = "sm_" + "".join(map(str, torch.cuda.get_device_capability()))
         specialization = (module, factory, repr(parameters), tuple(outputs), target)
@@ -59,7 +59,7 @@ class Operators:
             module,
             factory,
             parameters,
-            dependencies=(module, "tensor.compiler.entry", "tensor.runtime.abi"),
+            dependencies=(module, 'tensor.compiler.frontend.source', "tensor.runtime.abi"),
             outputs=outputs,
         )
         key = hashlib.sha256((source + target).encode()).hexdigest()

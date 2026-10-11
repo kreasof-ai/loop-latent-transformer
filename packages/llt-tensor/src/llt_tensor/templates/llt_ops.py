@@ -138,7 +138,7 @@ def make_kernel(p):
 
         return kernel
     if kind in ("gelu", "gelu_dx", "zero", "scale", "add", "cast"):
-        from tensor.compiler.entry import primitive
+        from tensor.compiler.frontend.source import primitive
 
         @T.macro
         def body(*args):

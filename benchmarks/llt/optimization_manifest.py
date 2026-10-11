@@ -14,7 +14,7 @@ from .qualify import TENSOR, source_key
 def main():
  files=list((ROOT/'packages/llt-tensor/src/llt_tensor').glob('*.py'))+list((ROOT/'packages/llt-tensor/src/llt_tensor/templates').glob('*.py'))
  files+=list((ROOT/'benchmarks/llt').glob('optim*.py'))
- files+=[TENSOR/'src/tensor/compiler/search.py',TENSOR/'src/tensor/compiler/entry.py',TENSOR/'src/tensor/compiler/nvrtc.py',TENSOR/'src/tensor/compiler/build.py',ROOT/'packages/llt-tensor/src/llt_tensor/executor.cpp']
+ files+=[TENSOR/'src/tensor/compiler/search.py',TENSOR/'src/tensor/compiler/frontend/source.py',TENSOR/'src/tensor/compiler/cuda/nvrtc.py',TENSOR/'src/tensor/compiler/cuda/build.py',TENSOR/'src/tensor/compiler/cache.py',TENSOR/'src/tensor/compiler/cuda/lowering.py',ROOT/'packages/llt-tensor/src/llt_tensor/executor.cpp']
  llt=Path(os.environ.get('LLT_CHECKOUT',ROOT))
  external=[llt/name for name in ('model/__init__.py','model/reference.py','model/tensor_backend.py','archive/experiments/l40s/nanogpt_adapter.py','archive/experiments/l40s/third_party/nanogpt/model.py','archive/experiments/l40s/third_party/nanogpt/LICENSE')]
  sources={}

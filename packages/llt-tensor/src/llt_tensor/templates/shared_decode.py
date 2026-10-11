@@ -128,4 +128,4 @@ def shared_decode_partial(p):
     return decode
 
 
-from .llt_decode import decode_merge
+from llt_tensor.templates.llt_decode import decode_merge

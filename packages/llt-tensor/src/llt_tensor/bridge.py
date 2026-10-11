@@ -13,7 +13,7 @@ from pathlib import Path
 import torch
 
 try:
-    from ._launch import submit as _submit
+    from llt_tensor._launch import submit as _submit
 except ImportError:
     _submit = None
 
@@ -59,11 +59,11 @@ def _enqueue(executable, launch, stream, parameters):
         code = _submit(executable.function.value, *launch['grid'], *launch['block'],
                        launch['shared_memory_bytes'], stream, c.addressof(parameters))
         if code:
-            from tensor.providers.cuda import CudaError
+            from tensor.providers.cuda.driver import CudaError
             raise CudaError(f'cuLaunchKernel failed with CUDA error {code}')
 
 from tensor.artifacts.format import read_artifact
-from tensor.providers.cuda import Device
+from tensor.providers.cuda.device import Device
 from tensor.runtime.abi import BoundCall
 from tensor.runtime.signature import SCALAR_TYPES, bind_shapes, buffer_argument, resolve_shape, scalar_value
 
